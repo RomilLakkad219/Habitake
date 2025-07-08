@@ -62,7 +62,7 @@ function App(): JSX.Element {
   return (
     <AuthProvider>
       <View style={styles.container}>
-        <StatusBar barStyle={'dark-content'} translucent={false} backgroundColor={COLORS.white} />
+        <StatusBar barStyle={'dark-content'} translucent={false} backgroundColor={COLORS.white} hidden={false} />
         <NavigationContainer>
           <Navigator
             initialRouteName={SCREENS.Splash.name}

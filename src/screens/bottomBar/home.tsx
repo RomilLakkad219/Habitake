@@ -9,8 +9,9 @@ import { COLORS, SCALE_SIZE, FONT_NAME, STRING } from "../../constants";
 
 //COMPONENTS
 import { Header, Text } from "../../components";
+
+//SCREENS
 import { SCREENS } from "..";
-import { useNavigation } from "@react-navigation/native";
 
 const Home = (props: any) => {
 
@@ -40,7 +41,10 @@ const Home = (props: any) => {
             <Header
                 type="home"
                 locationText={'1012 Ocean avanue, New yourk, USA'}
-                profileIcon={''} />
+                profileIcon={''}
+                onNotification={() => {
+                    props.navigation.navigate(SCREENS.Notification.name)
+                }} />
             <View style={styles.searchView}>
                 <View style={{ flex: 1 }}>
                     <TouchableOpacity style={styles.searchStyle}>
@@ -105,10 +109,10 @@ const Home = (props: any) => {
                     scrollEnabled={true}
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => 
-                    <PropertyCard item={item} onPress={() => {
-                        props.navigation.navigate(SCREENS.PropertyDetail.name)
-                    }} />}
+                    renderItem={({ item }) =>
+                        <PropertyCard item={item} onPress={() => {
+                            props.navigation.navigate(SCREENS.PropertyDetail.name)
+                        }} />}
                 >
                 </FlatList>
             </View>
@@ -127,14 +131,13 @@ const Home = (props: any) => {
                     {STRING.more}
                 </Text>
             </View>
-            {/* <View> */}
             <FlatList
                 data={['', '', '', '']}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
                     return (
-                        <View style={[styles.propertyItemView, { marginBottom:  SCALE_SIZE(10) }]}>
+                        <View style={[styles.propertyItemView, { marginBottom: SCALE_SIZE(10) }]}>
                             <ImageBackground
                                 style={styles.propertyImages}
                                 resizeMode="contain"
@@ -230,7 +233,6 @@ const Home = (props: any) => {
                     return <View style={{ marginBottom: SCALE_SIZE(10) }}></View>;
                 }}>
             </FlatList>
-            {/* </View> */}
         </View>
     )
 }

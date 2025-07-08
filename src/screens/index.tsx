@@ -17,6 +17,9 @@ import Search from "./bottomBar/search";
 import Chat from "./bottomBar/chat";
 import Favourite from "./bottomBar/favourite";
 import PropertyDetail from "./propertyDetail";
+import AiInterior from "./aiInterior";
+import Messaging from "./messaging";
+import Notification from "./notification";
 
 export const SCREENS = {
     Splash: {
@@ -83,5 +86,16 @@ export const SCREENS = {
         name: 'PropertyDetail',
         component: PropertyDetail
     },
-
+    AiInterior: {
+        name: 'AiInterior',
+        component: AiInterior
+    },
+    Messaging: {
+        name: 'Messaging',
+        component: Messaging
+    },
+    Notification: {
+        name: 'Notification',
+        component: Notification
+    },
 }

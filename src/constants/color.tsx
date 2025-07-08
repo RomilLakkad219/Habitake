@@ -19,7 +19,12 @@ const COLORS = {
     color_FF0000: '#FF0000',
     color_2A2B3F: '#2A2B3F',
     color_FDFDFD: '#FDFDFD',
-    color_000929: '#000929'
+    color_000929: '#000929',
+    color_EBE9F0: '#EBE9F0',
+    color_F1F1F1: '#F1F1F1',
+    color_E6E6EA: '#E6E6EA',
+    color_E6E6EA99: '#E6E6EA99',
+    color_C0BAD1: '#C0BAD1'
 }
 
 export { COLORS }

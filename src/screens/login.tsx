@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, ScrollView } from "react-native"
+import { StyleSheet, Image, View, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -28,121 +28,126 @@ const Login = (props: any) => {
                 type='onboarding' onBack={() => {
                     props.navigation.goBack()
                 }} />
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <Text
-                    style={[styles.signInText, { marginTop: SCALE_SIZE(35) }]}
-                    font={FONT_NAME.regular}
-                    color={COLORS.color_333A54}
-                    size={SCALE_SIZE(28)}>
-                    {STRING.lets}
+            <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}>
+                <ScrollView showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    keyboardShouldPersistTaps="handled">
                     <Text
-                        font={FONT_NAME.bold}
+                        style={[styles.signInText, { marginTop: SCALE_SIZE(35) }]}
+                        font={FONT_NAME.regular}
                         color={COLORS.color_333A54}
                         size={SCALE_SIZE(28)}>
-                        {STRING.sign_in}
+                        {STRING.lets}
+                        <Text
+                            font={FONT_NAME.bold}
+                            color={COLORS.color_333A54}
+                            size={SCALE_SIZE(28)}>
+                            {STRING.sign_in}
+                        </Text>
                     </Text>
-                </Text>
-                <Text
-                    style={[styles.signInText, { marginTop: SCALE_SIZE(10) }]}
-                    font={FONT_NAME.regular}
-                    color={COLORS.color_545A70}
-                    size={SCALE_SIZE(16)}>
-                    {'quis nostrud exercitation ullamco laboris nisi ut'}
-                </Text>
-                <Input
-                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(24) }]}
-                    value={email}
-                    isEmail={IMAGES.ic_email}
-                    placeholder={STRING.email}
-                    autoCapitalize='none'
-                    placeholderTextColor={COLORS.color_8A8E9D}
-                    onChangeText={(text) => {
-                        setEmail(text)
-                    }} />
-                <Input
-                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
-                    value={password}
-                    isLock={IMAGES.ic_lock}
-                    placeholder={STRING.password}
-                    autoCapitalize='none'
-                    placeholderTextColor={COLORS.color_8A8E9D}
-                    secureTextEntry={!isSecurePassword}
-                    onPressSecureIcon={() => {
-                        setIsSecurePassword(!isSecurePassword)
-                    }}
-                    secureIcon={isSecurePassword ? IMAGES.ic_eye : IMAGES.ic_hide}
-                    onChangeText={(text) => {
-                        setPassword(text)
-                    }} />
-                <Text
-                    onPress={() => {
-                        props.navigation.navigate(SCREENS.ForgotPassword.name)
-                    }}
-                    style={styles.forgotPasswordText}
-                    font={FONT_NAME.semiBold}
-                    color={COLORS.color_01A669}
-                    size={SCALE_SIZE(14)}>
-                    {STRING.forgot_password}
-                </Text>
-                <Button
-                    onPress={() => {
-                        props.navigation.navigate(SCREENS.BottomBar.name)
-                    }}
-                    style={styles.loginButtonStyle}
-                    title={STRING.login} />
-                <View style={styles.horizontalLineView}>
-                    <Image
-                        style={{ flex: 1 }}
-                        resizeMode="contain"
-                        source={IMAGES.ic_horizontal}></Image>
                     <Text
-                        style={{ marginHorizontal: SCALE_SIZE(10) }}
-                        font={FONT_NAME.bold}
-                        color={COLORS.color_B0B3BD}
-                        size={SCALE_SIZE(10)}>
-                        {STRING.or}
+                        style={[styles.signInText, { marginTop: SCALE_SIZE(10) }]}
+                        font={FONT_NAME.regular}
+                        color={COLORS.color_545A70}
+                        size={SCALE_SIZE(16)}>
+                        {'quis nostrud exercitation ullamco laboris nisi ut'}
                     </Text>
-                    <Image
-                        style={{ flex: 1 }}
-                        resizeMode="contain"
-                        source={IMAGES.ic_horizontal}></Image>
-                </View>
-                <View style={styles.buttonDirectionView}>
-                    <TouchableOpacity style={styles.googleButtonStyle}>
-                        <Image
-                            style={styles.socialIcons}
-                            resizeMode="contain"
-                            source={IMAGES.ic_google}>
-                        </Image>
-                    </TouchableOpacity>
-                    <View style={{ width: SCALE_SIZE(12) }}></View>
-                    <TouchableOpacity style={styles.fbButtonStyle}>
-                        <Image
-                            style={styles.socialIcons}
-                            resizeMode="contain"
-                            source={IMAGES.ic_fb}>
-                        </Image>
-                    </TouchableOpacity>
-                </View>
-                <Text
-                    style={{ marginBottom: SCALE_SIZE(20) }}
-                    font={FONT_NAME.regular}
-                    align="center"
-                    color={COLORS.color_333A54}
-                    size={SCALE_SIZE(16)}>
-                    {STRING.dont_have_an_account}
+                    <Input
+                        style={[styles.inputStyle, { marginTop: SCALE_SIZE(24) }]}
+                        value={email}
+                        isEmail={IMAGES.ic_email}
+                        placeholder={STRING.email}
+                        autoCapitalize='none'
+                        placeholderTextColor={COLORS.color_8A8E9D}
+                        onChangeText={(text) => {
+                            setEmail(text)
+                        }} />
+                    <Input
+                        style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
+                        value={password}
+                        isLock={IMAGES.ic_lock}
+                        placeholder={STRING.password}
+                        autoCapitalize='none'
+                        placeholderTextColor={COLORS.color_8A8E9D}
+                        secureTextEntry={!isSecurePassword}
+                        onPressSecureIcon={() => {
+                            setIsSecurePassword(!isSecurePassword)
+                        }}
+                        secureIcon={isSecurePassword ? IMAGES.ic_eye : IMAGES.ic_hide}
+                        onChangeText={(text) => {
+                            setPassword(text)
+                        }} />
                     <Text
                         onPress={() => {
-                            props.navigation.navigate(SCREENS.SignUp.name)
+                            props.navigation.navigate(SCREENS.ForgotPassword.name)
                         }}
-                        font={FONT_NAME.bold}
-                        align="center"
+                        style={styles.forgotPasswordText}
+                        font={FONT_NAME.semiBold}
                         color={COLORS.color_01A669}
-                        size={SCALE_SIZE(16)}>
-                        {STRING.register}
+                        size={SCALE_SIZE(14)}>
+                        {STRING.forgot_password}
                     </Text>
-                </Text>
-            </ScrollView>
+                    <Button
+                        onPress={() => {
+                            props.navigation.navigate(SCREENS.BottomBar.name)
+                        }}
+                        style={styles.loginButtonStyle}
+                        title={STRING.login} />
+                    <View style={styles.horizontalLineView}>
+                        <Image
+                            style={{ flex: 1 }}
+                            resizeMode="contain"
+                            source={IMAGES.ic_horizontal}></Image>
+                        <Text
+                            style={{ marginHorizontal: SCALE_SIZE(10) }}
+                            font={FONT_NAME.bold}
+                            color={COLORS.color_B0B3BD}
+                            size={SCALE_SIZE(10)}>
+                            {STRING.or}
+                        </Text>
+                        <Image
+                            style={{ flex: 1 }}
+                            resizeMode="contain"
+                            source={IMAGES.ic_horizontal}></Image>
+                    </View>
+                    <View style={styles.buttonDirectionView}>
+                        <TouchableOpacity style={styles.googleButtonStyle}>
+                            <Image
+                                style={styles.socialIcons}
+                                resizeMode="contain"
+                                source={IMAGES.ic_google}>
+                            </Image>
+                        </TouchableOpacity>
+                        <View style={{ width: SCALE_SIZE(12) }}></View>
+                        <TouchableOpacity style={styles.fbButtonStyle}>
+                            <Image
+                                style={styles.socialIcons}
+                                resizeMode="contain"
+                                source={IMAGES.ic_fb}>
+                            </Image>
+                        </TouchableOpacity>
+                    </View>
+                    <Text
+                        style={{ marginBottom: SCALE_SIZE(20) }}
+                        font={FONT_NAME.regular}
+                        align="center"
+                        color={COLORS.color_333A54}
+                        size={SCALE_SIZE(16)}>
+                        {STRING.dont_have_an_account}
+                        <Text
+                            onPress={() => {
+                                props.navigation.navigate(SCREENS.SignUp.name)
+                            }}
+                            font={FONT_NAME.bold}
+                            align="center"
+                            color={COLORS.color_01A669}
+                            size={SCALE_SIZE(16)}>
+                            {STRING.register}
+                        </Text>
+                    </Text>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </View>
     )
 }

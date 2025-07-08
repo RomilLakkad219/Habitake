@@ -54,8 +54,20 @@ const IMAGES = {
     thumb: require('./images/thumb.png'),
     share: require('./images/share.png'),
     chat_icon: require('./images/chatIcon.png'),
-    ic_location_green: require('./images/ic_location_green.png')
-
+    ic_location_green: require('./images/ic_location_green.png'),
+    ic_light: require('./images/ic_light.png'),
+    ic_static_home: require('./images/ic_static_home.png'),
+    ic_search_filter: require('./images/ic_search_filter.png'),
+    ic_search_alert: require('./images/ic_search_alert.png'),
+    ic_dining_room: require('./images/ic_dining_room.png'),
+    ic_move_left: require('./images/ic_move_left.png'),
+    ic_move_right: require('./images/ic_move_right.png'),
+    green_check_bg: require('./images/green_check_bg.png'),
+    ic_trash: require('./images/ic_trash.png'),
+    ic_send: require('./images/ic_send.png'),
+    ic_camera: require('./images/ic_camera.png'),
+    ic_attach: require('./images/ic_attach.png'),
+    ic_warning: require('./images/ic_warning.png')
 }
 
 export { IMAGES }

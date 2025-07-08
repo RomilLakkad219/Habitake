@@ -4,6 +4,9 @@ import Header from "./header";
 import Input from "./input";
 import AccountCreationSuccessSheet from "./accountCreationSuccessSheet";
 import TabBar from "./tabBar";
+import FilterSheet from "./filterSheet";
+import FavouritePropertyRemoveSheet from "./favouritePropertyRemoveSheet";
+import ChatDeleteSheet from "./chatDeleteSheet";
 
 export { 
     Text ,
@@ -11,5 +14,8 @@ export {
     Header,
     Input,
     AccountCreationSuccessSheet,
-    TabBar
+    TabBar,
+    FilterSheet,
+    FavouritePropertyRemoveSheet,
+    ChatDeleteSheet
 }

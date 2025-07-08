@@ -13,6 +13,9 @@ import { Header, Text } from "../components";
 //PACKAGES
 import { BlurView } from "@react-native-community/blur";
 
+//SCREENS
+import { SCREENS } from ".";
+
 const PropertyDetail = (props: any) => {
 
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -26,51 +29,51 @@ const PropertyDetail = (props: any) => {
 
     return (
         <View style={styles.container}>
-            <ImageBackground
-                style={styles.propertyImage}
-                resizeMode="cover"
-                source={IMAGES.luxury_bg}>
-                <View style={{ flex: 1 }}>
-                    <Header
-                        type="favourite"
-                        onBack={()=>{
-                            props.navigation.goBack()
-                        }}
-                    />
-                </View>
-                <View style={styles.bottomView}>
-                    <View style={styles.propertyTypeTag}>
-                        <Text
-                            size={SCALE_SIZE(16)}
-                            align="center"
-                            font={FONT_NAME.semiBold}
-                            color={COLORS.white}>
-                            {STRING.luxury}
-                        </Text>
-                    </View>
-                    <View style={{ flex: 1 }}></View>
-                    <View style={styles.rightImageStack}>
-                        {imageList &&
-                            <>
-                                {imageList.map((img, index) => (
-                                    <View key={index} style={styles.sideImageContainer}>
-                                        <Image source={img} style={styles.sideImage} />
-                                        {index === 2 && (
-                                            <View style={styles.overlay}>
-                                                <Text size={SCALE_SIZE(18)}
-                                                    align="center"
-                                                    font={FONT_NAME.medium}
-                                                    color={COLORS.color_ECEDF3}>+3</Text>
-                                            </View>
-                                        )}
-                                    </View>
-                                ))}
-                            </>
-                        }
-                    </View>
-                </View>
-            </ImageBackground>
             <ScrollView showsVerticalScrollIndicator={false}>
+                <ImageBackground
+                    style={styles.propertyImage}
+                    resizeMode="cover"
+                    source={IMAGES.luxury_bg}>
+                    <View style={{ flex: 1 }}>
+                        <Header
+                            type="favourite"
+                            onBack={() => {
+                                props.navigation.goBack()
+                            }}
+                        />
+                    </View>
+                    <View style={styles.bottomView}>
+                        <View style={styles.propertyTypeTag}>
+                            <Text
+                                size={SCALE_SIZE(16)}
+                                align="center"
+                                font={FONT_NAME.semiBold}
+                                color={COLORS.white}>
+                                {STRING.luxury}
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1 }}></View>
+                        <View style={styles.rightImageStack}>
+                            {imageList &&
+                                <>
+                                    {imageList.map((img, index) => (
+                                        <View key={index} style={styles.sideImageContainer}>
+                                            <Image source={img} style={styles.sideImage} />
+                                            {index === 2 && (
+                                                <View style={styles.overlay}>
+                                                    <Text size={SCALE_SIZE(18)}
+                                                        align="center"
+                                                        font={FONT_NAME.medium}
+                                                        color={COLORS.color_ECEDF3}>+3</Text>
+                                                </View>
+                                            )}
+                                        </View>
+                                    ))}
+                                </>
+                            }
+                        </View>
+                    </View>
+                </ImageBackground>
                 <Text
                     style={styles.propertyName}
                     size={SCALE_SIZE(24)}
@@ -127,7 +130,8 @@ const PropertyDetail = (props: any) => {
                     placeholderTextColor={COLORS.color_545A70}
                     onChangeText={(text) => {
                         setComment(text)
-                    }}></TextInput>
+                    }}>
+                </TextInput>
                 <View style={styles.optionContainer}>
                     <Option title={STRING.description}
                         selected={selectedIndex == 0}
@@ -161,6 +165,7 @@ const PropertyDetail = (props: any) => {
                                                 paddingHorizontal: SCALE_SIZE(25),
                                                 paddingVertical: SCALE_SIZE(15),
                                                 marginTop: SCALE_SIZE(24),
+                                                marginLeft: SCALE_SIZE(10)
                                             }]}>
                                             {item.image &&
                                                 <Image
@@ -206,9 +211,12 @@ const PropertyDetail = (props: any) => {
                                     return (
                                         <View
                                             style={[styles.itemView, {
-                                                paddingHorizontal: SCALE_SIZE(19),
-                                                paddingVertical: SCALE_SIZE(10),
+                                                // paddingHorizontal: SCALE_SIZE(19),
+                                                // paddingVertical: SCALE_SIZE(10),
                                                 marginTop: index == 0 || index == 1 || index == 2 ? SCALE_SIZE(16) : SCALE_SIZE(14),
+                                                marginLeft: SCALE_SIZE(14),
+                                                width: Dimensions.get('window').width / 3 - SCALE_SIZE(19),
+                                                height: SCALE_SIZE(40)
                                             }]}>
                                             {item.image &&
                                                 <Image
@@ -348,6 +356,36 @@ const PropertyDetail = (props: any) => {
                                 {' (10)'}
                             </Text>
                         </Text>
+                        <FlatList
+                            data={['Living', 'Living', 'Kitchen', 'Bathroom', 'Dining room', 'Bedroom']}
+                            numColumns={2}
+                            showsVerticalScrollIndicator={false}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <ImageBackground
+                                        style={styles.galleryItem}
+                                        resizeMode="contain"
+                                        source={IMAGES.ic_static_home}>
+                                        <View style={styles.directionView}>
+                                            <View style={styles.galleryType}>
+                                                <Text
+                                                    align="center"
+                                                    size={SCALE_SIZE(12)}
+                                                    font={FONT_NAME.medium}
+                                                    color={COLORS.color_333A54}>
+                                                    {item}
+                                                </Text>
+                                            </View>
+                                            <Image
+                                                style={styles.lightIcon}
+                                                resizeMode="contain"
+                                                source={IMAGES.ic_light} />
+                                        </View>
+                                    </ImageBackground>
+                                );
+                            }}
+                        ></FlatList>
                     </View>}
                 <View style={styles.footerView}>
                     <View>
@@ -366,7 +404,9 @@ const PropertyDetail = (props: any) => {
                         </Text>
                     </View>
                     <View style={{ flex: 1 }}></View>
-                    <TouchableOpacity style={styles.availableButton}>
+                    <TouchableOpacity style={styles.availableButton} onPress={() => {
+                        props.navigation.navigate(SCREENS.AiInterior.name)
+                    }}>
                         <Text
                             size={SCALE_SIZE(18)}
                             align="center"
@@ -492,7 +532,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemView: {
-        marginLeft: SCALE_SIZE(10),
         justifyContent: 'center',
         backgroundColor: COLORS.color_F1F1F3,
         borderRadius: SCALE_SIZE(100),
@@ -545,7 +584,7 @@ const styles = StyleSheet.create({
         marginRight: SCALE_SIZE(16)
     },
     nearByLocationView: {
-        backgroundColor: '#ECEDF3',
+        backgroundColor: '#FFF',
         borderRadius: SCALE_SIZE(25),
         height: SCALE_SIZE(50),
         alignItems: 'center',
@@ -557,7 +596,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         marginTop: SCALE_SIZE(32),
-        marginHorizontal: SCALE_SIZE(16)
+        marginHorizontal: SCALE_SIZE(16),
+        borderWidth:1,
+        borderColor:'#ECEDF3'
     },
     locateGreenIcon: {
         height: SCALE_SIZE(20),
@@ -613,10 +654,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     activeLine: {
-        height: 3,
+        height: SCALE_SIZE(3),
         width: '100%',
-        marginTop: 6,
-        borderRadius: 2
+        marginTop: SCALE_SIZE(6),
+        borderRadius: SCALE_SIZE(2),
     },
     galleryText: {
         marginTop: SCALE_SIZE(24),
@@ -629,7 +670,33 @@ const styles = StyleSheet.create({
         marginTop: SCALE_SIZE(16),
         marginHorizontal: SCALE_SIZE(16),
         paddingVertical: SCALE_SIZE(14),
-        paddingHorizontal: SCALE_SIZE(16)
+        paddingHorizontal: SCALE_SIZE(16),
+        fontFamily: FONT_NAME.regular
+    },
+    galleryItem: {
+        width: (Dimensions.get('window').width - SCALE_SIZE(42)) / 2,
+        height: (Dimensions.get('window').width - SCALE_SIZE(42)) / 2,
+        alignSelf: 'center',
+        marginLeft: SCALE_SIZE(16),
+    },
+    lightIcon: {
+        height: SCALE_SIZE(20),
+        width: SCALE_SIZE(20),
+        alignSelf: "center"
+    },
+    directionView: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: SCALE_SIZE(10),
+        alignItems: 'center'
+    },
+    galleryType: {
+        borderRadius: SCALE_SIZE(12),
+        backgroundColor: COLORS.white,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: SCALE_SIZE(68),
+        height: SCALE_SIZE(19)
     }
 })
 

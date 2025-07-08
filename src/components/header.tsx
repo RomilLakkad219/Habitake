@@ -15,11 +15,12 @@ interface HeaderProps {
     onBack?: () => void;
     onHeart?: () => void;
     title?: string,
-    type?: 'onboarding' | 'basic' | 'favourite' | 'home' | 'none';
+    type?: 'onboarding' | 'basic' | 'favourite' | 'home' | 'search';
     locationText?: any,
     onProfile?: () => void;
     onNotification?: () => void;
-    profileIcon?: any
+    profileIcon?: any,
+    onFilter?: () => void;
 }
 
 const Header = (props: HeaderProps) => {
@@ -35,6 +36,7 @@ const Header = (props: HeaderProps) => {
                         <Image
                             style={[styles.backIcon, {
                                 marginLeft: SCALE_SIZE(25),
+                                marginTop: SCALE_SIZE(10)
                             }]}
                             resizeMode="contain"
                             source={IMAGES.ic_back}>
@@ -50,7 +52,9 @@ const Header = (props: HeaderProps) => {
                 <TouchableOpacity
                     onPress={props.onBack}>
                     <Image
-                        style={styles.backIcon}
+                        style={[styles.backIcon, {
+                            marginTop: SCALE_SIZE(10)
+                        }]}
                         resizeMode="contain"
                         source={IMAGES.ic_back}>
                     </Image>
@@ -65,7 +69,9 @@ const Header = (props: HeaderProps) => {
                     <TouchableOpacity
                         onPress={props.onBack}>
                         <Image
-                            style={styles.backIcon}
+                            style={[styles.backIcon, {
+                                marginTop: SCALE_SIZE(10)
+                            }]}
                             resizeMode="contain"
                             source={IMAGES.ic_back}>
                         </Image>
@@ -134,14 +140,57 @@ const Header = (props: HeaderProps) => {
             </View>
         )
     }
-
+    else if (props.type === 'search') {
+        return (
+            <View style={styles.headerContainer}>
+                <View style={styles.searchContainer}>
+                    <TouchableOpacity
+                        onPress={props.onBack}>
+                        <Image
+                            style={styles.backIcon}
+                            resizeMode="contain"
+                            source={IMAGES.ic_back}>
+                        </Image>
+                    </TouchableOpacity>
+                    <Text
+                        size={SCALE_SIZE(16)}
+                        align="center"
+                        font={FONT_NAME.semiBold}
+                        color={COLORS.color_333A54}>
+                        {props.title}
+                    </Text>
+                    <TouchableOpacity
+                        onPress={props.onFilter}>
+                        <Image
+                            style={styles.filterIcon}
+                            resizeMode="contain"
+                            source={IMAGES.ic_search_filter}>
+                        </Image>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+    else {
+        return (
+            <View style={styles.headerContainer}>
+                <Text
+                    style={{ marginTop: SCALE_SIZE(20) }}
+                    size={SCALE_SIZE(16)}
+                    align="center"
+                    font={FONT_NAME.semiBold}
+                    color={COLORS.color_333A54}>
+                    {props.title}
+                </Text>
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
     backIcon: {
         height: SCALE_SIZE(44),
         width: SCALE_SIZE(44),
-        marginTop: SCALE_SIZE(10)
     },
     headerImage: {
         height: SCALE_SIZE(243)
@@ -152,7 +201,7 @@ const styles = StyleSheet.create({
     directionView: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent:'space-between'
+        justifyContent: 'space-between'
     },
     heartIcon: {
         height: SCALE_SIZE(84),
@@ -193,6 +242,18 @@ const styles = StyleSheet.create({
         borderRadius: SCALE_SIZE(22),
         backgroundColor: 'gray',
         marginLeft: SCALE_SIZE(12)
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        marginTop: SCALE_SIZE(20),
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: SCALE_SIZE(16)
+    },
+    filterIcon: {
+        height: SCALE_SIZE(44),
+        width: SCALE_SIZE(44),
+        alignSelf: 'center',
     }
 
 })

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native"
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -26,61 +26,65 @@ const ForgotPassword = (props: any) => {
                 type='onboarding' onBack={() => {
                     props.navigation.goBack()
                 }} />
-            <Text
-                style={[styles.textStyle, { marginTop: SCALE_SIZE(35) }]}
-                font={FONT_NAME.bold}
-                color={COLORS.color_333A54}
-                size={SCALE_SIZE(28)}>
-                {STRING.forgot}
+            <KeyboardAvoidingView
+                behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}>
                 <Text
-                    font={FONT_NAME.regular}
+                    style={[styles.textStyle, { marginTop: SCALE_SIZE(35) }]}
+                    font={FONT_NAME.bold}
                     color={COLORS.color_333A54}
                     size={SCALE_SIZE(28)}>
-                    {STRING.password}
+                    {STRING.forgot}
+                    <Text
+                        font={FONT_NAME.regular}
+                        color={COLORS.color_333A54}
+                        size={SCALE_SIZE(28)}>
+                        {STRING.password}
+                    </Text>
                 </Text>
-            </Text>
-            <Text
-                style={[styles.textStyle, { marginTop: SCALE_SIZE(10) }]}
-                font={FONT_NAME.regular}
-                color={COLORS.color_545A70}
-                size={SCALE_SIZE(16)}>
-                {'quis nostrud exercitation ullamco laboris nisi ut'}
-            </Text>
-            <Input
-                style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
-                value={email}
-                isEmail={IMAGES.ic_email}
-                placeholder={STRING.email}
-                autoCapitalize='none'
-                placeholderTextColor={COLORS.color_8A8E9D}
-                onChangeText={(text) => {
-                    setEmail(text)
-                }} />
-            <View style={{ flex: 1 }}></View>
-            <Button
-                onPress={() => {
-                    props.navigation.navigate(SCREENS.ResetPassword.name)
-                }}
-                style={styles.continueButtonStyle}
-                title={STRING.continue} />
-            <Text
-                style={{ marginBottom: SCALE_SIZE(20) }}
-                font={FONT_NAME.regular}
-                align="center"
-                color={COLORS.color_00092999}
-                size={SCALE_SIZE(18)}>
-                {STRING.remember_your_password}
                 <Text
-                    onPress={() => {
-                        props.navigation.navigate(SCREENS.Login.name)
-                    }}
-                    font={FONT_NAME.medium}
-                    align="center"
-                    color={COLORS.color_01A669}
-                    size={SCALE_SIZE(18)}>
-                    {STRING.login_insted}
+                    style={[styles.textStyle, { marginTop: SCALE_SIZE(10) }]}
+                    font={FONT_NAME.regular}
+                    color={COLORS.color_545A70}
+                    size={SCALE_SIZE(16)}>
+                    {'quis nostrud exercitation ullamco laboris nisi ut'}
                 </Text>
-            </Text>
+                <Input
+                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
+                    value={email}
+                    isEmail={IMAGES.ic_email}
+                    placeholder={STRING.email}
+                    autoCapitalize='none'
+                    placeholderTextColor={COLORS.color_8A8E9D}
+                    onChangeText={(text) => {
+                        setEmail(text)
+                    }} />
+                <View style={{ flex: 1 }}></View>
+                <Button
+                    onPress={() => {
+                        props.navigation.navigate(SCREENS.ResetPassword.name)
+                    }}
+                    style={styles.continueButtonStyle}
+                    title={STRING.continue} />
+                <Text
+                    style={{ marginBottom: SCALE_SIZE(20) }}
+                    font={FONT_NAME.regular}
+                    align="center"
+                    color={COLORS.color_00092999}
+                    size={SCALE_SIZE(18)}>
+                    {STRING.remember_your_password}
+                    <Text
+                        onPress={() => {
+                            props.navigation.navigate(SCREENS.Login.name)
+                        }}
+                        font={FONT_NAME.medium}
+                        align="center"
+                        color={COLORS.color_01A669}
+                        size={SCALE_SIZE(18)}>
+                        {STRING.login_insted}
+                    </Text>
+                </Text>
+            </KeyboardAvoidingView>
         </View>
     )
 }
