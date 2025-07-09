@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image } from "react-native"
+import { View, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -12,6 +12,9 @@ import { Header, Text } from "../components";
 
 //PACKAGES
 import { SwipeListView } from 'react-native-swipe-list-view';
+
+//SCREENS
+import { SCREENS } from ".";
 
 const Notification = (props: any) => {
 
@@ -85,10 +88,14 @@ const Notification = (props: any) => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView />
             <Header
                 type="home"
                 locationText={'1012 Ocean avanue, New yourk, USA'}
-                profileIcon={''} />
+                profileIcon={''}
+                onProfile={() => {
+                    props.navigation.navigate(SCREENS.UserProfile.name)
+                }} />
             <Text
                 style={{ marginTop: SCALE_SIZE(35) }}
                 size={SCALE_SIZE(18)}
@@ -347,7 +354,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         backgroundColor: COLORS.white,
         elevation: 2,
-        marginRight: SCALE_SIZE(14)
+        marginRight: SCALE_SIZE(14),
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
     },
     propertyImage: {
         height: SCALE_SIZE(50),
@@ -356,6 +367,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         backgroundColor: COLORS.white,
         elevation: 2,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
     },
     rowBack: {
         alignItems: 'center',
@@ -367,7 +382,7 @@ const styles = StyleSheet.create({
     deleteBtn: {
         backgroundColor: COLORS.color_34216B,
         width: SCALE_SIZE(100),
-        height: '100%',
+        height: SCALE_SIZE(100),
         justifyContent: 'center',
         alignItems: 'center',
         borderTopRightRadius: SCALE_SIZE(25),

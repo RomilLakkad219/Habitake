@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, Image, View, FlatList, Dimensions, ScrollView, TouchableOpacity, ImageBackground } from "react-native"
+import { StyleSheet, Image, View, TouchableOpacity, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -21,6 +21,7 @@ const AddProfile = (props: any) => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView />
             <Header
                 type='basic'
                 onBack={() => {
@@ -69,20 +70,25 @@ const AddProfile = (props: any) => {
                 }}
                 style={styles.submitButtonStyle}
                 title={STRING.submit} />
-            <Text
-                onPress={() => { }}
-                align="center"
-                style={{ marginBottom: SCALE_SIZE(20) }}
-                font={FONT_NAME.medium}
-                color={COLORS.color_333A54}
-                size={SCALE_SIZE(16)}>
-                {STRING.skip}
-            </Text>
-            <AccountCreationSuccessSheet 
-            onRef={accountCreationSuccessRef}
+            <TouchableOpacity>
+                <Text
+                    onPress={() => {
+                        props.navigation.navigate(SCREENS.Login.name)
+                    }}
+                    align="center"
+                    style={{ marginBottom: SCALE_SIZE(20) }}
+                    font={FONT_NAME.medium}
+                    color={COLORS.color_333A54}
+                    size={SCALE_SIZE(16)}>
+                    {STRING.skip}
+                </Text>
+            </TouchableOpacity>
+            <AccountCreationSuccessSheet
+                onRef={accountCreationSuccessRef}
                 onFinish={() => {
                     accountCreationSuccessRef?.current?.close()
                 }} />
+                            <SafeAreaView />
         </View>
     )
 }

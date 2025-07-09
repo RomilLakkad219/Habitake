@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, Dimensions, ScrollView } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, Dimensions, ScrollView, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -29,6 +29,7 @@ const PropertyDetail = (props: any) => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <ImageBackground
                     style={styles.propertyImage}
@@ -377,15 +378,20 @@ const PropertyDetail = (props: any) => {
                                                     {item}
                                                 </Text>
                                             </View>
-                                            <Image
-                                                style={styles.lightIcon}
-                                                resizeMode="contain"
-                                                source={IMAGES.ic_light} />
+                                            <TouchableOpacity onPress={() => {
+                                                props.navigation.navigate(SCREENS.AiInterior.name)
+                                            }}>
+                                                <Image
+                                                    style={styles.lightIcon}
+                                                    resizeMode="contain"
+                                                    source={IMAGES.ic_light} />
+                                            </TouchableOpacity>
                                         </View>
                                     </ImageBackground>
                                 );
                             }}
-                        ></FlatList>
+                        >
+                        </FlatList>
                     </View>}
                 <View style={styles.footerView}>
                     <View>
@@ -405,7 +411,6 @@ const PropertyDetail = (props: any) => {
                     </View>
                     <View style={{ flex: 1 }}></View>
                     <TouchableOpacity style={styles.availableButton} onPress={() => {
-                        props.navigation.navigate(SCREENS.AiInterior.name)
                     }}>
                         <Text
                             size={SCALE_SIZE(18)}
@@ -417,11 +422,12 @@ const PropertyDetail = (props: any) => {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
+            <SafeAreaView />
         </View>
     )
 }
 
-const Option = (props) => {
+const Option = (props: any) => {
     return (
         <TouchableOpacity style={styles.optionItem}
             onPress={props.onPress}
@@ -597,8 +603,8 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         marginTop: SCALE_SIZE(32),
         marginHorizontal: SCALE_SIZE(16),
-        borderWidth:1,
-        borderColor:'#ECEDF3'
+        borderWidth: 1,
+        borderColor: '#ECEDF3'
     },
     locateGreenIcon: {
         height: SCALE_SIZE(20),
@@ -643,7 +649,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: SCALE_SIZE(16),
         paddingVertical: SCALE_SIZE(20),
-        marginTop: SCALE_SIZE(28)
+        marginTop: SCALE_SIZE(28),
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
     },
     availableButton: {
         paddingVertical: SCALE_SIZE(15),
@@ -675,7 +685,7 @@ const styles = StyleSheet.create({
     },
     galleryItem: {
         width: (Dimensions.get('window').width - SCALE_SIZE(42)) / 2,
-        height: (Dimensions.get('window').width - SCALE_SIZE(42)) / 2,
+        height: (Dimensions.get('window').width - SCALE_SIZE(42)) / 2 - SCALE_SIZE(35),
         alignSelf: 'center',
         marginLeft: SCALE_SIZE(16),
     },
@@ -687,7 +697,8 @@ const styles = StyleSheet.create({
     directionView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: SCALE_SIZE(10),
+        paddingTop: SCALE_SIZE(20),
+        paddingHorizontal: SCALE_SIZE(10),
         alignItems: 'center'
     },
     galleryType: {
@@ -695,7 +706,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         justifyContent: 'center',
         alignItems: 'center',
-        width: SCALE_SIZE(68),
+        paddingHorizontal: SCALE_SIZE(8),
         height: SCALE_SIZE(19)
     }
 })

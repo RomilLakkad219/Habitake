@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, View, TouchableOpacity } from "react-native"
+import { StyleSheet, Image, View, TouchableOpacity, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -22,6 +22,7 @@ const Location = (props: any) => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView />
             <Header
                 type='basic'
                 onBack={() => {
@@ -78,17 +79,17 @@ const Location = (props: any) => {
                 size={SCALE_SIZE(16)}>
                 {STRING.select_your_location_to_find_relevant_properties_near_you}
             </Text>
-                <Input
-                    style={styles.locationDetailView}
-                    value={locationDetails}
-                    isLocation={IMAGES.ic_location}
-                    isNext={IMAGES.ic_next}
-                    placeholder={STRING.location_detail}
-                    autoCapitalize='none'
-                    placeholderTextColor={COLORS.color_8A8E9D}
-                    onChangeText={(text) => {
-                        setLocationDetails(text)
-                    }} />
+            <Input
+                style={styles.locationDetailView}
+                value={locationDetails}
+                isLocation={IMAGES.ic_location}
+                isNext={IMAGES.ic_next}
+                placeholder={STRING.location_detail}
+                autoCapitalize='none'
+                placeholderTextColor={COLORS.color_8A8E9D}
+                onChangeText={(text) => {
+                    setLocationDetails(text)
+                }} />
             <View style={{ flex: 1 }}></View>
             <Button
                 onPress={() => {
@@ -105,6 +106,7 @@ const Location = (props: any) => {
                 size={SCALE_SIZE(16)}>
                 {STRING.skip}
             </Text>
+            <SafeAreaView />
         </View>
     )
 }

@@ -31,7 +31,7 @@ const AccountCreationSuccessSheet = (props: SheetProps) => {
             customStyles={{
                 container: {
                     backgroundColor: COLORS.white,
-                    height: Dimensions.get('window').height * 0.6,
+                    height: Dimensions.get('window').height * 0.5,
                     borderTopLeftRadius: SCALE_SIZE(40),
                     borderTopRightRadius: SCALE_SIZE(40),
                 },
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     buttonStyle: {
         marginTop: SCALE_SIZE(36),
         marginHorizontal: SCALE_SIZE(16),
-        marginBottom: SCALE_SIZE(30)
+        marginBottom: SCALE_SIZE(20)
     }
 })
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, Dimensions } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, Dimensions, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
@@ -38,10 +38,14 @@ const Home = (props: any) => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView />
             <Header
                 type="home"
                 locationText={'1012 Ocean avanue, New yourk, USA'}
                 profileIcon={''}
+                onProfile={() => {
+                    props.navigation.navigate(SCREENS.UserProfile.name)
+                }}
                 onNotification={() => {
                     props.navigation.navigate(SCREENS.Notification.name)
                 }} />
@@ -327,8 +331,7 @@ const styles = StyleSheet.create({
     searchView: {
         flexDirection: 'row',
         marginTop: SCALE_SIZE(32),
-        // alignItems: 'center',
-        // justifyContent: 'center',
+        marginBottom: SCALE_SIZE(20)
     },
     searchStyle: {
         height: SCALE_SIZE(56),
@@ -336,6 +339,10 @@ const styles = StyleSheet.create({
         borderRadius: SCALE_SIZE(32),
         flexDirection: 'row',
         elevation: 2,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
     },
     searchTextStyle: {
         fontFamily: FONT_NAME.regular,
@@ -360,7 +367,6 @@ const styles = StyleSheet.create({
         borderRadius: SCALE_SIZE(17),
         paddingHorizontal: SCALE_SIZE(20),
         marginLeft: SCALE_SIZE(8),
-        marginTop: SCALE_SIZE(32),
         paddingVertical: SCALE_SIZE(9),
         justifyContent: 'center',
         borderWidth: 1,
@@ -368,7 +374,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     unSelectedPropertyStyle: {
-        marginTop: SCALE_SIZE(32),
         marginLeft: SCALE_SIZE(8),
         justifyContent: 'center',
         paddingHorizontal: SCALE_SIZE(20),
@@ -394,7 +399,11 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         elevation: 2,
         borderRadius: SCALE_SIZE(15),
-        padding: SCALE_SIZE(10)
+        padding: SCALE_SIZE(10),
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
     },
     propertyImages: {
         height: SCALE_SIZE(89),

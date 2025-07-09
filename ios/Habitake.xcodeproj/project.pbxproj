@@ -9,6 +9,15 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-Habitake.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-Habitake.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		21D6AE2C2E1E7CC900C6DF1D /* Outfit-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21D6AE262E1E7CC900C6DF1D /* Outfit-ExtraLight.ttf */; };
+		21D6AE2D2E1E7CC900C6DF1D /* Outfit-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21D6AE292E1E7CC900C6DF1D /* Outfit-Regular.ttf */; };
+		21D6AE2E2E1E7CC900C6DF1D /* Outfit-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21D6AE272E1E7CC900C6DF1D /* Outfit-Light.ttf */; };
+		21D6AE2F2E1E7CC900C6DF1D /* Outfit-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21D6AE252E1E7CC900C6DF1D /* Outfit-ExtraBold.ttf */; };
+		21D6AE302E1E7CC900C6DF1D /* Outfit-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21D6AE282E1E7CC900C6DF1D /* Outfit-Medium.ttf */; };
+		21D6AE312E1E7CC900C6DF1D /* Outfit-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21D6AE2A2E1E7CC900C6DF1D /* Outfit-SemiBold.ttf */; };
+		21D6AE322E1E7CC900C6DF1D /* Outfit-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21D6AE232E1E7CC900C6DF1D /* Outfit-Black.ttf */; };
+		21D6AE332E1E7CC900C6DF1D /* Outfit-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21D6AE2B2E1E7CC900C6DF1D /* Outfit-Thin.ttf */; };
+		21D6AE342E1E7CC900C6DF1D /* Outfit-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21D6AE242E1E7CC900C6DF1D /* Outfit-Bold.ttf */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		D219183F989F1FDAAD5BD90E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
@@ -19,6 +28,15 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Habitake/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Habitake/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Habitake/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		21D6AE232E1E7CC900C6DF1D /* Outfit-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Outfit-Black.ttf"; sourceTree = "<group>"; };
+		21D6AE242E1E7CC900C6DF1D /* Outfit-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Outfit-Bold.ttf"; sourceTree = "<group>"; };
+		21D6AE252E1E7CC900C6DF1D /* Outfit-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Outfit-ExtraBold.ttf"; sourceTree = "<group>"; };
+		21D6AE262E1E7CC900C6DF1D /* Outfit-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Outfit-ExtraLight.ttf"; sourceTree = "<group>"; };
+		21D6AE272E1E7CC900C6DF1D /* Outfit-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Outfit-Light.ttf"; sourceTree = "<group>"; };
+		21D6AE282E1E7CC900C6DF1D /* Outfit-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Outfit-Medium.ttf"; sourceTree = "<group>"; };
+		21D6AE292E1E7CC900C6DF1D /* Outfit-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Outfit-Regular.ttf"; sourceTree = "<group>"; };
+		21D6AE2A2E1E7CC900C6DF1D /* Outfit-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Outfit-SemiBold.ttf"; sourceTree = "<group>"; };
+		21D6AE2B2E1E7CC900C6DF1D /* Outfit-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Outfit-Thin.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-Habitake.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Habitake.debug.xcconfig"; path = "Target Support Files/Pods-Habitake/Pods-Habitake.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-Habitake.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Habitake.release.xcconfig"; path = "Target Support Files/Pods-Habitake/Pods-Habitake.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-Habitake.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Habitake.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +88,15 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				21D6AE232E1E7CC900C6DF1D /* Outfit-Black.ttf */,
+				21D6AE242E1E7CC900C6DF1D /* Outfit-Bold.ttf */,
+				21D6AE252E1E7CC900C6DF1D /* Outfit-ExtraBold.ttf */,
+				21D6AE262E1E7CC900C6DF1D /* Outfit-ExtraLight.ttf */,
+				21D6AE272E1E7CC900C6DF1D /* Outfit-Light.ttf */,
+				21D6AE282E1E7CC900C6DF1D /* Outfit-Medium.ttf */,
+				21D6AE292E1E7CC900C6DF1D /* Outfit-Regular.ttf */,
+				21D6AE2A2E1E7CC900C6DF1D /* Outfit-SemiBold.ttf */,
+				21D6AE2B2E1E7CC900C6DF1D /* Outfit-Thin.ttf */,
 				13B07FAE1A68108700A75B9A /* Habitake */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -159,6 +186,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				21D6AE2C2E1E7CC900C6DF1D /* Outfit-ExtraLight.ttf in Resources */,
+				21D6AE2D2E1E7CC900C6DF1D /* Outfit-Regular.ttf in Resources */,
+				21D6AE2E2E1E7CC900C6DF1D /* Outfit-Light.ttf in Resources */,
+				21D6AE2F2E1E7CC900C6DF1D /* Outfit-ExtraBold.ttf in Resources */,
+				21D6AE302E1E7CC900C6DF1D /* Outfit-Medium.ttf in Resources */,
+				21D6AE312E1E7CC900C6DF1D /* Outfit-SemiBold.ttf in Resources */,
+				21D6AE322E1E7CC900C6DF1D /* Outfit-Black.ttf in Resources */,
+				21D6AE332E1E7CC900C6DF1D /* Outfit-Thin.ttf in Resources */,
+				21D6AE342E1E7CC900C6DF1D /* Outfit-Bold.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				D219183F989F1FDAAD5BD90E /* PrivacyInfo.xcprivacy in Resources */,
 			);
@@ -376,10 +412,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -448,10 +481,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

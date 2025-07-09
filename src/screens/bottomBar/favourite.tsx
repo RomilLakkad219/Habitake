@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View, StyleSheet, FlatList, TouchableOpacity, Image, Dimensions } from "react-native"
+import { View, StyleSheet, FlatList, TouchableOpacity, Image, Dimensions, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
@@ -45,6 +45,7 @@ const Favourite = (props: any) => {
 
     return (
         <View style={styles.container}>
+             <SafeAreaView />
             <Header title={STRING.favourite_property} />
             <View>
                 <FlatList

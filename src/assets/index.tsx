@@ -67,7 +67,9 @@ const IMAGES = {
     ic_send: require('./images/ic_send.png'),
     ic_camera: require('./images/ic_camera.png'),
     ic_attach: require('./images/ic_attach.png'),
-    ic_warning: require('./images/ic_warning.png')
+    ic_warning: require('./images/ic_warning.png'),
+    filter_bg_white: require('./images/filter_bg_white.png'),
+    error_bg: require('./images/error_bg.png')
 }
 
 export { IMAGES }

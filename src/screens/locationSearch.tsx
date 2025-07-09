@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, Platform, TextInput } from "react-native"
+import { StyleSheet, Image, View, TouchableOpacity, Platform, TextInput, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -17,6 +17,7 @@ const LocationSearch = (props: any) => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView />
             <Header
                 type='basic'
                 onBack={() => {
@@ -39,7 +40,7 @@ const LocationSearch = (props: any) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={{flex:1}}></View>
+            <View style={{ flex: 1 }}></View>
             <View style={styles.locationDetailView}>
                 <Text
                     font={FONT_NAME.semiBold}
@@ -75,6 +76,7 @@ const LocationSearch = (props: any) => {
                 size={SCALE_SIZE(16)}>
                 {STRING.skip}
             </Text>
+            <SafeAreaView />
         </View>
     )
 }
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
         flex: 1.0
     },
     nextButtonStyle: {
-        marginTop:SCALE_SIZE(50),
+        marginTop: SCALE_SIZE(50),
         marginBottom: SCALE_SIZE(24),
     },
     searchImage: {
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
     addressView: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop:SCALE_SIZE(10)
+        marginTop: SCALE_SIZE(10)
     },
     locationIcon: {
         height: SCALE_SIZE(50),

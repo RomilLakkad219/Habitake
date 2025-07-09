@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, View, FlatList, Dimensions, ScrollView, TouchableOpacity, ImageBackground } from "react-native"
+import { StyleSheet, Image, View, FlatList, Dimensions, ScrollView, TouchableOpacity, ImageBackground, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -19,8 +19,9 @@ const PropertyType = (props: any) => {
     const [budget, setBudget] = useState('')
 
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.container}>
+        <View style={styles.container}>
+            <SafeAreaView />
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <Header
                     type='basic'
                     onBack={() => {
@@ -93,8 +94,8 @@ const PropertyType = (props: any) => {
                     size={SCALE_SIZE(16)}>
                     {STRING.skip}
                 </Text>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
     )
 }
 

@@ -26,7 +26,8 @@ interface HeaderProps {
 const Header = (props: HeaderProps) => {
     if (props.type === 'onboarding') {
         return (
-            <SafeAreaView>
+            <View>
+                <SafeAreaView />
                 <ImageBackground
                     style={styles.headerImage}
                     resizeMode="contain"
@@ -43,7 +44,7 @@ const Header = (props: HeaderProps) => {
                         </Image>
                     </TouchableOpacity>
                 </ImageBackground>
-            </SafeAreaView>
+            </View>
         )
     }
     else if (props.type === 'basic') {
@@ -53,7 +54,7 @@ const Header = (props: HeaderProps) => {
                     onPress={props.onBack}>
                     <Image
                         style={[styles.backIcon, {
-                            marginTop: SCALE_SIZE(10)
+                            // marginTop: SCALE_SIZE(10)
                         }]}
                         resizeMode="contain"
                         source={IMAGES.ic_back}>
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
     },
     searchContainer: {
         flexDirection: 'row',
-        marginTop: SCALE_SIZE(20),
+        marginTop: Platform.OS == 'ios' ? 0 : SCALE_SIZE(20),
         justifyContent: 'space-between',
         alignItems: 'center',
         marginHorizontal: SCALE_SIZE(16)
@@ -255,7 +256,6 @@ const styles = StyleSheet.create({
         width: SCALE_SIZE(44),
         alignSelf: 'center',
     }
-
 })
 
 export default Header;

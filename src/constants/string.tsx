@@ -90,8 +90,18 @@ const STRING = {
     just_messaged_you: 'Just messaged you. ',
     check_the_message_in: 'Check the message in\n',
     message: 'message ',
-    tab: 'tab.'
-
+    tab: 'tab.',
+    profile: 'Profile',
+    edit_profile: 'Edit Profile',
+    privacy_policy: 'Privacy Policy',
+    term_conditions: 'Terms & Conditions',
+    support: 'Support',
+    logout_capital: 'Logout',
+    logout: 'logout',
+    the_account: 'the account?',
+    update: 'Update',
+    near_by_you: 'Nearby you',
+    cant_found_real_estate_nearby_you: `Can't found real estate nearby you`
 }
 
 export { STRING }

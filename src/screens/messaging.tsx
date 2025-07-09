@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, SectionList, Platform, TextInput } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, SectionList, Platform, TextInput, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -26,6 +26,7 @@ const Messaging = (props: any) => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView />
             <View style={styles.headerView}>
                 <TouchableOpacity
                     onPress={() => {
@@ -104,7 +105,7 @@ const Messaging = (props: any) => {
                             )
                         }} />
                 </KeyboardAvoidingView>
-                <View style={{flex:1}}></View>
+                <View style={{ flex: 1 }}></View>
                 <View style={styles.inputView}>
                     <Image
                         style={styles.cameraIcon}
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     headerView: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: SCALE_SIZE(20)
+        marginTop: Platform.OS == 'ios' ? 0 : SCALE_SIZE(20)
     },
     backIcon: {
         height: SCALE_SIZE(44),
@@ -164,9 +165,9 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.color_E6E6EA99,
         borderRadius: SCALE_SIZE(32),
         marginTop: SCALE_SIZE(16),
-        marginBottom: SCALE_SIZE(14),
+        marginBottom: SCALE_SIZE(20),
         flex: 1,
-        paddingHorizontal: SCALE_SIZE(16)
+        paddingHorizontal: SCALE_SIZE(16),
     },
     senderContainer: {
         flexDirection: 'row',
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFFCC',
         borderRadius: SCALE_SIZE(32),
         paddingHorizontal: SCALE_SIZE(16),
-        marginBottom:SCALE_SIZE(20)
+        marginBottom: SCALE_SIZE(20)
     },
     inputStyle: {
         fontSize: SCALE_SIZE(15),
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
         width: SCALE_SIZE(20),
         alignSelf: 'center',
     },
-    sendIcon:{
+    sendIcon: {
         height: SCALE_SIZE(40),
         width: SCALE_SIZE(40),
         alignSelf: 'center',

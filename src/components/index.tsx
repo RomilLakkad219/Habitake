@@ -7,6 +7,7 @@ import TabBar from "./tabBar";
 import FilterSheet from "./filterSheet";
 import FavouritePropertyRemoveSheet from "./favouritePropertyRemoveSheet";
 import ChatDeleteSheet from "./chatDeleteSheet";
+import LogoutSheet from "./logoutSheet";
 
 export { 
     Text ,
@@ -17,5 +18,6 @@ export {
     TabBar,
     FilterSheet,
     FavouritePropertyRemoveSheet,
-    ChatDeleteSheet
+    ChatDeleteSheet,
+    LogoutSheet
 }

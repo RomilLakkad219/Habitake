@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View, StyleSheet, FlatList, TouchableOpacity, Image } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
@@ -84,6 +84,7 @@ const Chat = (props: any) => {
 
     return (
         <View style={styles.container}>
+             <SafeAreaView />
             <Text
                 style={{ marginTop: SCALE_SIZE(20) }}
                 font={FONT_NAME.semiBold}

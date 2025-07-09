@@ -207,7 +207,11 @@ const styles = StyleSheet.create({
         elevation: 2,
         borderRadius: SCALE_SIZE(15),
         padding: SCALE_SIZE(10),
-        marginTop: SCALE_SIZE(24)
+        marginTop: SCALE_SIZE(24),
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
     },
     propertyImages: {
         height: SCALE_SIZE(89),

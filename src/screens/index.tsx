@@ -20,6 +20,8 @@ import PropertyDetail from "./propertyDetail";
 import AiInterior from "./aiInterior";
 import Messaging from "./messaging";
 import Notification from "./notification";
+import UserProfile from "./userProfile";
+import EditProfile from "./editProfile";
 
 export const SCREENS = {
     Splash: {
@@ -98,4 +100,13 @@ export const SCREENS = {
         name: 'Notification',
         component: Notification
     },
+    UserProfile: {
+        name: 'UserProfile',
+        component: UserProfile
+    },
+    EditProfile: {
+        name: 'EditProfile',
+        component: EditProfile
+    },
 }
+

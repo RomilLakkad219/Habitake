@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, Dimensions } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, Dimensions, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
@@ -70,6 +70,7 @@ const Search = (props: any) => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView />
             <Header
                 type="search"
                 onBack={() => {
@@ -79,6 +80,31 @@ const Search = (props: any) => {
                 onFilter={() => {
                     filterRef?.current?.open()
                 }} />
+            {/* <View style={styles.headerView}>
+                <View style={styles.locationWrapper}>
+                    <Image
+                        style={styles.locationImage}
+                        resizeMode="contain"
+                        source={IMAGES.ic_location} />
+                    <Text
+                        style={{ marginRight: SCALE_SIZE(8) }}
+                        font={FONT_NAME.regular}
+                        color={COLORS.color_545A70}
+                        size={SCALE_SIZE(16)}>
+                        {'Jakarta, Indonesia'}
+                    </Text>
+                    <Image
+                        style={styles.downIcon}
+                        resizeMode="contain"
+                        source={IMAGES.ic_down_arrow} />
+                </View>
+                <View style={{ flex: 1 }}></View>
+                <Image
+                    style={styles.filterIcon}
+                    resizeMode="contain"
+                    source={IMAGES.filter_bg_white}>
+                </Image>
+            </View> */}
             <View style={styles.searchView}>
                 <View style={{ flex: 1 }}>
                     <TouchableOpacity style={styles.searchStyle}>
@@ -115,12 +141,33 @@ const Search = (props: any) => {
                     {STRING.estates}
                 </Text>
             </Text>
+            {/* <View style={styles.nearByYouStyle}>
+                <Image
+                    style={styles.alertIcon}
+                    resizeMode="contain"
+                    source={IMAGES.error_bg} />
+                <Text
+                    style={{ marginRight: SCALE_SIZE(8) }}
+                    font={FONT_NAME.regular}
+                    color={COLORS.color_000929}
+                    size={SCALE_SIZE(16)}>
+                    {STRING.near_by_you}
+                </Text>
+            </View>
+             <View style={styles.cantFoundEstateView}>
+                <Text
+                    font={FONT_NAME.regular}
+                    color={COLORS.color_000929}
+                    size={SCALE_SIZE(16)}>
+                    {STRING.cant_found_real_estate_nearby_you}
+                </Text>
+            </View> */}
             {/* <MapView
                 style={styles.map}
                 showsUserLocation={true}
                 showsMyLocationButton={false}
             /> */}
-            {/* <View style={styles.searchAlertView}>
+            <View style={styles.searchAlertView}>
                 <Image
                     style={styles.searchAlertIcon}
                     resizeMode="contain"
@@ -146,8 +193,8 @@ const Search = (props: any) => {
                     size={SCALE_SIZE(14)}>
                     {STRING.search_not_found_error}
                 </Text>
-            </View> */}
-            <View style={{ flex: 1 }}>
+            </View>
+            {/* <View style={{ flex: 1 }}>
                 <FlatList
                     data={listings}
                     numColumns={2}
@@ -158,7 +205,7 @@ const Search = (props: any) => {
                         }} />}
                 >
                 </FlatList>
-            </View>
+            </View> */}
             <FilterSheet onRef={filterRef} />
         </View>
     )
@@ -261,7 +308,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFFCC',
         borderRadius: SCALE_SIZE(32),
         flexDirection: 'row',
-        elevation: 2
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
     },
     searchTextStyle: {
         fontFamily: FONT_NAME.medium,
@@ -359,6 +410,76 @@ const styles = StyleSheet.create({
     map: {
         ...StyleSheet.absoluteFillObject, // fills the entire screen
     },
+    headerView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: SCALE_SIZE(16)
+    },
+    locationWrapper: {
+        backgroundColor: COLORS.white,
+        paddingVertical: SCALE_SIZE(12),
+        paddingHorizontal: SCALE_SIZE(16),
+        elevation: 2,
+        borderRadius: SCALE_SIZE(24),
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
+    },
+    locationImage: {
+        height: SCALE_SIZE(15),
+        width: SCALE_SIZE(15),
+        alignSelf: 'center',
+        marginRight: SCALE_SIZE(8)
+    },
+    downIcon: {
+        height: SCALE_SIZE(10),
+        width: SCALE_SIZE(10),
+        alignSelf: 'center',
+    },
+    filterIcon: {
+        height: SCALE_SIZE(44),
+        width: SCALE_SIZE(44),
+        alignSelf: 'center',
+    },
+    nearByYouStyle: {
+        backgroundColor: COLORS.white,
+        elevation: 2,
+        borderRadius: SCALE_SIZE(32),
+        paddingHorizontal: SCALE_SIZE(12),
+        paddingVertical: SCALE_SIZE(10),
+        alignItems: 'center',
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+        marginHorizontal: SCALE_SIZE(16),
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
+    },
+    alertIcon: {
+        height: SCALE_SIZE(24),
+        width: SCALE_SIZE(24),
+        alignSelf: 'center',
+        marginRight: SCALE_SIZE(8)
+    },
+    cantFoundEstateView: {
+        backgroundColor: COLORS.white,
+        elevation: 2,
+        borderRadius: SCALE_SIZE(32),
+        paddingHorizontal: SCALE_SIZE(76),
+        paddingVertical: SCALE_SIZE(13),
+        alignItems: 'center',
+        marginHorizontal: SCALE_SIZE(16),
+        marginTop: SCALE_SIZE(12),
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
+    }
 })
 
 export default Search;

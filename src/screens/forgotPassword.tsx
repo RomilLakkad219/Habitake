@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native"
+import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, View } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -85,6 +85,7 @@ const ForgotPassword = (props: any) => {
                     </Text>
                 </Text>
             </KeyboardAvoidingView>
+            <SafeAreaView />
         </View>
     )
 }

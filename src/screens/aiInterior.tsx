@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -9,6 +9,7 @@ import { COLORS, SCALE_SIZE, FONT_NAME, STRING } from "../constants";
 
 //COMPONENTS
 import { Text } from "../components";
+import { BlurView } from "@react-native-community/blur";
 
 const AiInterior = (props: any) => {
 
@@ -19,6 +20,7 @@ const AiInterior = (props: any) => {
 
     return (
         <View style={styles.container}>
+            <SafeAreaView />
             <TouchableOpacity onPress={() => {
                 props.navigation.goBack()
             }}>
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
         height: SCALE_SIZE(44),
         width: SCALE_SIZE(44),
         marginLeft: SCALE_SIZE(10),
-        marginTop: SCALE_SIZE(40)
+        marginTop: Platform.OS == 'ios' ? SCALE_SIZE(10) : SCALE_SIZE(40)
     },
     imageContainer: {
         flex: 1
@@ -242,7 +244,8 @@ const styles = StyleSheet.create({
     modalBox: {
         width: SCALE_SIZE(119),
         height: SCALE_SIZE(164),
-        backgroundColor: 'rgba(255,255,255,0.5)',
+        backgroundColor:'#FFFFFF80',
+        // backgroundColor: 'rgba(255,255,255,0.5)',
         borderRadius: SCALE_SIZE(16),
         padding: SCALE_SIZE(16),
         justifyContent: 'space-between'
@@ -257,6 +260,10 @@ const styles = StyleSheet.create({
         borderRadius: SCALE_SIZE(20),
         alignItems: 'center',
         justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
     },
     arrowDown: {
         position: 'absolute',
