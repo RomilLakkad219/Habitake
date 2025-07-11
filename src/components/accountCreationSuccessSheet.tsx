@@ -31,7 +31,7 @@ const AccountCreationSuccessSheet = (props: SheetProps) => {
             customStyles={{
                 container: {
                     backgroundColor: COLORS.white,
-                    height: Dimensions.get('window').height * 0.5,
+                    height: Dimensions.get('window').height * 0.6,
                     borderTopLeftRadius: SCALE_SIZE(40),
                     borderTopRightRadius: SCALE_SIZE(40),
                 },

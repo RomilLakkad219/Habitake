@@ -126,7 +126,7 @@ const UserProfile = (props: any) => {
                     onLogoutRef?.current?.close()
                 }}
                 onLogout={() => {
-
+                    onLogoutRef?.current?.close()
                 }} />
         </View>
     )
@@ -135,7 +135,7 @@ const UserProfile = (props: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1.0,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.color_FDFDFD,
         paddingHorizontal: SCALE_SIZE(16)
     },
     profileView: {

@@ -31,7 +31,7 @@ const ChatDeleteSheet = (props: SheetProps) => {
             draggable={true}
             customStyles={{
                 container: {
-                    backgroundColor: COLORS.white,
+                    backgroundColor: COLORS.color_FDFDFD,
                     height: Dimensions.get('window').height * 0.6,
                     borderTopLeftRadius: SCALE_SIZE(40),
                     borderTopRightRadius: SCALE_SIZE(40),

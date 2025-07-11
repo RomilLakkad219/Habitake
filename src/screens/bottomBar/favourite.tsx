@@ -185,7 +185,7 @@ const PropertyCard = ({ item, onPress }: PropertyCardProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.color_FDFDFD
     },
     selectedPropertyStyle: {
         backgroundColor: COLORS.color_E3FFF5,

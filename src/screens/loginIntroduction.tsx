@@ -73,7 +73,7 @@ const LoginIntroduction = (props: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1.0,
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.color_FDFDFD
     },
     introLogo: {
         height: ((Dimensions.get('window').width - SCALE_SIZE(32)) * SCALE_SIZE(490)) / SCALE_SIZE(396),

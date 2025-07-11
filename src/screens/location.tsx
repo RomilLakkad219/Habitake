@@ -97,15 +97,19 @@ const Location = (props: any) => {
                 }}
                 style={styles.nextButtonStyle}
                 title={STRING.next} />
-            <Text
-                onPress={() => { }}
-                align="center"
-                style={{ marginBottom: SCALE_SIZE(20) }}
-                font={FONT_NAME.medium}
-                color={COLORS.color_333A54}
-                size={SCALE_SIZE(16)}>
-                {STRING.skip}
-            </Text>
+            <TouchableOpacity>
+                <Text
+                    onPress={() => {
+                        props.navigation.navigate(SCREENS.LocationSearch.name)
+                    }}
+                    align="center"
+                    style={{ marginBottom: SCALE_SIZE(20) }}
+                    font={FONT_NAME.medium}
+                    color={COLORS.color_333A54}
+                    size={SCALE_SIZE(16)}>
+                    {STRING.skip}
+                </Text>
+            </TouchableOpacity>
             <SafeAreaView />
         </View>
     )

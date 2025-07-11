@@ -295,7 +295,7 @@ const PropertyCard = ({ item, onPress }: PropertyCardProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.color_FDFDFD
     },
     searchView: {
         flexDirection: 'row',

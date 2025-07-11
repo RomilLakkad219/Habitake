@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { StyleSheet, Image, View, FlatList, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView } from "react-native"
+import React, { useState } from "react";
+import { StyleSheet, Image, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -8,7 +8,7 @@ import { IMAGES } from "../assets";
 import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
 
 //COMPONENTS
-import { Button, Header, LogoutSheet, Text } from "../components";
+import { Button, Header, Text } from "../components";
 
 //SCREENS
 import { SCREENS } from ".";
@@ -157,7 +157,7 @@ const EditProfile = (props: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1.0,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.color_FDFDFD,
         paddingHorizontal: SCALE_SIZE(16)
     },
     profileView: {

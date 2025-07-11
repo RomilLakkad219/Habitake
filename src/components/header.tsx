@@ -36,7 +36,7 @@ const Header = (props: HeaderProps) => {
                         onPress={props.onBack}>
                         <Image
                             style={[styles.backIcon, {
-                                marginLeft: SCALE_SIZE(25),
+                                marginLeft: SCALE_SIZE(16),
                                 marginTop: SCALE_SIZE(10)
                             }]}
                             resizeMode="contain"
@@ -54,7 +54,7 @@ const Header = (props: HeaderProps) => {
                     onPress={props.onBack}>
                     <Image
                         style={[styles.backIcon, {
-                            // marginTop: SCALE_SIZE(10)
+                            marginTop: Platform.OS == 'ios' ? 0 : SCALE_SIZE(10)
                         }]}
                         resizeMode="contain"
                         source={IMAGES.ic_back}>

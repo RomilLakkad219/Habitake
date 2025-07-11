@@ -447,7 +447,7 @@ const Option = (props: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.color_FDFDFD,
     },
     propertyImage: {
         height: ((Dimensions.get('window').width - SCALE_SIZE(8)) * SCALE_SIZE(560)) / SCALE_SIZE(428),
