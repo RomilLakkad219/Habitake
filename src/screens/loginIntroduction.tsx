@@ -16,12 +16,12 @@ import { SCREENS } from ".";
 const LoginIntroduction = (props: any) => {
 
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        // <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.container}>
                 <SafeAreaView>
                     <Image
                         style={styles.introLogo}
-                        resizeMode="contain"
+                        resizeMode="cover"
                         source={IMAGES.ic_intro}>
                     </Image>
                     <Text
@@ -66,7 +66,7 @@ const LoginIntroduction = (props: any) => {
                     </Text>
                 </SafeAreaView>
             </View>
-        </ScrollView>
+        // </ScrollView>
     )
 }
 
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.color_FDFDFD
     },
     introLogo: {
-        height: ((Dimensions.get('window').width - SCALE_SIZE(32)) * SCALE_SIZE(490)) / SCALE_SIZE(396),
+        height: '60%',
         width: Dimensions.get('window').width - SCALE_SIZE(32),
         alignSelf: 'center',
         borderRadius: SCALE_SIZE(20),
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
     },
     loginButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),
-        marginTop: SCALE_SIZE(74),
-        marginBottom: SCALE_SIZE(50)
+        marginTop: SCALE_SIZE(20),
+        marginBottom: SCALE_SIZE(30)
     }
 })
 

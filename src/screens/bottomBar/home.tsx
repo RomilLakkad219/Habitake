@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, Dimensions, SafeAreaView } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, Dimensions, SafeAreaView, KeyboardAvoidingView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
@@ -72,172 +72,187 @@ const Home = (props: any) => {
                         source={IMAGES.ic_filter} />
                 </TouchableOpacity>
             </View>
-            <View>
-                <FlatList
-                    data={[{ name: 'All', image: '' }, { name: 'Residential', image: IMAGES.house_residential }, { name: 'Commercial', image: IMAGES.house_commercial }, { name: 'Rental', image: IMAGES.house_rental }, { name: 'Luxury', image: '' }, { name: 'Rental', image: '' }]}
-                    horizontal
-                    scrollEnabled={true}
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setSelectedPropertyItem(index)
-                                }}
-                                style={selectedPropertyItem == index ? styles.selectedPropertyStyle : styles.unSelectedPropertyStyle}>
-                                {item.image &&
-                                    <Image
-                                        style={styles.iconsOfHouse}
-                                        resizeMode="contain"
-                                        source={item.image} />
-                                }
-                                <Text
-                                    size={SCALE_SIZE(12)}
-                                    font={FONT_NAME.medium}
-                                    color={selectedPropertyItem == index ? COLORS.color_01A669 : COLORS.color_545A70}>
-                                    {item.name}
-                                </Text>
-                            </TouchableOpacity>
-                        );
-                    }}
-                    ListFooterComponent={() => {
-                        return <View style={{ marginRight: SCALE_SIZE(16) }}></View>;
-                    }}>
-                </FlatList>
-            </View>
-            <View>
-                <FlatList
-                    data={listings}
-                    horizontal
-                    scrollEnabled={true}
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) =>
-                        <PropertyCard item={item} onPress={() => {
-                            props.navigation.navigate(SCREENS.PropertyDetail.name)
-                        }} />}
-                >
-                </FlatList>
-            </View>
-            <View style={styles.nearByView}>
-                <Text
-                    size={SCALE_SIZE(20)}
-                    font={FONT_NAME.semiBold}
-                    color={COLORS.color_333A54}>
-                    {STRING.nearby_listing}
-                </Text>
-                <View style={{ flex: 1 }}></View>
-                <Text
-                    size={SCALE_SIZE(14)}
-                    font={FONT_NAME.medium}
-                    color={COLORS.color_01A669}>
-                    {STRING.more}
-                </Text>
-            </View>
             <FlatList
                 data={['', '', '', '']}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => {
-                    return (
-                        <View style={[styles.propertyItemView, { marginBottom: SCALE_SIZE(10) }]}>
-                            <ImageBackground
-                                style={styles.propertyImages}
+                ListHeaderComponent={() => (
+                    <View>
+                        <FlatList
+                            data={[
+                                { name: 'All', image: '' },
+                                { name: 'Residential', image: IMAGES.house_residential },
+                                { name: 'Commercial', image: IMAGES.house_commercial },
+                                { name: 'Rental', image: IMAGES.house_rental },
+                                { name: 'Luxury', image: IMAGES.luxury_img },
+                            ]}
+                            horizontal
+                            scrollEnabled={true}
+                            showsHorizontalScrollIndicator={false}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item, index }) => (
+                                <TouchableOpacity
+                                    onPress={() => setSelectedPropertyItem(index)}
+                                    style={
+                                        selectedPropertyItem == index
+                                            ? styles.selectedPropertyStyle
+                                            : styles.unSelectedPropertyStyle
+                                    }>
+                                    {item.image && (
+                                        <Image
+                                            style={styles.iconsOfHouse}
+                                            resizeMode="contain"
+                                            source={item.image}
+                                        />
+                                    )}
+                                    <Text
+                                        size={SCALE_SIZE(12)}
+                                        font={FONT_NAME.medium}
+                                        color={
+                                            selectedPropertyItem == index
+                                                ? COLORS.color_01A669
+                                                : COLORS.color_545A70
+                                        }>
+                                        {item.name}
+                                    </Text>
+                                </TouchableOpacity>
+                            )}
+                            ListFooterComponent={() => <View style={{ marginRight: SCALE_SIZE(16) }} />}
+                        />
+                        <FlatList
+                            data={listings}
+                            horizontal
+                            scrollEnabled={true}
+                            showsHorizontalScrollIndicator={false}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => (
+                                <PropertyCard
+                                    item={item}
+                                    onPress={() => {
+                                        props.navigation.navigate(SCREENS.PropertyDetail.name);
+                                    }}
+                                />
+                            )}
+                        />
+                        <View style={styles.nearByView}>
+                            <Text
+                                size={SCALE_SIZE(20)}
+                                font={FONT_NAME.semiBold}
+                                color={COLORS.color_333A54}>
+                                {STRING.nearby_listing}
+                            </Text>
+                            <View style={{ flex: 1 }} />
+                            <Text
+                                size={SCALE_SIZE(14)}
+                                font={FONT_NAME.medium}
+                                color={COLORS.color_01A669}>
+                                {STRING.more}
+                            </Text>
+                        </View>
+                    </View>
+                )}
+                renderItem={({ item, index }) => (
+                    <View style={[styles.propertyItemView, { marginBottom: SCALE_SIZE(10) }]}>
+                        <ImageBackground
+                            style={styles.propertyImages}
+                            resizeMode="contain"
+                            source={IMAGES.ic_residencial}>
+                            <Image
+                                style={styles.heartIcon}
                                 resizeMode="contain"
-                                source={IMAGES.ic_residencial}>
+                                source={
+                                    index == 0 ? IMAGES.ic_square_red_heart : IMAGES.ic_un_heart
+                                }
+                            />
+                        </ImageBackground>
+                        <View style={{ flex: 1 }}>
+                            <View style={styles.headerPropertyNameView}>
+                                <Text
+                                    size={SCALE_SIZE(17)}
+                                    align="center"
+                                    font={FONT_NAME.semiBold}
+                                    color={COLORS.color_333A54}>
+                                    {'Woodland Apartment'}
+                                </Text>
+                                <View style={{ flex: 1 }} />
+                                <Text
+                                    size={SCALE_SIZE(11)}
+                                    align="center"
+                                    font={FONT_NAME.semiBold}
+                                    color={COLORS.color_01A669}>
+                                    {'$340'}
+                                </Text>
+                            </View>
+                            <View style={[styles.locationView, { marginTop: SCALE_SIZE(10) }]}>
                                 <Image
-                                    style={styles.heartIcon}
+                                    style={styles.locationIcon}
                                     resizeMode="contain"
-                                    source={index == 0 ? IMAGES.ic_square_red_heart : IMAGES.ic_un_heart} />
-                            </ImageBackground>
-                            <View style={{ flex: 1 }}>
-                                <View style={styles.headerPropertyNameView}>
-                                    <Text
-                                        size={SCALE_SIZE(17)}
-                                        align="center"
-                                        font={FONT_NAME.semiBold}
-                                        color={COLORS.color_333A54}>
-                                        {'Woodland Apartment'}
-                                    </Text>
-                                    <View style={{ flex: 1 }}></View>
-                                    <Text
-                                        size={SCALE_SIZE(11)}
-                                        align="center"
-                                        font={FONT_NAME.semiBold}
-                                        color={COLORS.color_01A669}>
-                                        {'$340'}
-                                    </Text>
-                                </View>
-                                <View style={[styles.locationView, { marginTop: SCALE_SIZE(10) }]}>
-                                    <Image
-                                        style={styles.locationIcon}
-                                        resizeMode="contain"
-                                        source={IMAGES.ic_location}>
-                                    </Image>
-                                    <Text
-                                        font={FONT_NAME.medium}
-                                        color={COLORS.color_545A70}
-                                        size={SCALE_SIZE(10)}>
-                                        {'1012 Ocean avanue, New yourk, USA'}
-                                    </Text>
-                                </View>
-                                <View style={styles.bathAndBedRoomView}>
-                                    <Image
-                                        style={styles.bathroomIcon}
-                                        resizeMode="contain"
-                                        source={IMAGES.ic_bathroom}></Image>
-                                    <Text
-                                        size={SCALE_SIZE(10)}
-                                        align="center"
-                                        font={FONT_NAME.medium}
-                                        color={COLORS.color_545A70}>
-                                        {'02 bathrooms'}
-                                    </Text>
-                                    <View style={{ marginLeft: SCALE_SIZE(12) }}></View>
-                                    <Image
-                                        style={styles.bedroomIcon}
-                                        resizeMode="contain"
-                                        source={IMAGES.ic_bedroom}></Image>
-                                    <Text
-                                        size={SCALE_SIZE(10)}
-                                        align="center"
-                                        font={FONT_NAME.medium}
-                                        color={COLORS.color_545A70}>
-                                        {'03 bedrooms'}
-                                    </Text>
-                                    <View style={{ flex: 1 }}></View>
-                                    {index == 0 || index == 2 ?
-                                        <TouchableOpacity style={styles.soldButton}>
-                                            <Text
-                                                size={SCALE_SIZE(10)}
-                                                align="center"
-                                                font={FONT_NAME.medium}
-                                                color={COLORS.color_545A70}>
-                                                {STRING.sold}
-                                            </Text>
-                                        </TouchableOpacity>
-                                        :
-                                        <TouchableOpacity style={styles.availableButton}>
-                                            <Text
-                                                size={SCALE_SIZE(10)}
-                                                align="center"
-                                                font={FONT_NAME.medium}
-                                                color={COLORS.white}>
-                                                {STRING.available}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    }
-                                </View>
+                                    source={IMAGES.ic_location}
+                                />
+                                <Text
+                                    font={FONT_NAME.medium}
+                                    color={COLORS.color_545A70}
+                                    size={SCALE_SIZE(10)}>
+                                    {'1012 Ocean avenue, New York, USA'}
+                                </Text>
+                            </View>
+                            <View style={styles.bathAndBedRoomView}>
+                                <Image
+                                    style={styles.bathroomIcon}
+                                    resizeMode="contain"
+                                    source={IMAGES.ic_bathroom}
+                                />
+                                <Text
+                                    size={SCALE_SIZE(10)}
+                                    align="center"
+                                    font={FONT_NAME.medium}
+                                    color={COLORS.color_545A70}>
+                                    {'02 bathrooms'}
+                                </Text>
+                                <View style={{ marginLeft: SCALE_SIZE(12) }} />
+                                <Image
+                                    style={styles.bedroomIcon}
+                                    resizeMode="contain"
+                                    source={IMAGES.ic_bedroom}
+                                />
+                                <Text
+                                    size={SCALE_SIZE(10)}
+                                    align="center"
+                                    font={FONT_NAME.medium}
+                                    color={COLORS.color_545A70}>
+                                    {'03 bedrooms'}
+                                </Text>
+                                <View style={{ flex: 1 }} />
+                                {index === 0 || index === 2 ? (
+                                    <TouchableOpacity style={styles.soldButton}>
+                                        <Text
+                                            size={SCALE_SIZE(10)}
+                                            align="center"
+                                            font={FONT_NAME.medium}
+                                            color={COLORS.color_545A70}>
+                                            {STRING.sold}
+                                        </Text>
+                                    </TouchableOpacity>
+                                ) : (
+                                    <TouchableOpacity style={styles.availableButton}>
+                                        <Text
+                                            size={SCALE_SIZE(10)}
+                                            align="center"
+                                            font={FONT_NAME.medium}
+                                            color={COLORS.white}>
+                                            {STRING.available}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
                             </View>
                         </View>
-                    );
-                }}
-                ListFooterComponent={() => {
-                    return <View style={{ marginBottom: SCALE_SIZE(10) }}></View>;
-                }}>
-            </FlatList>
-        </View>
+                    </View>
+                )}
+                ListFooterComponent={() => (
+                    <View style={{ marginBottom: SCALE_SIZE(10) }} />
+                )}
+            />
+        </View >
     )
 }
 
@@ -330,8 +345,8 @@ const styles = StyleSheet.create({
     },
     searchView: {
         flexDirection: 'row',
-        marginTop: SCALE_SIZE(32),
-        marginBottom: SCALE_SIZE(20)
+        marginTop: SCALE_SIZE(25),
+        marginBottom: SCALE_SIZE(10)
     },
     searchStyle: {
         height: SCALE_SIZE(56),

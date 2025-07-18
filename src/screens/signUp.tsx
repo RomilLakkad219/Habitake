@@ -131,16 +131,16 @@ const SignUp = (props: any) => {
                         align="center"
                         color={COLORS.color_333A54}
                         size={SCALE_SIZE(16)}>
-                        {STRING.dont_have_an_account}
+                        {STRING.already_have_an_account}
                         <Text
                             onPress={() => {
-                                props.navigation.navigate(SCREENS.SignUp.name)
+                                props.navigation.navigate(SCREENS.Login.name)
                             }}
                             font={FONT_NAME.bold}
                             align="center"
                             color={COLORS.color_01A669}
                             size={SCALE_SIZE(16)}>
-                            {STRING.register}
+                            {STRING.login}
                         </Text>
                     </Text>
                 </ScrollView>

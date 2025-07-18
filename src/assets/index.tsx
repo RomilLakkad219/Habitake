@@ -69,7 +69,8 @@ const IMAGES = {
     ic_attach: require('./images/ic_attach.png'),
     ic_warning: require('./images/ic_warning.png'),
     filter_bg_white: require('./images/filter_bg_white.png'),
-    error_bg: require('./images/error_bg.png')
+    error_bg: require('./images/error_bg.png'),
+    luxury_img:require('./images/luxury.png')
 }
 
 export { IMAGES }

@@ -101,7 +101,8 @@ const STRING = {
     the_account: 'the account?',
     update: 'Update',
     near_by_you: 'Nearby you',
-    cant_found_real_estate_nearby_you: `Can't found real estate nearby you`
+    cant_found_real_estate_nearby_you: `Can't found real estate nearby you`,
+    already_have_an_account:'Already have an account? '
 }
 
 export { STRING }

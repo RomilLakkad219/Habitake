@@ -15,11 +15,11 @@ import { SCREENS } from ".";
 
 const EditProfile = (props: any) => {
 
-    const [isSecurePassword, setIsSecurePassword] = useState(false);
-    const [name, setName] = useState('Mathew Adam');
-    const [password, setPassword] = useState('12345');
-    const [email, setEmail] = useState('mathew@gmail.com');
-    const [phoneNumber, setPhoneNumber] = useState('1234567890');
+    const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
+    const [name, setName] = useState<string>('Mathew Adam');
+    const [password, setPassword] = useState<string>('12345');
+    const [email, setEmail] = useState<string>('mathew@gmail.com');
+    const [phoneNumber, setPhoneNumber] = useState<string>('1234567890');
 
     return (
         <View style={styles.container}>

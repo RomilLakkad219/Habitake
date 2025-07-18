@@ -16,7 +16,7 @@ const BottomBar = (props: any) => {
     return (
         <>
             <Tab.Navigator screenOptions={{
-                headerShown: false
+                headerShown: false,
             }}
                 tabBar={props =>
                     <TabBar

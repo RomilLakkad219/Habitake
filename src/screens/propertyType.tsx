@@ -48,7 +48,11 @@ const PropertyType = (props: any) => {
                     {STRING.you_can_edit_this_later_on_your_account_setting}
                 </Text>
                 <View >
-                    <FlatList data={[{ propertyIcon: IMAGES.ic_residencial }, { propertyIcon: IMAGES.ic_commercial }, { propertyIcon: IMAGES.ic_rental }, { propertyIcon: IMAGES.ic_luxury }]}
+                    <FlatList data={[
+                        { propertyIcon: IMAGES.ic_residencial, name: 'Residential' },
+                        { propertyIcon: IMAGES.ic_commercial, name: 'Commercial' },
+                        { propertyIcon: IMAGES.ic_rental, name: 'Rental' },
+                        { propertyIcon: IMAGES.ic_luxury, name: 'Luxury' }]}
                         keyExtractor={(item, index) => index.toString()}
                         showsVerticalScrollIndicator={false}
                         numColumns={2}
@@ -60,10 +64,19 @@ const PropertyType = (props: any) => {
                                     style={[styles.propetyImages, { marginTop: index == 2 || index == 3 ? SCALE_SIZE(10) : SCALE_SIZE(46) }]}
                                     resizeMode="contain"
                                     source={item.propertyIcon}>
-                                    <Image
-                                        style={styles.checkMarkImage}
-                                        resizeMode="contain"
-                                        source={isSelectedProperty == index ? IMAGES.ic_check_green : IMAGES.ic_check_white} />
+                                    <View style={{ flexDirection: 'column' }}>
+                                        <Image
+                                            style={styles.checkMarkImage}
+                                            resizeMode="contain"
+                                            source={isSelectedProperty == index ? IMAGES.ic_check_green : IMAGES.ic_check_white} />
+                                        <Text
+                                            style={styles.propertyName}
+                                            font={FONT_NAME.bold}
+                                            color={COLORS.white}
+                                            size={SCALE_SIZE(16)}>
+                                            {item.name}
+                                        </Text>
+                                    </View>
                                 </ImageBackground>
                             </TouchableOpacity>
                         )}
@@ -141,10 +154,16 @@ const styles = StyleSheet.create({
         height: SCALE_SIZE(24),
         width: SCALE_SIZE(24),
         position: 'absolute',
-        top: 8,
-        left: 8,
+        top: SCALE_SIZE(8),
+        left: SCALE_SIZE(8),
         zIndex: 1,
-        margin: SCALE_SIZE(8)
+        margin: SCALE_SIZE(8),
+    },
+    propertyName: {
+        position: 'absolute',
+        left: SCALE_SIZE(12),
+        zIndex: 1,
+        top: 150,
     }
 })
 

@@ -9,7 +9,6 @@ import { COLORS, SCALE_SIZE, FONT_NAME, STRING } from "../constants";
 
 //COMPONENTS
 import { Text } from "../components";
-import { BlurView } from "@react-native-community/blur";
 
 const AiInterior = (props: any) => {
 
@@ -91,47 +90,45 @@ const AiInterior = (props: any) => {
                     </TouchableOpacity>
                 ))}
             </View>
-            {modalVisible && (
+            {modalVisible &&
                 <View style={styles.modalContainer}>
                     <View style={styles.modalBox}>
-                        <TouchableOpacity style={selectedOptions == 0 ? styles.optionSelected : styles.option}
-                            onPress={() => {
-                                setSelectedOptions(0)
-                            }}>
-                            <Text
-                                size={SCALE_SIZE(15)}
-                                align="center"
-                                font={FONT_NAME.semiBold}
-                                color={selectedOptions == 0 ? COLORS.color_01A669 : COLORS.white}>
-                                {STRING.style}
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={selectedOptions == 1 ? styles.optionSelected : styles.option} onPress={() => {
-                            setSelectedOptions(1)
-                        }}>
-                            <Text
-                                size={SCALE_SIZE(15)}
-                                align="center"
-                                font={FONT_NAME.semiBold}
-                                color={selectedOptions == 1 ? COLORS.color_01A669 : COLORS.white}>
-                                {STRING.colour}
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={selectedOptions == 2 ? styles.optionSelected : styles.option} onPress={() => {
-                            setSelectedOptions(2)
-                        }}>
-                            <Text
-                                size={SCALE_SIZE(15)}
-                                align="center"
-                                font={FONT_NAME.semiBold}
-                                color={selectedOptions == 2 ? COLORS.color_01A669 : COLORS.white}>
-                                {STRING.furniture}
-                            </Text>
-                        </TouchableOpacity>
-                        <View style={styles.arrowDown} />
+                        {[STRING.style, STRING.colour, STRING.furniture].map((e, index) => {
+                            return (
+                                <ModalOptions
+                                    isSelected={selectedOptions == index}
+                                    optionName={e}
+                                    onPress={() => { setSelectedOptions(index) }} />
+                            )
+                        })}
                     </View>
+                    <View style={styles.arrowDown} />
                 </View>
-            )}
+            }
+        </View>
+    )
+}
+
+type ModalProps = {
+    isSelected: boolean;
+    onPress?: () => void;
+    optionName: any
+}
+
+const ModalOptions = ({ isSelected, onPress, optionName }: ModalProps) => {
+    return (
+        <View style={styles.optionContainer}>
+            <TouchableOpacity style={[styles.optionStyle, { backgroundColor: isSelected ? '#fff' : 'transparent' }]}
+                onPress={onPress}>
+                <Text
+                    size={SCALE_SIZE(15)}
+                    align="center"
+                    font={FONT_NAME.semiBold}
+                    numberOfLines={1}
+                    color={isSelected ? COLORS.color_01A669 : COLORS.white}>
+                    {optionName}
+                </Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -234,42 +231,37 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         gap: 2,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     modalContainer: {
         position: 'absolute',
-        bottom: 80,
-        left: 20,
+        bottom: SCALE_SIZE(105),
+        left: SCALE_SIZE(20),
     },
     modalBox: {
-        width: SCALE_SIZE(119),
-        height: SCALE_SIZE(164),
-        backgroundColor:'#FFFFFF80',
-        // backgroundColor: 'rgba(255,255,255,0.5)',
-        borderRadius: SCALE_SIZE(16),
-        padding: SCALE_SIZE(16),
-        justifyContent: 'space-between'
+        width: SCALE_SIZE(140),
+        backgroundColor: '#FFFFFF80',
+        borderRadius: SCALE_SIZE(20),
+        justifyContent: 'center',
+        alignSelf: 'center',
+        overflow: 'hidden'
     },
-    option: {
-        paddingVertical: 4,
+    optionContainer: {
+        marginHorizontal: SCALE_SIZE(4),
+        marginVertical: SCALE_SIZE(8),
+        alignSelf: 'center'
     },
-    optionSelected: {
-        height: SCALE_SIZE(39),
-        backgroundColor: COLORS.white,
-        elevation: 2,
+    optionStyle: {
+        paddingVertical: SCALE_SIZE(10),
+        paddingHorizontal: SCALE_SIZE(20),
         borderRadius: SCALE_SIZE(20),
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
-        shadowOffset: { width: 0, height: 2 },
     },
     arrowDown: {
         position: 'absolute',
         bottom: -10,
-        left: '50%',
-        marginLeft: -2,
+        left: '42%',
         width: 0,
         height: 0,
         borderLeftWidth: 10,
