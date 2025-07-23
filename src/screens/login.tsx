@@ -128,24 +128,25 @@ const Login = (props: any) => {
                             </Image>
                         </TouchableOpacity>
                     </View>
-                    <Text
-                        style={{ marginBottom: SCALE_SIZE(20) }}
-                        font={FONT_NAME.regular}
-                        align="center"
-                        color={COLORS.color_333A54}
-                        size={SCALE_SIZE(16)}>
-                        {STRING.dont_have_an_account}
+                    <View style={{ marginBottom: SCALE_SIZE(40) }}>
                         <Text
-                            onPress={() => {
-                                props.navigation.navigate(SCREENS.SignUp.name)
-                            }}
-                            font={FONT_NAME.bold}
+                            font={FONT_NAME.regular}
                             align="center"
-                            color={COLORS.color_01A669}
+                            color={COLORS.color_333A54}
                             size={SCALE_SIZE(16)}>
-                            {STRING.register}
+                            {STRING.dont_have_an_account}
+                            <Text
+                                onPress={() => {
+                                    props.navigation.navigate(SCREENS.SignUp.name)
+                                }}
+                                font={FONT_NAME.bold}
+                                align="center"
+                                color={COLORS.color_01A669}
+                                size={SCALE_SIZE(16)}>
+                                {STRING.register}
+                            </Text>
                         </Text>
-                    </Text>
+                    </View>
                 </ScrollView>
             </KeyboardAvoidingView>
         </View>
@@ -167,14 +168,14 @@ const styles = StyleSheet.create({
     },
     loginButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),
-        marginTop: SCALE_SIZE(58),
-        marginBottom: SCALE_SIZE(50)
+        marginTop: SCALE_SIZE(50),
+        marginBottom: SCALE_SIZE(30)
     },
     buttonDirectionView: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginBottom: SCALE_SIZE(77),
-        marginTop: SCALE_SIZE(20)
+        marginTop: SCALE_SIZE(20),
+        marginBottom: SCALE_SIZE(40)
     },
     googleButtonStyle: {
         height: SCALE_SIZE(70),

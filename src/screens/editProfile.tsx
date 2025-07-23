@@ -51,22 +51,6 @@ const EditProfile = (props: any) => {
                         source={IMAGES.ic_edit}
                     />
                 </View>
-                <Text
-                    style={{ marginTop: SCALE_SIZE(12) }}
-                    size={SCALE_SIZE(14)}
-                    align="center"
-                    font={FONT_NAME.semiBold}
-                    color={COLORS.color_333A54}>
-                    {'Mathew Adam'}
-                </Text>
-                <Text
-                    style={{ marginTop: SCALE_SIZE(4) }}
-                    size={SCALE_SIZE(10)}
-                    align="center"
-                    font={FONT_NAME.regular}
-                    color={COLORS.color_545A70}>
-                    {'mathew@gmail.com'}
-                </Text>
                 <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
                     style={{ flex: 1 }}>
                     <View style={[styles.inputView, { marginTop: SCALE_SIZE(40) }]}>
@@ -193,7 +177,8 @@ const styles = StyleSheet.create({
     },
     inputTextStyle: {
         fontSize: SCALE_SIZE(14),
-        fontFamily: FONT_NAME.semiBold
+        fontFamily: FONT_NAME.semiBold,
+        color: COLORS.color_333A54,
     },
     updateButton: {
         marginTop: SCALE_SIZE(50),

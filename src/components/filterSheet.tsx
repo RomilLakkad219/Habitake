@@ -55,205 +55,173 @@ const FilterSheet = (props: SheetProps) => {
             <View style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <TouchableOpacity activeOpacity={1}>
-                    <Text
-                        font={FONT_NAME.bold}
-                        color={COLORS.color_333A54}
-                        size={SCALE_SIZE(20)}>
-                        {STRING.filter}
-                    </Text>
-                    <Text
-                        style={{ marginTop: SCALE_SIZE(24) }}
-                        font={FONT_NAME.semiBold}
-                        color={COLORS.color_333A54}
-                        size={SCALE_SIZE(16)}>
-                        {STRING.property_type}
-                    </Text>
-                    <View>
-                        <FlatList
-                            data={[{ name: 'Residential' }, { name: 'Commercial' }, { name: 'Rental' }, { name: 'Luxury' }]}
-                            horizontal
-                            scrollEnabled={true}
-                            showsHorizontalScrollIndicator={false}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            setSelectedPropertyItem(index)
-                                        }}
-                                        style={selectedPropertyItem == index ? styles.selectedPropertyStyle : styles.unSelectedPropertyStyle}>
-                                        <Text
-                                            size={SCALE_SIZE(12)}
-                                            font={selectedPropertyItem == index ? FONT_NAME.semiBold : FONT_NAME.medium}
-                                            color={selectedPropertyItem == index ? COLORS.white : COLORS.color_545A70}>
-                                            {item.name}
-                                        </Text>
-                                    </TouchableOpacity>
-                                );
-                            }}
-                            ListFooterComponent={() => {
-                                return <View style={{ marginRight: SCALE_SIZE(16) }}></View>;
-                            }}>
-                        </FlatList>
-                    </View>
-                    <Text
-                        style={{ marginTop: SCALE_SIZE(32) }}
-                        font={FONT_NAME.semiBold}
-                        color={COLORS.color_333A54}
-                        size={SCALE_SIZE(16)}>
-                        {STRING.price_range}
-                    </Text>
-                    <MultiSlider
-                        values={[priceRange[0], priceRange[1]]}
-                        sliderLength={300}
-                        onValuesChange={(values) => setPriceRange(values)}
-                        min={100}
-                        max={10000}
-                        step={100}
-                        allowOverlap={false}
-                        snapped
-                        containerStyle={{
-                            marginHorizontal: SCALE_SIZE(16)
-                        }}
-                        selectedStyle={{
-                            backgroundColor: COLORS.color_01A669,
-                            height: SCALE_SIZE(5),
-                        }}
-                        unselectedStyle={{
-                            backgroundColor: COLORS.color_F1F1F1,
-                            height: SCALE_SIZE(6),
-                            borderRadius: SCALE_SIZE(10),
-                        }}
-                        markerStyle={{
-                            backgroundColor: COLORS.color_01A669,
-                            height: SCALE_SIZE(20),
-                            width: SCALE_SIZE(20),
-                        }}
-                    />
-                    <View style={styles.rangeStyle}>
                         <Text
-                            font={FONT_NAME.regular}
-                            color={COLORS.black}
-                            size={SCALE_SIZE(14)}>
-                            {'$100'}
+                            font={FONT_NAME.bold}
+                            color={COLORS.color_333A54}
+                            size={SCALE_SIZE(20)}>
+                            {STRING.filter}
                         </Text>
-                        <View style={{ flex: 1 }}></View>
                         <Text
-                            font={FONT_NAME.regular}
-                            color={COLORS.black}
-                            size={SCALE_SIZE(14)}>
-                            {'$10000'}
+                            style={{ marginTop: SCALE_SIZE(24) }}
+                            font={FONT_NAME.semiBold}
+                            color={COLORS.color_333A54}
+                            size={SCALE_SIZE(16)}>
+                            {STRING.property_type}
                         </Text>
-                    </View>
-                    <Text
-                        style={{ marginTop: SCALE_SIZE(32) }}
-                        font={FONT_NAME.semiBold}
-                        color={COLORS.color_333A54}
-                        size={SCALE_SIZE(16)}>
-                        {STRING.amenities}
-                    </Text>
-                    <View>
-                        <FlatList data={[
-                            { name: 'TV Set' },
-                            { name: 'Washing machine' },
-                            { name: 'Kitchen' },
-                            { name: 'Air Conditional' },
-                            { name: 'Parking' },
-                            { name: 'Pool' },
-                            { name: 'Refrigerator' },
-                            { name: 'Drying machine' },
-                            { name: 'Garden' }
-                        ]}
-                            showsVerticalScrollIndicator={false}
-                            columnWrapperStyle={{ flex:1 }}
-                            numColumns={3}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={({ item, index }) => {
-                                const isInclude = selectedAmenities?.some(i => i.name === item.name);
-                                return (
-                                    <TouchableOpacity
-                                        style={[styles.itemView, {
-                                            marginTop: SCALE_SIZE(16),
-                                        }]}
-                                        onPress={() => {
-                                            if (isInclude) {
-                                                const updated = selectedAmenities.filter(filterItem => filterItem?.name !== item?.name);
-                                                setSelectedAmenities(updated);
-                                            } else {
-                                                const updated = [...selectedAmenities];
-                                                updated.push(item)
-                                                setSelectedAmenities(updated);
-                                            }
-                                        }}>
-                                        {isInclude ?
-                                            <Image
-                                                style={styles.squareImage}
-                                                resizeMode="contain"
-                                                source={IMAGES.green_check_bg} />
-                                            :
-                                            <Image
-                                                style={styles.squareImage}
-                                                resizeMode="contain"
-                                                source={IMAGES.ic_square} />
-                                        }
-                                        <Text
-                                            size={SCALE_SIZE(16)}
-                                            align="center"
-                                            font={FONT_NAME.regular}
-                                            color={COLORS.color_000929}>
-                                            {item.name}
-                                        </Text>
-                                    </TouchableOpacity>
-                                );
-                            }}>
-                        </FlatList>
-                    </View>
-                    <View style={styles.bathAndBedRoomView}>
-                        <View style={{ flex: 1 }}>
-                            <Text
-                                font={FONT_NAME.semiBold}
-                                color={COLORS.color_333A54}
-                                size={SCALE_SIZE(16)}>
-                                {STRING.bathrooms_capital}
-                            </Text>
-                            <View style={{ flexDirection: 'row' }}>
-                                {['1', '2', '3', '+4'].map((e, index) => {
+                        <View>
+                            <FlatList
+                                data={[{ name: 'Residential' }, { name: 'Commercial' }, { name: 'Rental' }, { name: 'Luxury' }]}
+                                horizontal
+                                scrollEnabled={true}
+                                showsHorizontalScrollIndicator={false}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({ item, index }) => {
                                     return (
-                                        <TouchableOpacity style={[selectednumbersOfBathrooms == index ? styles.numberSelectStyle : styles.numberUnselectStyle, { marginRight: SCALE_SIZE(18) }]}
+                                        <TouchableOpacity
                                             onPress={() => {
-                                                setSelectedNumbersOfBathrooms(index)
-                                            }}>
+                                                setSelectedPropertyItem(index)
+                                            }}
+                                            style={selectedPropertyItem == index ? styles.selectedPropertyStyle : styles.unSelectedPropertyStyle}>
                                             <Text
-                                                font={FONT_NAME.regular}
-                                                align="center"
-                                                color={selectednumbersOfBathrooms == index ? COLORS.white : COLORS.color_545A70}
-                                                size={SCALE_SIZE(16)}>
-                                                {e}
+                                                size={SCALE_SIZE(12)}
+                                                font={selectedPropertyItem == index ? FONT_NAME.semiBold : FONT_NAME.medium}
+                                                color={selectedPropertyItem == index ? COLORS.white : COLORS.color_545A70}>
+                                                {item.name}
                                             </Text>
                                         </TouchableOpacity>
-                                    )
-                                })}
-                            </View>
+                                    );
+                                }}
+                                ListFooterComponent={() => {
+                                    return <View style={{ marginRight: SCALE_SIZE(16) }}></View>;
+                                }}>
+                            </FlatList>
                         </View>
-                        <View style={{ flex: 1 }}>
+                        <Text
+                            style={{ marginTop: SCALE_SIZE(32) }}
+                            font={FONT_NAME.semiBold}
+                            color={COLORS.color_333A54}
+                            size={SCALE_SIZE(16)}>
+                            {STRING.price_range}
+                        </Text>
+                        <MultiSlider
+                            values={[priceRange[0], priceRange[1]]}
+                            sliderLength={300}
+                            onValuesChange={(values) => setPriceRange(values)}
+                            min={100}
+                            max={10000}
+                            step={100}
+                            allowOverlap={false}
+                            snapped
+                            containerStyle={{
+                                marginHorizontal: SCALE_SIZE(16)
+                            }}
+                            selectedStyle={{
+                                backgroundColor: COLORS.color_01A669,
+                                height: SCALE_SIZE(5),
+                            }}
+                            unselectedStyle={{
+                                backgroundColor: COLORS.color_F1F1F1,
+                                height: SCALE_SIZE(6),
+                                borderRadius: SCALE_SIZE(10),
+                            }}
+                            markerStyle={{
+                                backgroundColor: COLORS.color_01A669,
+                                height: SCALE_SIZE(20),
+                                width: SCALE_SIZE(20),
+                            }}
+                        />
+                        <View style={styles.rangeStyle}>
                             <Text
-                                font={FONT_NAME.semiBold}
-                                color={COLORS.color_333A54}
-                                size={SCALE_SIZE(16)}>
-                                {STRING.bedrooms_capital}
+                                font={FONT_NAME.regular}
+                                color={COLORS.black}
+                                size={SCALE_SIZE(14)}>
+                                {'$100'}
                             </Text>
+                            <View style={{ flex: 1 }}></View>
+                            <Text
+                                font={FONT_NAME.regular}
+                                color={COLORS.black}
+                                size={SCALE_SIZE(14)}>
+                                {'$10000'}
+                            </Text>
+                        </View>
+                        <Text
+                            style={{ marginTop: SCALE_SIZE(32) }}
+                            font={FONT_NAME.semiBold}
+                            color={COLORS.color_333A54}
+                            size={SCALE_SIZE(16)}>
+                            {STRING.amenities}
+                        </Text>
+                        <View>
+                            <FlatList data={[
+                                { name: 'TV Set' },
+                                { name: 'Washing machine' },
+                                { name: 'Kitchen' },
+                                { name: 'Air Conditional' },
+                                { name: 'Parking' },
+                                { name: 'Pool' },
+                                { name: 'Refrigerator' },
+                                { name: 'Drying machine' },
+                                { name: 'Garden' }
+                            ]}
+                                numColumns={3}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({ item, index }) => {
+                                    const isInclude = selectedAmenities?.some(i => i.name === item.name);
+                                    return (
+                                        <TouchableOpacity
+                                            style={[styles.itemView, {
+                                                marginTop: SCALE_SIZE(16)
+                                            }]}
+                                            onPress={() => {
+                                                if (isInclude) {
+                                                    const updated = selectedAmenities.filter(filterItem => filterItem?.name !== item?.name);
+                                                    setSelectedAmenities(updated);
+                                                } else {
+                                                    const updated = [...selectedAmenities];
+                                                    updated.push(item)
+                                                    setSelectedAmenities(updated);
+                                                }
+                                            }}>
+                                            <Image
+                                                style={styles.squareImage}
+                                                resizeMode="contain"
+                                                source={isInclude ? IMAGES.green_check_bg : IMAGES.ic_square} />
+                                            <View style={styles.textWrapper}>
+                                                <Text
+                                                    style={styles.itemText}
+                                                    numberOfLines={1}
+                                                    ellipsizeMode="tail"
+                                                    size={SCALE_SIZE(16)}
+                                                    font={FONT_NAME.regular}
+                                                    color={COLORS.color_000929}>
+                                                    {item.name}
+                                                </Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    );
+                                }}>
+                            </FlatList>
+                        </View>
+                        <View style={styles.bathAndBedRoomView}>
                             <View style={{ flex: 1 }}>
+                                <Text
+                                    font={FONT_NAME.semiBold}
+                                    color={COLORS.color_333A54}
+                                    size={SCALE_SIZE(16)}>
+                                    {STRING.bathrooms_capital}
+                                </Text>
                                 <View style={{ flexDirection: 'row' }}>
                                     {['1', '2', '3', '+4'].map((e, index) => {
                                         return (
-                                            <TouchableOpacity style={[selectednumbersOfBedrooms == index ? styles.numberSelectStyle : styles.numberUnselectStyle, { marginRight: SCALE_SIZE(18) }]}
+                                            <TouchableOpacity style={[selectednumbersOfBathrooms == index ? styles.numberSelectStyle : styles.numberUnselectStyle, { marginRight: SCALE_SIZE(18) }]}
                                                 onPress={() => {
-                                                    setSelectedNumbersOfBedrooms(index)
+                                                    setSelectedNumbersOfBathrooms(index)
                                                 }}>
                                                 <Text
                                                     font={FONT_NAME.regular}
                                                     align="center"
-                                                    color={selectednumbersOfBedrooms == index ? COLORS.white : COLORS.color_545A70}
+                                                    color={selectednumbersOfBathrooms == index ? COLORS.white : COLORS.color_545A70}
                                                     size={SCALE_SIZE(16)}>
                                                     {e}
                                                 </Text>
@@ -262,33 +230,60 @@ const FilterSheet = (props: SheetProps) => {
                                     })}
                                 </View>
                             </View>
+                            <View style={{ flex: 1 }}>
+                                <Text
+                                    font={FONT_NAME.semiBold}
+                                    color={COLORS.color_333A54}
+                                    size={SCALE_SIZE(16)}>
+                                    {STRING.bedrooms_capital}
+                                </Text>
+                                <View style={{ flex: 1 }}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        {['1', '2', '3', '+4'].map((e, index) => {
+                                            return (
+                                                <TouchableOpacity style={[selectednumbersOfBedrooms == index ? styles.numberSelectStyle : styles.numberUnselectStyle, { marginRight: SCALE_SIZE(18) }]}
+                                                    onPress={() => {
+                                                        setSelectedNumbersOfBedrooms(index)
+                                                    }}>
+                                                    <Text
+                                                        font={FONT_NAME.regular}
+                                                        align="center"
+                                                        color={selectednumbersOfBedrooms == index ? COLORS.white : COLORS.color_545A70}
+                                                        size={SCALE_SIZE(16)}>
+                                                        {e}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            )
+                                        })}
+                                    </View>
+                                </View>
+                            </View>
                         </View>
-                    </View>
-                    <Text
-                        style={{ marginTop: SCALE_SIZE(32) }}
-                        font={FONT_NAME.semiBold}
-                        color={COLORS.color_333A54}
-                        size={SCALE_SIZE(16)}>
-                        {STRING.property_size}
-                    </Text>
-                    <View style={styles.propertySizeSelectionView}>
                         <Text
-                            font={FONT_NAME.regular}
-                            color={COLORS.color_8A8E9D}
-                            size={SCALE_SIZE(14)}>
-                            {STRING.select}
+                            style={{ marginTop: SCALE_SIZE(32) }}
+                            font={FONT_NAME.semiBold}
+                            color={COLORS.color_333A54}
+                            size={SCALE_SIZE(16)}>
+                            {STRING.property_size}
                         </Text>
-                        <View style={{ flex: 1 }}></View>
-                        <Image
-                            style={styles.nextIcon}
-                            resizeMode="contain"
-                            source={IMAGES.ic_next} />
-                    </View>
-                    <Button
-                        onPress={props.onFinish}
-                        style={styles.buttonStyle}
-                        title={STRING.apply_filter} />
-                </TouchableOpacity>
+                        <View style={styles.propertySizeSelectionView}>
+                            <Text
+                                font={FONT_NAME.regular}
+                                color={COLORS.color_8A8E9D}
+                                size={SCALE_SIZE(14)}>
+                                {STRING.select}
+                            </Text>
+                            <View style={{ flex: 1 }}></View>
+                            <Image
+                                style={styles.nextIcon}
+                                resizeMode="contain"
+                                source={IMAGES.ic_next} />
+                        </View>
+                        <Button
+                            onPress={props.onFinish}
+                            style={styles.buttonStyle}
+                            title={STRING.apply_filter} />
+                    </TouchableOpacity>
                 </ScrollView>
             </View>
             <SafeAreaView />
@@ -326,7 +321,7 @@ const styles = StyleSheet.create({
         marginTop: SCALE_SIZE(6)
     },
     itemView: {
-        width: (Dimensions.get('window').width )/ 3,
+        width: (Dimensions.get('window').width) / 3,
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -335,6 +330,16 @@ const styles = StyleSheet.create({
         width: SCALE_SIZE(20),
         alignSelf: 'center',
         marginRight: SCALE_SIZE(8)
+    },
+    textWrapper: {
+        flex: 1,
+        justifyContent: 'center',
+        overflow: 'hidden',
+    },
+    itemText: {
+        flexShrink: 1,
+        overflow: 'hidden',
+        marginRight: SCALE_SIZE(10)
     },
     bathAndBedRoomView: {
         flexDirection: 'row',

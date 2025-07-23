@@ -2,7 +2,7 @@ import React from 'react';
 import { Text as RNText, StyleProp, TextStyle } from 'react-native';
 
 //CONSTANT
-import { COLORS, FONT_NAME, SCALE_SIZE } from '../constants';
+import { COLORS, FONT_NAME } from '../constants';
 
 interface TextProps {
     style?: StyleProp<TextStyle> | undefined;
@@ -14,19 +14,22 @@ interface TextProps {
     children: any | undefined;
     numberOfLines?: number | undefined;
     onPress?: () => void;
+    ellipsizeMode?: "head" | "middle" | "tail" | "clip";
 }
-
 function Text(props: TextProps & TextProps) {
+
     const fontFamily: string | undefined = props.font ? props.font : undefined;
     const fontSize: number = props.size ? props.size : 13;
     const fontColor: string = props?.color ?? COLORS.black;
     const align: "auto" | "left" | "right" | "center" | "justify" | undefined = props?.align ?? 'left'
-    const lineHeight: number | undefined = props?.lineHeight
+    const lineHeight: number | undefined = props?.lineHeight;
 
     return (
         <RNText
             {...props}
             onPress={props.onPress}
+            numberOfLines={props.numberOfLines}
+            ellipsizeMode={props.ellipsizeMode}
             style={[
                 props.style,
                 {

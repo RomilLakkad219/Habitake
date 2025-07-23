@@ -61,7 +61,9 @@ const PropertyType = (props: any) => {
                                 setIsSelectedProperty(index)
                             }}>
                                 <ImageBackground
-                                    style={[styles.propetyImages, { marginTop: index == 2 || index == 3 ? SCALE_SIZE(10) : SCALE_SIZE(46) }]}
+                                    style={[styles.propetyImages, {
+                                        marginTop: index == 2 || index == 3 ? SCALE_SIZE(10) : SCALE_SIZE(46),
+                                    }]}
                                     resizeMode="contain"
                                     source={item.propertyIcon}>
                                     <View style={{ flexDirection: 'column' }}>
@@ -69,6 +71,8 @@ const PropertyType = (props: any) => {
                                             style={styles.checkMarkImage}
                                             resizeMode="contain"
                                             source={isSelectedProperty == index ? IMAGES.ic_check_green : IMAGES.ic_check_white} />
+                                    </View>
+                                    <View style={styles.contentWrapper}>
                                         <Text
                                             style={styles.propertyName}
                                             font={FONT_NAME.bold}
@@ -148,23 +152,27 @@ const styles = StyleSheet.create({
     propetyImages: {
         height: (Dimensions.get('window').width - SCALE_SIZE(42)) / 2,
         width: (Dimensions.get('window').width - SCALE_SIZE(42)) / 2,
-        alignSelf: 'center',
+        overflow: 'hidden',
     },
     checkMarkImage: {
         height: SCALE_SIZE(24),
         width: SCALE_SIZE(24),
-        position: 'absolute',
         top: SCALE_SIZE(8),
         left: SCALE_SIZE(8),
         zIndex: 1,
         margin: SCALE_SIZE(8),
     },
     propertyName: {
-        position: 'absolute',
-        left: SCALE_SIZE(12),
-        zIndex: 1,
-        top: 150,
-    }
+        alignSelf: 'flex-start',
+        marginLeft: SCALE_SIZE(12),
+        marginBottom: SCALE_SIZE(8)
+    },
+    contentWrapper: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+    },
 })
 
 export default PropertyType;

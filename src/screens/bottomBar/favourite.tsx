@@ -54,8 +54,7 @@ const Favourite = (props: any) => {
                         { name: 'Residential' },
                         { name: 'Commercial' },
                         { name: 'Rental' },
-                        { name: 'Luxury' },
-                        { name: 'Rental' }]}
+                        { name: 'Luxury' },]}
                     horizontal
                     scrollEnabled={true}
                     showsHorizontalScrollIndicator={false}

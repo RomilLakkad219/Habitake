@@ -17,37 +17,37 @@ const LoginIntroduction = (props: any) => {
 
     return (
         // <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.container}>
-                <SafeAreaView>
-                    <Image
-                        style={styles.introLogo}
-                        resizeMode="cover"
-                        source={IMAGES.ic_intro}>
-                    </Image>
+        <View style={styles.container}>
+            <SafeAreaView>
+                <Image
+                    style={styles.introLogo}
+                    resizeMode="cover"
+                    source={IMAGES.ic_intro}>
+                </Image>
+                <Text
+                    font={FONT_NAME.bold}
+                    align="center"
+                    color={COLORS.color_333A54}
+                    size={SCALE_SIZE(28)}>
+                    {'Lorem ipsum dolor sit amet\n consectetur.'}
+                </Text>
+                <Text
+                    style={{ marginTop: SCALE_SIZE(10) }}
+                    font={FONT_NAME.regular}
+                    align="center"
+                    color={COLORS.color_8A8E9D}
+                    lineHeight={SCALE_SIZE(26)}
+                    size={SCALE_SIZE(16)}>
+                    {'Lorem ipsum dolor sit amet consectetur. Nunc nunc\n felis non erat neque fringilla commodo.'}
+                </Text>
+                <Button
+                    onPress={() => {
+                        props.navigation.navigate(SCREENS.Login.name)
+                    }}
+                    style={styles.loginButtonStyle}
+                    title={STRING.login} />
+                <View style={{ marginBottom: SCALE_SIZE(40) }}>
                     <Text
-                        font={FONT_NAME.bold}
-                        align="center"
-                        color={COLORS.color_333A54}
-                        size={SCALE_SIZE(28)}>
-                        {'Lorem ipsum dolor sit amet\n consectetur.'}
-                    </Text>
-                    <Text
-                        style={{ marginTop: SCALE_SIZE(10) }}
-                        font={FONT_NAME.regular}
-                        align="center"
-                        color={COLORS.color_8A8E9D}
-                        lineHeight={SCALE_SIZE(26)}
-                        size={SCALE_SIZE(16)}>
-                        {'Lorem ipsum dolor sit amet consectetur. Nunc nunc\n felis non erat neque fringilla commodo.'}
-                    </Text>
-                    <Button
-                        onPress={() => {
-                            props.navigation.navigate(SCREENS.Login.name)
-                        }}
-                        style={styles.loginButtonStyle}
-                        title={STRING.login} />
-                    <Text
-                        style={{ marginBottom: SCALE_SIZE(10) }}
                         font={FONT_NAME.regular}
                         align="center"
                         color={COLORS.color_333A54}
@@ -64,8 +64,9 @@ const LoginIntroduction = (props: any) => {
                             {STRING.register}
                         </Text>
                     </Text>
-                </SafeAreaView>
-            </View>
+                </View>
+            </SafeAreaView>
+        </View>
         // </ScrollView>
     )
 }
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     },
     loginButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),
-        marginTop: SCALE_SIZE(20),
+        marginTop: SCALE_SIZE(30),
         marginBottom: SCALE_SIZE(30)
     }
 })

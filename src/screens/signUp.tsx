@@ -126,7 +126,7 @@ const SignUp = (props: any) => {
                         style={styles.nextButtonStyle}
                         title={STRING.next} />
                     <Text
-                        style={{ marginBottom: SCALE_SIZE(20) }}
+                        style={{ marginBottom: SCALE_SIZE(25) }}
                         font={FONT_NAME.regular}
                         align="center"
                         color={COLORS.color_333A54}
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     nextButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),
         marginTop: SCALE_SIZE(58),
-        marginBottom: SCALE_SIZE(50)
+        marginBottom: SCALE_SIZE(40)
     },
     inputStyle: {
         marginHorizontal: SCALE_SIZE(16),

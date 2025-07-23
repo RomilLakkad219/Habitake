@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     },
     logoutButton: {
         paddingVertical: SCALE_SIZE(18),
-        paddingHorizontal: SCALE_SIZE(70),
+        // paddingHorizontal: SCALE_SIZE(70),
         backgroundColor: COLORS.color_34216B,
         justifyContent: 'center',
         alignItems: 'center',
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         paddingVertical: SCALE_SIZE(18),
-        paddingHorizontal: SCALE_SIZE(70),
+        // paddingHorizontal: SCALE_SIZE(70),
         backgroundColor: COLORS.color_E6E6EA,
         justifyContent: 'center',
         alignItems: 'center',
