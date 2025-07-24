@@ -17,7 +17,7 @@ const AddProfile = (props: any) => {
 
     const accountCreationSuccessRef = useRef<any>('')
 
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState<any>('');
 
     return (
         <View style={styles.container}>
@@ -88,7 +88,7 @@ const AddProfile = (props: any) => {
                 onFinish={() => {
                     accountCreationSuccessRef?.current?.close()
                 }} />
-                            <SafeAreaView />
+            <SafeAreaView />
         </View>
     )
 }

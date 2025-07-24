@@ -14,7 +14,7 @@ const AiInterior = (props: any) => {
 
     const categories = ['Modern', 'Classic', 'Industrial', 'Style'];
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedOptions, setSelectedOptions] = useState<number>(0);
 
     return (

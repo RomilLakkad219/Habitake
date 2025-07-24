@@ -40,7 +40,7 @@ interface InputProps {
 
 const Input = (props: InputProps) => {
 
-    const [enable, setEnable] = useState(false)
+    const [enable, setEnable] = useState<boolean>(false)
 
     return (
         <View style={props.style}>

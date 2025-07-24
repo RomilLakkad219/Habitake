@@ -27,7 +27,7 @@ const FilterSheet = (props: SheetProps) => {
     const [selectedPropertyItem, setSelectedPropertyItem] = useState<number>(0);
     const [selectednumbersOfBathrooms, setSelectedNumbersOfBathrooms] = useState<number>(0);
     const [selectednumbersOfBedrooms, setSelectedNumbersOfBedrooms] = useState<number>(0);
-    const [priceRange, setPriceRange] = useState([100, 10000])
+    const [priceRange, setPriceRange] = useState<any>([100, 10000])
     const [selectedAmenities, setSelectedAmenities] = useState<{ name: string }[]>([]);
 
     return (

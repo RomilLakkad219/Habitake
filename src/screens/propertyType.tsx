@@ -15,8 +15,8 @@ import { SCREENS } from ".";
 
 const PropertyType = (props: any) => {
 
-    const [isSelectedProperty, setIsSelectedProperty] = useState(0)
-    const [budget, setBudget] = useState('')
+    const [isSelectedProperty, setIsSelectedProperty] = useState<number>(0)
+    const [budget, setBudget] = useState<any>('')
 
     return (
         <View style={styles.container}>
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
         height: (Dimensions.get('window').width - SCALE_SIZE(42)) / 2,
         width: (Dimensions.get('window').width - SCALE_SIZE(42)) / 2,
         overflow: 'hidden',
+        backgroundColor: 'transparent',
     },
     checkMarkImage: {
         height: SCALE_SIZE(24),

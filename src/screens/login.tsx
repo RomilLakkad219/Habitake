@@ -18,9 +18,9 @@ import { SCREENS } from ".";
 
 const Login = (props: any) => {
 
-    const [isSecurePassword, setIsSecurePassword] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
+    const [email, setEmail] = useState<any>('');
+    const [password, setPassword] = useState<any>('');
 
     return (
         <View style={styles.container}>

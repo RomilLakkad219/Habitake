@@ -19,7 +19,7 @@ import { SCREENS } from ".";
 const PropertyDetail = (props: any) => {
 
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
-    const [comment, setComment] = useState('')
+    const [comment, setComment] = useState<any>('')
 
     const imageList = [
         IMAGES.ic_luxury,

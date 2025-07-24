@@ -18,7 +18,7 @@ import { SCREENS } from ".";
 
 const Location = (props: any) => {
 
-    const [locationDetails, setLocationDetails] = useState('');
+    const [locationDetails, setLocationDetails] = useState<any>('');
 
     return (
         <View style={styles.container}>

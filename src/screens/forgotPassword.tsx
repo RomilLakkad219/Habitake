@@ -18,7 +18,7 @@ import { SCREENS } from ".";
 
 const ForgotPassword = (props: any) => {
 
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState<any>('');
 
     return (
         <View style={styles.container}>

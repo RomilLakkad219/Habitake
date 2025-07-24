@@ -18,12 +18,12 @@ import { SCREENS } from ".";
 
 const SignUp = (props: any) => {
 
-    const [isSecurePassword, setIsSecurePassword] = useState(false);
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState(false);
+    const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
+    const [name, setName] = useState<any>('');
+    const [password, setPassword] = useState<any>('');
+    const [email, setEmail] = useState<any>('');
+    const [confirmPassword, setConfirmPassword] = useState<any>('');
+    const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState<boolean>(false);
 
     return (
         <View style={styles.container}>

@@ -18,10 +18,10 @@ import { SCREENS } from ".";
 
 const ResetPassword = (props: any) => {
 
-    const [isSecurePassword, setIsSecurePassword] = useState(false);
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState(false);
+    const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
+    const [password, setPassword] = useState<any>('');
+    const [confirmPassword, setConfirmPassword] = useState<any>('');
+    const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState<boolean>(false);
 
     return (
         <View style={styles.container}>

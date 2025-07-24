@@ -13,7 +13,7 @@ import { Text } from "../components";
 const Messaging = (props: any) => {
 
     const textInputRef = useRef<any>(null)
-    const [input, setInput] = useState('')
+    const [input, setInput] = useState<any>('')
 
     const chatSections = [
         {

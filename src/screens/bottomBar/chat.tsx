@@ -21,6 +21,8 @@ const Chat = (props: any) => {
     const onChatDeleteRef = useRef<any>(null)
 
     const [swipedRow, setSwipedRow] = useState<any>(null);
+    const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+    const [swipedToDelete, setSwipedToDelete] = useState<string[]>([]);
     const [chatData, setChatData] = useState([
         {
             id: '1',
@@ -67,24 +69,42 @@ const Chat = (props: any) => {
         setSwipedRow(null);
     };
 
+    // Adjust this value based on your swipe sensitivity preference
+    const handleSwipeValueChange = ({ key, value }: any) => {
+        const swipeThreshold = -130; // value more negative than rightOpenValue (-75)
+        const alreadyDeleted = swipedToDelete.includes(key);
+
+        if (value < swipeThreshold && !alreadyDeleted) {
+            setSwipedToDelete(prev => [...prev, key]);
+
+            setTimeout(() => {
+                deleteRow(key);
+                setSwipedToDelete(prev => prev.filter(id => id !== key));
+            }, 150); // give animation time to complete
+        }
+    };
+
     const renderHiddenItem = (data: any, rowMap: any) => (
         <View style={styles.rowBack}>
             {swipedRow === data.item.id && (
-                <TouchableOpacity style={styles.deleteBtn} onPress={() =>
-                    deleteRow(data.item.id)}>
+                <TouchableOpacity style={styles.deleteBtn} onPress={() => {
+                    setSelectedChatId(data?.item?.id)
+                    onChatDeleteRef?.current?.open()
+                }}>
                     <Image
                         style={styles.deleteIcon}
                         resizeMode="contain"
                         source={IMAGES.ic_trash}>
                     </Image>
                 </TouchableOpacity>
-            )}
-        </View>
+            )
+            }
+        </View >
     );
 
     return (
         <View style={styles.container}>
-             <SafeAreaView />
+            <SafeAreaView />
             <Text
                 style={{ marginTop: SCALE_SIZE(20) }}
                 font={FONT_NAME.semiBold}
@@ -98,25 +118,35 @@ const Chat = (props: any) => {
                 renderItem={({ item }) => (
                     <ChatItem
                         item={item}
-                        onPress={() =>
-                            // onChatDeleteRef?.current?.open()
+                        onPress={() => {
                             props.navigation.navigate(SCREENS.Messaging.name)
-                        }
+                        }}
                     />
                 )}
                 renderHiddenItem={renderHiddenItem}
                 rightOpenValue={-75}
                 disableRightSwipe
-                onRowOpen={(rowKey) => setSwipedRow(rowKey)}
+                onRowOpen={(rowKey) => {
+                    setSwipedRow(rowKey)
+                    // setTimeout(() => {
+                    //     deleteRow(rowKey)
+                    // }, 200)
+                }}
                 onRowClose={(rowKey) => {
                     if (swipedRow === rowKey) setSwipedRow(null)
                 }}
+                onSwipeValueChange={handleSwipeValueChange}
             />
             <ChatDeleteSheet onRef={onChatDeleteRef} onCancel={() => {
                 onChatDeleteRef?.current?.close()
+                setSelectedChatId(null)
             }}
                 onDelete={() => {
-
+                    if (selectedChatId) {
+                        deleteRow(selectedChatId)
+                        setSelectedChatId(null)
+                    }
+                    onChatDeleteRef?.current?.close()
                 }} />
         </View>
     )
