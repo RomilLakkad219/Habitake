@@ -16,12 +16,20 @@ import { CommonActions } from "@react-navigation/native";
 //SCREENS
 import { SCREENS } from ".";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const ForgotPassword = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const [email, setEmail] = useState<any>('');
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
             <Header
                 type='onboarding' onBack={() => {
                     props.navigation.goBack()

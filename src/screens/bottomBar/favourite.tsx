@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View, StyleSheet, FlatList, TouchableOpacity, Image, Dimensions, SafeAreaView } from "react-native"
+import { View, StyleSheet, FlatList, TouchableOpacity, Image, Dimensions, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
@@ -10,7 +10,12 @@ import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../../constants";
 //COMPONENT
 import { FavouritePropertyRemoveSheet, Header, Text } from "../../components";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const Favourite = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const onFavouriteRef = useRef<any>(null)
 
@@ -44,8 +49,8 @@ const Favourite = (props: any) => {
     ];
 
     return (
-        <View style={styles.container}>
-             <SafeAreaView />
+        <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0 }]}>
+            <SafeAreaView />
             <Header title={STRING.favourite_property} />
             <View>
                 <FlatList
@@ -93,7 +98,7 @@ const Favourite = (props: any) => {
                 >
                 </FlatList>
             </View>
-            <FavouritePropertyRemoveSheet onRef={onFavouriteRef} onCancel={()=>{
+            <FavouritePropertyRemoveSheet onRef={onFavouriteRef} onCancel={() => {
                 onFavouriteRef?.current?.close()
             }} />
         </View>

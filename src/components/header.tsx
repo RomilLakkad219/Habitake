@@ -10,6 +10,8 @@ import Text from "./text";
 //CONSTANTS
 import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface HeaderProps {
     style?: any
     onBack?: () => void;
@@ -24,6 +26,9 @@ interface HeaderProps {
 }
 
 const Header = (props: HeaderProps) => {
+
+    const insets = useSafeAreaInsets()
+
     if (props.type === 'onboarding') {
         return (
             <View>
@@ -92,6 +97,7 @@ const Header = (props: HeaderProps) => {
     else if (props.type === 'home') {
         return (
             <View style={styles.headerContainer}>
+                <SafeAreaView />
                 <View style={styles.homeDirectionView}>
                     <View>
                         <View style={styles.locationView}>
@@ -143,7 +149,7 @@ const Header = (props: HeaderProps) => {
     }
     else if (props.type === 'search') {
         return (
-            <View style={styles.headerContainer}>
+            <View style={[styles.headerContainer, { marginTop: Platform.OS === 'android' ? insets.top : 0 }]}>
                 <View style={styles.searchContainer}>
                     <TouchableOpacity
                         onPress={props.onBack}>

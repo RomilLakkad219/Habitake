@@ -10,6 +10,7 @@ import Toast, {
   ErrorToast,
   InfoToast,
 } from 'react-native-toast-message';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 //SCREENS
 import { SCREENS } from './src/screens';
@@ -18,7 +19,7 @@ import { SCREENS } from './src/screens';
 import { COLORS, FONT_NAME, SCALE_SIZE } from './src/constants';
 
 //CONTEXT
-import { AuthContext, AuthProvider } from './src/context';
+import { AuthProvider } from './src/context';
 
 LogBox.ignoreAllLogs()
 
@@ -60,27 +61,31 @@ const toastConfig = {
 
 function App(): JSX.Element {
   return (
-    <AuthProvider>
-      <View style={styles.container}>
-        <StatusBar barStyle={'dark-content'} translucent={false} backgroundColor={COLORS.white} hidden={false} />
-        <NavigationContainer>
-          <Navigator
-            initialRouteName={SCREENS.Splash.name}
-            screenOptions={{ headerShown: false, gestureEnabled: true }}>
-            {_.toArray(SCREENS).map((item:any) => {
-              return item.component ? (
-                <Screen
-                  key={item.name}
-                  name={item.name}
-                  component={item.component}
-                />
-              ) : null;
-            })}
-          </Navigator>
-        </NavigationContainer>
-        <Toast config={toastConfig} />
+    <SafeAreaProvider>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <AuthProvider>
+          <View style={styles.container}>
+            <StatusBar barStyle={'dark-content'} translucent={false} backgroundColor={COLORS.white} />
+            <NavigationContainer>
+              <Navigator
+                initialRouteName={SCREENS.Splash.name}
+                screenOptions={{ headerShown: false, gestureEnabled: true }}>
+                {_.toArray(SCREENS).map((item: any) => {
+                  return item.component ? (
+                    <Screen
+                      key={item.name}
+                      name={item.name}
+                      component={item.component}
+                    />
+                  ) : null;
+                })}
+              </Navigator>
+            </NavigationContainer>
+            <Toast config={toastConfig} />
+          </View>
+        </AuthProvider>
       </View>
-    </AuthProvider>
+    </SafeAreaProvider>
   )
 }
 

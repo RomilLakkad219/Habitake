@@ -10,7 +10,12 @@ import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
 //COMPONENTS
 import { Text } from "../components";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const Messaging = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const textInputRef = useRef<any>(null)
     const [input, setInput] = useState<any>('')
@@ -25,7 +30,10 @@ const Messaging = (props: any) => {
     ];
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
             <SafeAreaView />
             <View style={styles.headerView}>
                 <TouchableOpacity

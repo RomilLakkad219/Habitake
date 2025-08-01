@@ -13,7 +13,12 @@ import { Button, Header, Text } from "../components";
 //SCREENS
 import { SCREENS } from ".";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const EditProfile = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [name, setName] = useState<string>('Mathew Adam');
@@ -22,7 +27,7 @@ const EditProfile = (props: any) => {
     const [phoneNumber, setPhoneNumber] = useState<string>('1234567890');
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0 ,paddingBottom: Platform.OS === 'android' ? insets.bottom : 0}]}>
             <SafeAreaView />
             <Header
                 type="home"

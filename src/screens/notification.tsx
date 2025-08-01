@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image, SafeAreaView } from "react-native"
+import { View, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -12,11 +12,14 @@ import { Header, Text } from "../components";
 
 //PACKAGES
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //SCREENS
 import { SCREENS } from ".";
 
 const Notification = (props: any) => {
+
+    const insets = useSafeAreaInsets()
 
     const todayList = [{
         id: '1',
@@ -87,7 +90,10 @@ const Notification = (props: any) => {
     )
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
             <SafeAreaView />
             <Header
                 type="home"
@@ -198,15 +204,26 @@ const Notification = (props: any) => {
                 <SwipeListView
                     data={olderNotificationList}
                     keyExtractor={(item) => item.id}
-                    renderItem={({ item, index }) => (
-                        <NotificationItem
-                            item={item}
-                            index={index}
-                            onPress={() => { }}
-                        />
-                    )}
+                    renderItem={({ item, index }) => {
+                        const isFirst = index === 0;
+                        const isLast = index === olderNotificationList.length - 1;
+                        return (
+                            <View
+                                style={{
+                                    marginTop: isFirst ? SCALE_SIZE(20) : SCALE_SIZE(9),
+                                    marginBottom: isLast ? SCALE_SIZE(25) : 0,
+                                }}
+                            >
+                                <NotificationItem
+                                    item={item}
+                                    index={index}
+                                    onPress={() => { }}
+                                />
+                            </View>
+                        );
+                    }}
                     renderHiddenItem={renderHiddenItem}
-                    rightOpenValue={-75}
+                    rightOpenValue={-SCALE_SIZE(100)}
                     disableRightSwipe
                     onRowOpen={(rowKey) => setSwipedRow(rowKey)}
                     onRowClose={(rowKey) => {
@@ -227,15 +244,13 @@ type NotificationProps = {
         time: string;
     };
     index: number;
-    onPress?: () => void
+    onPress?: () => void;
 }
 
 const NotificationItem = ({ item, onPress, index }: NotificationProps) => {
     return (
         <View style={[styles.notificationView, {
             backgroundColor: COLORS.color_E6E6EA66,
-            marginTop: index == 0 ? SCALE_SIZE(20) : SCALE_SIZE(10),
-            marginBottom: index == 2 ? SCALE_SIZE(15) : 0
         }]}>
             <View style={styles.profileView}></View>
             {index == 0 &&
@@ -344,8 +359,11 @@ const styles = StyleSheet.create({
     },
     notificationView: {
         borderRadius: SCALE_SIZE(25),
-        padding: SCALE_SIZE(10),
-        flexDirection: 'row'
+        paddingVertical: SCALE_SIZE(14),
+        flexDirection: 'row',
+        paddingHorizontal: SCALE_SIZE(14),
+        alignItems: 'center',
+        alignContent: 'center'
     },
     profileView: {
         height: SCALE_SIZE(50),
@@ -373,16 +391,16 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
     },
     rowBack: {
-        alignItems: 'center',
-        flex: 1,
-        marginTop: SCALE_SIZE(10),
         justifyContent: 'flex-end',
         flexDirection: 'row',
+        flex: 1,
+        backgroundColor: 'transparent',
+        alignItems: 'center',
     },
     deleteBtn: {
         backgroundColor: COLORS.color_34216B,
         width: SCALE_SIZE(100),
-        height: SCALE_SIZE(100),
+        height: '91%',
         justifyContent: 'center',
         alignItems: 'center',
         borderTopRightRadius: SCALE_SIZE(25),

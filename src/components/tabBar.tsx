@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ImageBackground, SafeAreaView, TouchableOpacity, Image } from "react-native"
+import { View, StyleSheet, ImageBackground, TouchableOpacity, Image, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -7,7 +7,12 @@ import { IMAGES } from "../assets";
 //CONSTANS
 import { COLORS, SCALE_SIZE } from "../constants";
 
+//PACKAGES
+import { useSafeAreaInsets, SafeAreaView } from 'react-native-safe-area-context';
+
 const TabBar = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     function onPress(name: any, index: number) {
         props.navigation.emit(
@@ -21,7 +26,7 @@ const TabBar = (props: any) => {
     }
 
     return (
-        <View style={{ backgroundColor: COLORS.color_FDFDFD, }}>
+        <SafeAreaView edges={['bottom']} style={styles.wrapper}>
             <View
                 style={styles.tabbarImage}>
                 <View style={styles.tabContainer}>
@@ -39,8 +44,7 @@ const TabBar = (props: any) => {
                     })}
                 </View>
             </View>
-            <SafeAreaView />
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -85,9 +89,12 @@ const Item = (props: any) => {
 }
 
 const styles = StyleSheet.create({
+    wrapper: {
+        backgroundColor: COLORS.color_FDFDFD,
+    },
     tabbarImage: {
         marginTop: SCALE_SIZE(16),
-        marginBottom: SCALE_SIZE(28),
+        marginBottom: SCALE_SIZE(10),
         backgroundColor: COLORS.color_000929,
         borderRadius: SCALE_SIZE(24),
         marginHorizontal: SCALE_SIZE(16)

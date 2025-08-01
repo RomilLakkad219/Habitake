@@ -71,7 +71,7 @@ const ChatDeleteSheet = (props: SheetProps) => {
                     align="center"
                     color={COLORS.color_333A54}
                     size={SCALE_SIZE(28)}>
-                    {STRING.all_your_chat}
+                    {STRING.your_chat}
                 </Text>
                 <Text
                     style={{ marginTop: SCALE_SIZE(20) }}
@@ -84,27 +84,27 @@ const ChatDeleteSheet = (props: SheetProps) => {
                 <View style={styles.buttonDirectionView}>
                     <View style={{ flex: 1 }}>
                         <TouchableOpacity
-                            style={styles.cancelButton}
+                            style={styles.deleteButton}
                             activeOpacity={1}
-                            onPress={props.onCancel}>
+                            onPress={props.onDelete}>
                             <Text
                                 size={SCALE_SIZE(16)}
                                 font={FONT_NAME.bold}
                                 color={COLORS.white}>
-                                {STRING.cancel}
+                                {STRING.delete_capital}
                             </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{ marginLeft: SCALE_SIZE(12) }}></View>
                     <View style={{ flex: 1 }}>
-                        <TouchableOpacity style={styles.deleteButton}
+                        <TouchableOpacity style={styles.cancelButton}
                             activeOpacity={1}
-                            onPress={props.onDelete}>
+                            onPress={props.onCancel}>
                             <Text
                                 size={SCALE_SIZE(16)}
                                 font={FONT_NAME.regular}
                                 color={COLORS.color_333A54}>
-                                {STRING.delete_capital}
+                                {STRING.cancel}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         marginTop: SCALE_SIZE(65),
         alignItems: 'center',
     },
-    cancelButton: {
+    deleteButton: {
         paddingVertical: SCALE_SIZE(18),
         // paddingHorizontal: SCALE_SIZE(71),
         backgroundColor: COLORS.color_34216B,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: SCALE_SIZE(32),
     },
-    deleteButton: {
+    cancelButton: {
         paddingVertical: SCALE_SIZE(18),
         // paddingHorizontal: SCALE_SIZE(71),
         backgroundColor: COLORS.color_E6E6EA,

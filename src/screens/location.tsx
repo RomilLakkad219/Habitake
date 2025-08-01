@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, SafeAreaView } from "react-native"
+import { StyleSheet, Image, View, TouchableOpacity, Platform, KeyboardAvoidingView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -12,50 +12,57 @@ import { Button, Header, Input, Text } from "../components";
 
 //PACKAGES
 import { BlurView } from '@react-native-community/blur';
+import { useSafeAreaInsets, SafeAreaView } from 'react-native-safe-area-context';
 
 //SCREENS
 import { SCREENS } from ".";
 
 const Location = (props: any) => {
 
+    const insets = useSafeAreaInsets();
+
     const [locationDetails, setLocationDetails] = useState<any>('');
 
     return (
-        <View style={styles.container}>
-            <SafeAreaView />
-            <Header
-                type='basic'
-                onBack={() => {
-                    props.navigation.goBack()
-                }} />
-            <Text
-                style={{ marginTop: SCALE_SIZE(14) }}
-                font={FONT_NAME.regular}
-                color={COLORS.color_333A54}
-                size={SCALE_SIZE(28)}>
-                {STRING.add}
+        <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : undefined}
+            >
+                {Platform.OS === 'ios' && <SafeAreaView />}
+                <Header
+                    type='basic'
+                    onBack={() => {
+                        props.navigation.goBack()
+                    }} />
                 <Text
+                    style={{ marginTop: SCALE_SIZE(14) }}
                     font={FONT_NAME.regular}
                     color={COLORS.color_333A54}
                     size={SCALE_SIZE(28)}>
-                    {STRING.your}
+                    {STRING.add}
                     <Text
-                        font={FONT_NAME.bold}
+                        font={FONT_NAME.regular}
                         color={COLORS.color_333A54}
                         size={SCALE_SIZE(28)}>
-                        {STRING.location}
+                        {STRING.your}
+                        <Text
+                            font={FONT_NAME.bold}
+                            color={COLORS.color_333A54}
+                            size={SCALE_SIZE(28)}>
+                            {STRING.location}
+                        </Text>
                     </Text>
                 </Text>
-            </Text>
-            <Text
-                style={{ marginTop: SCALE_SIZE(10) }}
-                font={FONT_NAME.regular}
-                color={COLORS.color_545A70}
-                size={SCALE_SIZE(16)}>
-                {STRING.you_can_edit_this_later_on_your_account_setting}
-            </Text>
-            <View style={styles.mapContainer}>
-                {/* <BlurView
+                <Text
+                    style={{ marginTop: SCALE_SIZE(10) }}
+                    font={FONT_NAME.regular}
+                    color={COLORS.color_545A70}
+                    size={SCALE_SIZE(16)}>
+                    {STRING.you_can_edit_this_later_on_your_account_setting}
+                </Text>
+                <View style={styles.mapContainer}>
+                    {/* <BlurView
                     style={styles.blurContent}
                     blurType="light"
                     blurAmount={15}
@@ -71,47 +78,47 @@ const Location = (props: any) => {
                         </Text>
                     </TouchableOpacity>
                 </BlurView> */}
-            </View>
-            <Text
-                style={{ marginTop: SCALE_SIZE(36) }}
-                font={FONT_NAME.regular}
-                color={COLORS.color_545A70}
-                size={SCALE_SIZE(16)}>
-                {STRING.select_your_location_to_find_relevant_properties_near_you}
-            </Text>
-            <Input
-                style={styles.locationDetailView}
-                value={locationDetails}
-                isLocation={IMAGES.ic_location}
-                isNext={IMAGES.ic_next}
-                placeholder={STRING.location_detail}
-                autoCapitalize='none'
-                placeholderTextColor={COLORS.color_8A8E9D}
-                onChangeText={(text) => {
-                    setLocationDetails(text)
-                }} />
-            <View style={{ flex: 1 }}></View>
-            <Button
-                onPress={() => {
-                    props.navigation.navigate(SCREENS.LocationSearch.name)
-                }}
-                style={styles.nextButtonStyle}
-                title={STRING.next} />
-            <TouchableOpacity>
+                </View>
                 <Text
+                    style={{ marginTop: SCALE_SIZE(36) }}
+                    font={FONT_NAME.regular}
+                    color={COLORS.color_545A70}
+                    size={SCALE_SIZE(16)}>
+                    {STRING.select_your_location_to_find_relevant_properties_near_you}
+                </Text>
+                <Input
+                    style={styles.locationDetailView}
+                    value={locationDetails}
+                    isLocation={IMAGES.ic_location}
+                    isNext={IMAGES.ic_next}
+                    placeholder={STRING.location_detail}
+                    autoCapitalize='none'
+                    placeholderTextColor={COLORS.color_8A8E9D}
+                    onChangeText={(text) => {
+                        setLocationDetails(text)
+                    }} />
+                <View style={{ flex: 1 }}></View>
+                <Button
                     onPress={() => {
                         props.navigation.navigate(SCREENS.LocationSearch.name)
                     }}
-                    align="center"
-                    style={{ marginBottom: SCALE_SIZE(20) }}
-                    font={FONT_NAME.medium}
-                    color={COLORS.color_333A54}
-                    size={SCALE_SIZE(16)}>
-                    {STRING.skip}
-                </Text>
-            </TouchableOpacity>
-            <SafeAreaView />
-        </View>
+                    style={styles.nextButtonStyle}
+                    title={STRING.next} />
+                <TouchableOpacity>
+                    <Text
+                        onPress={() => {
+                            props.navigation.navigate(SCREENS.LocationSearch.name)
+                        }}
+                        align="center"
+                        style={{ marginBottom: SCALE_SIZE(20) }}
+                        font={FONT_NAME.medium}
+                        color={COLORS.color_333A54}
+                        size={SCALE_SIZE(16)}>
+                        {STRING.skip}
+                    </Text>
+                </TouchableOpacity>
+            </KeyboardAvoidingView >
+        </SafeAreaView>
     )
 }
 

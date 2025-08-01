@@ -13,7 +13,12 @@ import { Header, Text } from "../../components";
 //SCREENS
 import { SCREENS } from "..";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const Home = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const [selectedPropertyItem, setSelectedPropertyItem] = useState<number>(0);
 
@@ -37,7 +42,7 @@ const Home = (props: any) => {
     ];
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0 }]}>
             <SafeAreaView />
             <Header
                 type="home"
@@ -65,7 +70,7 @@ const Home = (props: any) => {
                         </TextInput>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity >
+                <TouchableOpacity>
                     <Image
                         style={styles.filterIcon}
                         resizeMode="contain"

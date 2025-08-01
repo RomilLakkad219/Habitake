@@ -20,4 +20,14 @@ const STORAGE_KEY = {
   USER_DETAILS: 'user_details_json',
 }
 
-export { SCALE_SIZE, STORAGE_KEY }
+const getAndroidInsets = (insets:any) => {
+  const result = {
+    paddingTop: Platform.OS === 'android' ? insets.top : 0,
+    paddingBottom: Platform.OS === 'android' ? insets.bottom : 0,
+  };
+
+  console.log('Android Insets Applied:', result)
+  return result
+};
+
+export { SCALE_SIZE, STORAGE_KEY, getAndroidInsets }

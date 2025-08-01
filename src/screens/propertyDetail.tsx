@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, Dimensions, ScrollView, SafeAreaView } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, Dimensions, ScrollView, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -12,11 +12,14 @@ import { Header, Text } from "../components";
 
 //PACKAGES
 import { BlurView } from "@react-native-community/blur";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //SCREENS
 import { SCREENS } from ".";
 
 const PropertyDetail = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [comment, setComment] = useState<any>('')
@@ -28,7 +31,10 @@ const PropertyDetail = (props: any) => {
     ];
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
             <SafeAreaView />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <ImageBackground

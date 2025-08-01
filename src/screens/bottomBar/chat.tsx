@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, SafeAreaView } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
@@ -12,13 +12,17 @@ import { ChatDeleteSheet, Text } from "../../components";
 
 //PACKAGES
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //SCREENS
 import { SCREENS } from "..";
 
 const Chat = (props: any) => {
 
+    const insets = useSafeAreaInsets();
+
     const onChatDeleteRef = useRef<any>(null)
+    const swipeCooldownRef = useRef(false);
 
     const [swipedRow, setSwipedRow] = useState<any>(null);
     const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
@@ -69,18 +73,25 @@ const Chat = (props: any) => {
         setSwipedRow(null);
     };
 
-    // Adjust this value based on your swipe sensitivity preference
-    const handleSwipeValueChange = ({ key, value }: any) => {
-        const swipeThreshold = -130; // value more negative than rightOpenValue (-75)
+    // On swipe value change, we can show the delete icon and handle deletion logic
+    const handleSwipeValueChange = ({ key, value, rowMap }: any) => {
+        const swipeThreshold = -130;
         const alreadyDeleted = swipedToDelete.includes(key);
 
-        if (value < swipeThreshold && !alreadyDeleted) {
-            setSwipedToDelete(prev => [...prev, key]);
+        if (value < -20 && swipedRow !== key && !swipeCooldownRef.current) {
+
+            swipeCooldownRef.current = true;
+            const prevRow = swipedRow && rowMap?.[swipedRow];
+            if (prevRow && typeof prevRow.closeRow === 'function') {
+                prevRow.closeRow();
+            }
+
+            setSwipedRow(null); // clear old one first
 
             setTimeout(() => {
-                deleteRow(key);
-                setSwipedToDelete(prev => prev.filter(id => id !== key));
-            }, 150); // give animation time to complete
+                setSwipedRow(key); // show icon for new one
+                swipeCooldownRef.current = false;
+            }, 150);
         }
     };
 
@@ -88,8 +99,12 @@ const Chat = (props: any) => {
         <View style={styles.rowBack}>
             {swipedRow === data.item.id && (
                 <TouchableOpacity style={styles.deleteBtn} onPress={() => {
+                    rowMap[data.item.id]?.closeRow();
+                    setSwipedRow(null);
                     setSelectedChatId(data?.item?.id)
-                    onChatDeleteRef?.current?.open()
+                    setTimeout(() => {
+                        onChatDeleteRef?.current?.open();
+                    }, 100);
                 }}>
                     <Image
                         style={styles.deleteIcon}
@@ -103,7 +118,7 @@ const Chat = (props: any) => {
     );
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0}]}>
             <SafeAreaView />
             <Text
                 style={{ marginTop: SCALE_SIZE(20) }}
@@ -126,16 +141,22 @@ const Chat = (props: any) => {
                 renderHiddenItem={renderHiddenItem}
                 rightOpenValue={-75}
                 disableRightSwipe
-                onRowOpen={(rowKey) => {
-                    setSwipedRow(rowKey)
-                    // setTimeout(() => {
-                    //     deleteRow(rowKey)
-                    // }, 200)
+                onRowOpen={(rowKey, rowMap) => {
+                    //For better UI, close any previously swiped row
+                    if (swipedRow && swipedRow !== rowKey && rowMap?.[swipedRow]) {
+                        try {
+                            rowMap[swipedRow].closeRow();
+                        } catch (e) {
+                            console.warn('Error closing row', e);
+                        }
+                    }
+
+                    setSwipedRow(rowKey); // set new swiped row after closing old
                 }}
                 onRowClose={(rowKey) => {
                     if (swipedRow === rowKey) setSwipedRow(null)
                 }}
-                onSwipeValueChange={handleSwipeValueChange}
+                onSwipeValueChange={undefined}
             />
             <ChatDeleteSheet onRef={onChatDeleteRef} onCancel={() => {
                 onChatDeleteRef?.current?.close()

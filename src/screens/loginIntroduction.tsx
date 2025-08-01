@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Image, View, Dimensions, ScrollView, SafeAreaView } from "react-native"
+import { StyleSheet, Image, View, Dimensions, ScrollView, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -13,12 +13,19 @@ import { Button, Text } from "../components";
 //SCREENS
 import { SCREENS } from ".";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const LoginIntroduction = (props: any) => {
 
+    const insets = useSafeAreaInsets();
+
     return (
-        // <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-            <SafeAreaView>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
+            <SafeAreaView >
                 <Image
                     style={styles.introLogo}
                     resizeMode="cover"
@@ -46,7 +53,7 @@ const LoginIntroduction = (props: any) => {
                     }}
                     style={styles.loginButtonStyle}
                     title={STRING.login} />
-                <View style={{ marginBottom: SCALE_SIZE(40) }}>
+                <View style={{ marginBottom: SCALE_SIZE(10) }}>
                     <Text
                         font={FONT_NAME.regular}
                         align="center"
@@ -67,7 +74,6 @@ const LoginIntroduction = (props: any) => {
                 </View>
             </SafeAreaView>
         </View>
-        // </ScrollView>
     )
 }
 
@@ -81,12 +87,13 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width - SCALE_SIZE(32),
         alignSelf: 'center',
         borderRadius: SCALE_SIZE(20),
-        marginBottom: SCALE_SIZE(48)
+        marginBottom: SCALE_SIZE(35),
+        marginTop: SCALE_SIZE(10)
     },
     loginButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),
         marginTop: SCALE_SIZE(30),
-        marginBottom: SCALE_SIZE(30)
+        marginBottom: SCALE_SIZE(35)
     }
 })
 

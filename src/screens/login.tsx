@@ -10,20 +10,25 @@ import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
 
-//NAVIGATION
-import { CommonActions } from "@react-navigation/native";
-
 //SCREENS
 import { SCREENS } from ".";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const Login = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [email, setEmail] = useState<any>('');
     const [password, setPassword] = useState<any>('');
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
             <Header
                 type='onboarding' onBack={() => {
                     props.navigation.goBack()

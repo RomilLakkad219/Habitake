@@ -10,7 +10,12 @@ import { COLORS, SCALE_SIZE, FONT_NAME, STRING } from "../constants";
 //COMPONENTS
 import { Text } from "../components";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const AiInterior = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const categories = ['Modern', 'Classic', 'Industrial', 'Style'];
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -18,7 +23,7 @@ const AiInterior = (props: any) => {
     const [selectedOptions, setSelectedOptions] = useState<number>(0);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0, paddingBottom: Platform.OS === 'android' ? insets.bottom : 0 }]}>
             <SafeAreaView />
             <TouchableOpacity onPress={() => {
                 props.navigation.goBack()

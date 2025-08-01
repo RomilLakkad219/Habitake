@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, SafeAreaView } from "react-native"
+import { StyleSheet, Image, View, TouchableOpacity, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -13,14 +13,22 @@ import { AccountCreationSuccessSheet, Button, Header, Input, Text } from "../com
 //SCREENS
 import { SCREENS } from ".";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const AddProfile = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const accountCreationSuccessRef = useRef<any>('')
 
     const [phoneNumber, setPhoneNumber] = useState<any>('');
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
             <SafeAreaView />
             <Header
                 type='basic'

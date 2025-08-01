@@ -41,7 +41,8 @@ const AccountCreationSuccessSheet = (props: SheetProps) => {
                 draggableIcon: {
                     backgroundColor: COLORS.color_545A70,
                     height: 3,
-                    width: SCALE_SIZE(68)
+                    width: SCALE_SIZE(68),
+                    marginTop: SCALE_SIZE(28)
                 }
             }}>
             <View>
@@ -51,7 +52,7 @@ const AccountCreationSuccessSheet = (props: SheetProps) => {
                     source={IMAGES.ic_success}>
                 </Image>
                 <Text
-                    style={{ marginTop: SCALE_SIZE(31) }}
+                    style={{ marginTop: SCALE_SIZE(25) }}
                     font={FONT_NAME.regular}
                     align="center"
                     color={COLORS.color_333A54}
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
         height: SCALE_SIZE(162),
         width: SCALE_SIZE(162),
         alignSelf: 'center',
-        marginTop: SCALE_SIZE(31)
+        marginTop: SCALE_SIZE(30)
     },
     buttonStyle: {
         marginTop: SCALE_SIZE(36),

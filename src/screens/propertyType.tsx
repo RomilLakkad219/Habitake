@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, View, FlatList, Dimensions, ScrollView, TouchableOpacity, ImageBackground, SafeAreaView } from "react-native"
+import { StyleSheet, Image, View, FlatList, Dimensions, ScrollView, TouchableOpacity, ImageBackground, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -13,13 +13,21 @@ import { Button, Header, Input, Text } from "../components"
 //SCREENS
 import { SCREENS } from ".";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const PropertyType = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const [isSelectedProperty, setIsSelectedProperty] = useState<number>(0)
     const [budget, setBudget] = useState<any>('')
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
             <SafeAreaView />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Header

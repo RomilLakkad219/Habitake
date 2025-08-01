@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, View, TouchableOpacity } from "react-native"
+import { StyleSheet, Image, View, TouchableOpacity, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -10,13 +10,15 @@ import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
 
-//NAVIGATION
-import { CommonActions } from "@react-navigation/native";
-
 //SCREENS
 import { SCREENS } from ".";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const ResetPassword = (props: any) => {
+
+    const insets = useSafeAreaInsets();
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [password, setPassword] = useState<any>('');
@@ -24,7 +26,10 @@ const ResetPassword = (props: any) => {
     const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState<boolean>(false);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
             <Header
                 type='onboarding' onBack={() => {
                     props.navigation.goBack()

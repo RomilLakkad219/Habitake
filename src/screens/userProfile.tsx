@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { StyleSheet, Image, View, FlatList, TouchableOpacity, SafeAreaView } from "react-native"
+import { StyleSheet, Image, View, FlatList, TouchableOpacity, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -13,7 +13,12 @@ import { Header, LogoutSheet, Text } from "../components";
 //SCREENS
 import { SCREENS } from ".";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const UserProfile = (props: any) => {
+
+    const insets = useSafeAreaInsets()
 
     const onLogoutRef = useRef<any>(null)
 
@@ -41,7 +46,10 @@ const UserProfile = (props: any) => {
     ]
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
             <SafeAreaView />
             <Header
                 type="home"

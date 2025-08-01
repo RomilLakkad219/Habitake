@@ -82,7 +82,7 @@ const STRING = {
     say_something: 'Say something',
     are_you_sure_want_to: 'Are you sure want to ',
     delete: 'delete',
-    all_your_chat: 'all your chat?',
+    your_chat: 'your chat?',
     this_action_cant_be_undo: 'This action can’t be undo',
     delete_capital: 'Delete',
     today: 'Today',

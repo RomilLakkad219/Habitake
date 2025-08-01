@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, View, ScrollView, KeyboardAvoidingView, Platform } from "react-native"
+import { StyleSheet, Image, View, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, ImageBackground } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -10,13 +10,15 @@ import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
 
-//NAVIGATION
-import { CommonActions } from "@react-navigation/native";
-
 //SCREENS
 import { SCREENS } from ".";
 
+//PACKAGES
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 const SignUp = (props: any) => {
+
+    const insets = useSafeAreaInsets()
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [name, setName] = useState<any>('');
@@ -24,9 +26,13 @@ const SignUp = (props: any) => {
     const [email, setEmail] = useState<any>('');
     const [confirmPassword, setConfirmPassword] = useState<any>('');
     const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState<boolean>(false);
+    const [isTermsSelected, setTermsSelected] = useState<boolean>(false);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {
+            marginTop: Platform.OS === 'android' ? insets.top : 0,
+            paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
+        }]}>
             <Header
                 type='onboarding' onBack={() => {
                     props.navigation.goBack()
@@ -107,11 +113,23 @@ const SignUp = (props: any) => {
                             setConfirmPassword(text)
                         }} />
                     <View style={styles.termsConditionView}>
-                        <Image
-                            style={styles.squareIcon}
-                            resizeMode="contain"
-                            source={IMAGES.ic_square}>
-                        </Image>
+                        <TouchableOpacity onPress={() => {
+                            setTermsSelected(!isTermsSelected)
+                        }}>
+                            <View style={styles.imageDirection}>
+                                <ImageBackground
+                                    style={styles.squareIcon}
+                                    resizeMode="contain"
+                                    source={IMAGES.ic_square}>
+                                    {isTermsSelected &&
+                                        <Image
+                                            style={styles.rightImage}
+                                            resizeMode="cover"
+                                            source={IMAGES.green_check_bg} />
+                                    }
+                                </ImageBackground>
+                            </View>
+                        </TouchableOpacity>
                         <Text
                             font={FONT_NAME.medium}
                             color={COLORS.color_00092999}
@@ -181,6 +199,14 @@ const styles = StyleSheet.create({
         width: SCALE_SIZE(16),
         alignSelf: 'center',
         marginRight: SCALE_SIZE(12)
+    },
+    rightImage: {
+        height: SCALE_SIZE(17),
+        width: SCALE_SIZE(17),
+        alignSelf: 'center'
+    },
+    imageDirection: {
+        flexDirection: 'row',
     }
 })
 
