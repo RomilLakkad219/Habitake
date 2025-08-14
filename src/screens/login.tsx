@@ -5,7 +5,8 @@ import { StyleSheet, Image, View, TouchableOpacity, ScrollView, KeyboardAvoiding
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STRING } from "../constants";
+import { WEB_SERVICE } from "../constants/webServices";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -15,6 +16,11 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import axios from "axios";
+import { CommonActions } from "@react-navigation/native";
+
+//LOADER
+import ProgressView from "./progressView";
 
 const Login = (props: any) => {
 
@@ -23,6 +29,57 @@ const Login = (props: any) => {
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [email, setEmail] = useState<any>('');
     const [password, setPassword] = useState<any>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    async function onValidateUser() {
+        if (!email) {
+            SHOW_TOAST('Please enter your email')
+        }
+        else if (REGEX.emailRegex.test(email) == false) {
+            SHOW_TOAST('Enter valid email')
+        }
+        else if (!password) {
+            SHOW_TOAST('Please enter your password')
+        }
+        else {
+            onLoginUser()
+        }
+    }
+
+    async function onLoginUser() {
+        setIsLoading(true)
+        try {
+            const response = await axios.post(
+                WEB_SERVICE.login,
+                {
+                    arguments: {
+                        input: {
+                            username: email,
+                            password: password,
+                        },
+                    },
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            console.log(response.data);
+            SHOW_SUCCESS_TOAST('Login Successfully')
+            props.navigation.dispatch(CommonActions.reset({
+                index: 0,
+                routes: [{
+                    name: SCREENS.BottomBar.name
+                }]
+            }))
+        } catch (error: any) {
+            SHOW_TOAST(error.response?.data || error.message);
+        }
+        finally {
+            setIsLoading(false)
+        }
+    }
 
     return (
         <View style={[styles.container, {
@@ -62,7 +119,9 @@ const Login = (props: any) => {
                         style={[styles.inputStyle, { marginTop: SCALE_SIZE(24) }]}
                         value={email}
                         isEmail={IMAGES.ic_email}
+                        inputStyle={styles.inputTextStyle}
                         placeholder={STRING.email}
+                        keyboardType='email-address'
                         autoCapitalize='none'
                         placeholderTextColor={COLORS.color_8A8E9D}
                         onChangeText={(text) => {
@@ -72,6 +131,7 @@ const Login = (props: any) => {
                         style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
                         value={password}
                         isLock={IMAGES.ic_lock}
+                        inputStyle={styles.inputTextStyle}
                         placeholder={STRING.password}
                         autoCapitalize='none'
                         placeholderTextColor={COLORS.color_8A8E9D}
@@ -95,7 +155,7 @@ const Login = (props: any) => {
                     </Text>
                     <Button
                         onPress={() => {
-                            props.navigation.navigate(SCREENS.BottomBar.name)
+                            onValidateUser()
                         }}
                         style={styles.loginButtonStyle}
                         title={STRING.login} />
@@ -154,6 +214,7 @@ const Login = (props: any) => {
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
+            {isLoading && <ProgressView />}
         </View>
     )
 }
@@ -211,7 +272,12 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         marginHorizontal: SCALE_SIZE(16),
-    }
+    },
+    inputTextStyle: {
+        color: COLORS.black,
+        fontSize: SCALE_SIZE(14),
+        fontFamily: FONT_NAME.medium
+    },
 })
 
 export default Login;

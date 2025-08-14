@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, TouchableOpacity, StyleProp, ViewStyle, KeyboardTypeOptions, View, TextInput, Platform } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, StyleProp, ViewStyle, KeyboardTypeOptions, View, TextInput, Platform, TextStyle } from "react-native";
 
 //CONSTANTS
 import { COLORS, FONT_NAME, SCALE_SIZE } from "../constants";
-
 interface InputProps {
     style?: StyleProp<ViewStyle> | undefined;
-    inputStyle?: StyleProp<ViewStyle> | undefined;
+    inputStyle?: StyleProp<TextStyle> | undefined;
     placeholder?: string | undefined;
     title?: string | undefined;
     onChangeText?: (text: string) => void;

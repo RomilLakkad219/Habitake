@@ -1,22 +1,35 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Image, View, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, ImageBackground } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
 
+//API
+import { register } from "../api";
+
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STORAGE_KEY, STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
 
+//CONTEXT
+import { AuthContext } from "../context";
+
 //SCREENS
 import { SCREENS } from ".";
 
+//LOADER
+import ProgressView from "./progressView";
+
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CommonActions } from "@react-navigation/native";
 
 const SignUp = (props: any) => {
+
+    const { setUser } = useContext<any>(AuthContext)
 
     const insets = useSafeAreaInsets()
 
@@ -27,6 +40,116 @@ const SignUp = (props: any) => {
     const [confirmPassword, setConfirmPassword] = useState<any>('');
     const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState<boolean>(false);
     const [isTermsSelected, setTermsSelected] = useState<boolean>(false);
+    const [nameError, setNameError] = useState<any>('');
+    const [emailError, setEmailError] = useState<any>('');
+    const [passwordError, setPasswordError] = useState<any>('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState<any>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isPassValid, setIsValidPassword] = useState<boolean>(true);
+    const [confirmPassValid, setConfirmPassValid] = useState<boolean>(true)
+
+    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
+
+    useEffect(() => {
+        if (password != '') {
+            _validatePassword()
+        }
+    }, [password])
+
+    useEffect(() => {
+        if (confirmPassword != '') {
+            _validateConfirmPassword()
+        }
+    }, [confirmPassword])
+
+
+    async function onValidateUser() {
+        if (!name) {
+            SHOW_TOAST('Please enter your full name')
+        }
+        else if (!email) {
+            SHOW_TOAST('Please enter your email')
+        }
+        else if (REGEX.emailRegex.test(email) == false) {
+            SHOW_TOAST('Enter valid email')
+        }
+        else if (!password) {
+            SHOW_TOAST('Please enter your password')
+        }
+        else if (!confirmPassword) {
+            SHOW_TOAST('Please enter your confirm password')
+        }
+        else if (confirmPassword != password) {
+            SHOW_TOAST('Password and confirm password do not match')
+        }
+        else if (!isTermsSelected) {
+            SHOW_TOAST('Please agree to all terms and condition')
+        }
+        else if (!isPassValid) {
+            SHOW_TOAST('Password must be at least with 1 number,\n1 uppercase letter,1 lowercase letter and 1 special character.')
+        }
+        else {
+            onRegisterUser()
+        }
+    }
+
+    function _validatePassword() {
+        if (password.length > 0 && PASSWORD_RE.test(String(password))) {
+            setIsValidPassword(true)
+        }
+        else {
+            setIsValidPassword(false)
+        }
+    }
+
+    function _validateConfirmPassword() {
+        if (password === confirmPassword && confirmPassword.length > 0) {
+            setConfirmPassValid(true)
+        }
+        else {
+            setConfirmPassValid(false)
+        }
+    }
+
+    async function onRegisterUser() {
+        try {
+            const params = {
+                "username": name,
+                "password": password,
+                "email": email
+            }
+
+            setIsLoading(true)
+            const result = await register(params)
+            setIsLoading(false)
+
+            console.log('PRMS', params)
+
+            console.log('SIGN UP SUCCESS', JSON.stringify(result))
+
+            if (result.status) {
+                // setUser(result?.data?.data)
+                // await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(result?.data?.data))
+                SHOW_SUCCESS_TOAST('Sign up successfully')
+                props.navigation.dispatch(CommonActions.reset({
+                    index: 0,
+                    routes: [{
+                        name: SCREENS.Otp.name,
+                        params: {
+                            userName: name,
+                            email: email
+                        }
+                    }]
+                }))
+            }
+            else {
+                SHOW_TOAST(result?.error)
+            }
+        }
+        catch (err) {
+            SHOW_TOAST(err)
+        }
+    }
 
     return (
         <View style={[styles.container, {
@@ -66,6 +189,7 @@ const SignUp = (props: any) => {
                         style={[styles.inputStyle, { marginTop: SCALE_SIZE(24) }]}
                         value={name}
                         isUser={IMAGES.ic_user}
+                        inputStyle={styles.inputTextStyle}
                         placeholder={STRING.full_name}
                         autoCapitalize='none'
                         placeholderTextColor={COLORS.color_8A8E9D}
@@ -75,8 +199,10 @@ const SignUp = (props: any) => {
                     <Input
                         style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
                         value={email}
+                        inputStyle={styles.inputTextStyle}
                         isEmail={IMAGES.ic_email}
                         placeholder={STRING.email}
+                        keyboardType='email-address'
                         autoCapitalize='none'
                         placeholderTextColor={COLORS.color_8A8E9D}
                         onChangeText={(text) => {
@@ -85,6 +211,7 @@ const SignUp = (props: any) => {
                     <Input
                         style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
                         value={password}
+                        inputStyle={styles.inputTextStyle}
                         isLock={IMAGES.ic_lock}
                         placeholder={STRING.password}
                         autoCapitalize='none'
@@ -100,6 +227,7 @@ const SignUp = (props: any) => {
                     <Input
                         style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
                         value={confirmPassword}
+                        inputStyle={styles.inputTextStyle}
                         isEmail={IMAGES.ic_lock}
                         placeholder={STRING.confirm_password}
                         autoCapitalize='none'
@@ -112,7 +240,9 @@ const SignUp = (props: any) => {
                         onChangeText={(text) => {
                             setConfirmPassword(text)
                         }} />
-                    <View style={styles.termsConditionView}>
+                    <TouchableOpacity style={styles.termsConditionView} onPress={() => {
+                        setTermsSelected(!isTermsSelected)
+                    }}>
                         <TouchableOpacity onPress={() => {
                             setTermsSelected(!isTermsSelected)
                         }}>
@@ -136,10 +266,13 @@ const SignUp = (props: any) => {
                             size={SCALE_SIZE(16)}>
                             {STRING.agree_to_terms_conditions}
                         </Text>
-                    </View>
+                    </TouchableOpacity>
                     <Button
                         onPress={() => {
-                            props.navigation.navigate(SCREENS.Location.name)
+                            // props.navigation.navigate(SCREENS.Otp.name, {
+                            //     userName: name
+                            // })
+                            onValidateUser()
                         }}
                         style={styles.nextButtonStyle}
                         title={STRING.next} />
@@ -163,6 +296,7 @@ const SignUp = (props: any) => {
                     </Text>
                 </ScrollView>
             </KeyboardAvoidingView>
+            {isLoading && <ProgressView />}
         </View>
     )
 }
@@ -188,6 +322,11 @@ const styles = StyleSheet.create({
     inputStyle: {
         marginHorizontal: SCALE_SIZE(16),
     },
+    inputTextStyle: {
+        color: COLORS.black,
+        fontSize: SCALE_SIZE(14),
+        fontFamily: FONT_NAME.medium
+    },
     termsConditionView: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -195,8 +334,8 @@ const styles = StyleSheet.create({
         marginTop: SCALE_SIZE(20)
     },
     squareIcon: {
-        height: SCALE_SIZE(16),
-        width: SCALE_SIZE(16),
+        height: SCALE_SIZE(17),
+        width: SCALE_SIZE(17),
         alignSelf: 'center',
         marginRight: SCALE_SIZE(12)
     },

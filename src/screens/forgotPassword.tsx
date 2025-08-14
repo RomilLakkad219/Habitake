@@ -61,6 +61,7 @@ const ForgotPassword = (props: any) => {
                     style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
                     value={email}
                     isEmail={IMAGES.ic_email}
+                    inputStyle={styles.inputTextStyle}
                     placeholder={STRING.email}
                     autoCapitalize='none'
                     placeholderTextColor={COLORS.color_8A8E9D}
@@ -117,7 +118,12 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         marginHorizontal: SCALE_SIZE(16)
-    }
+    },
+    inputTextStyle: {
+        color: COLORS.black,
+        fontSize: SCALE_SIZE(14),
+        fontFamily: FONT_NAME.medium
+    },
 })
 
 export default ForgotPassword;

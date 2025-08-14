@@ -32,7 +32,7 @@ const toastConfig = {
       contentContainerStyle={{ paddingHorizontal: SCALE_SIZE(15) }}
       text1NumberOfLines={3}
       text1Style={{
-        fontSize: SCALE_SIZE(14),
+        fontSize: SCALE_SIZE(16),
         fontFamily: FONT_NAME.light
       }}>
     </BaseToast>
@@ -41,7 +41,7 @@ const toastConfig = {
     <ErrorToast  {...props}
       text1NumberOfLines={3}
       text1Style={{
-        fontSize: SCALE_SIZE(14),
+        fontSize: SCALE_SIZE(16),
         fontFamily: FONT_NAME.light
       }}
     >
@@ -52,7 +52,7 @@ const toastConfig = {
       style={{ borderLeftColor: COLORS.gray }}
       text1NumberOfLines={3}
       text1Style={{
-        fontSize: SCALE_SIZE(14),
+        fontSize: SCALE_SIZE(16),
         fontFamily: FONT_NAME.light
       }}>
     </InfoToast>
@@ -69,7 +69,7 @@ function App(): JSX.Element {
             <NavigationContainer>
               <Navigator
                 initialRouteName={SCREENS.Splash.name}
-                screenOptions={{ headerShown: false, gestureEnabled: true }}>
+                screenOptions={{ headerShown: false, gestureEnabled: false }}>
                 {_.toArray(SCREENS).map((item: any) => {
                   return item.component ? (
                     <Screen

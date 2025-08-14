@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: SCALE_SIZE(14),
         alignItems: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
     },
     profileView: {
         height: SCALE_SIZE(50),
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     deleteBtn: {
         backgroundColor: COLORS.color_34216B,
         width: SCALE_SIZE(100),
-        height: '91%',
+        height: SCALE_SIZE(100),
         justifyContent: 'center',
         alignItems: 'center',
         borderTopRightRadius: SCALE_SIZE(25),
