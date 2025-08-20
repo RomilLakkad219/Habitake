@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, View, KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native"
 
+//API
+import { resendOtp } from "../api";
+
 //CONSTANTS
 import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STRING, WEB_SERVICE } from "../constants";
 
@@ -44,17 +47,8 @@ const Otp = (props: any) => {
             const response = await axios.post(
                 WEB_SERVICE.verify_email,
                 {
-                    arguments: {
-                        input: {
-                            username: userName,
-                            verificationCode: otp,
-                        },
-                    },
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    username: userName,
+                    confirmationCode: otp,
                 }
             );
             console.log(response.data);
@@ -62,14 +56,44 @@ const Otp = (props: any) => {
             props.navigation.dispatch(CommonActions.reset({
                 index: 0,
                 routes: [{
-                    name: SCREENS.BottomBar.name
+                    name: SCREENS.ResetPassword.name,
+                    params: {
+                        email: email,
+                        otp: otp
+                    }
                 }]
             }))
         } catch (error: any) {
-            SHOW_TOAST(error.response?.data || error.message);
+            SHOW_TOAST(error.message);
         }
         finally {
             setIsLoading(false)
+        }
+    }
+
+    async function onResendOtp() {
+        try {
+            const params = {
+                "username": userName
+            }
+
+            setIsLoading(true)
+            const result = await resendOtp(params)
+            setIsLoading(false)
+
+            console.log('PRMS', params)
+
+            console.log('RESEND OTP SUCCESS', JSON.stringify(result))
+
+            if (result.status) {
+                SHOW_SUCCESS_TOAST('OTP has been sent on your email')
+            }
+            else {
+                SHOW_TOAST(result?.error)
+            }
+        }
+        catch (err) {
+            SHOW_TOAST(err)
         }
     }
 
@@ -89,7 +113,7 @@ const Otp = (props: any) => {
                     font={FONT_NAME.bold}
                     color={COLORS.color_333A54}
                     size={SCALE_SIZE(28)}>
-                    {'Verify Email'}
+                    {STRING.verify_email}
                 </Text>
                 <Text
                     style={[styles.textStyle, { marginTop: SCALE_SIZE(35) }]}
@@ -107,21 +131,27 @@ const Otp = (props: any) => {
                         setOtp(text)
                     }}>
                 </OTPTextInput>
-                <TouchableOpacity onPress={() => { }}>
+                <TouchableOpacity onPress={() => {
+                    onResendOtp()
+                }}>
                     <Text
                         style={[styles.textStyle, { marginTop: SCALE_SIZE(35) }]}
                         font={FONT_NAME.medium}
                         color={COLORS.color_333A54}
                         align="center"
                         size={SCALE_SIZE(16)}>
-                        {`Don't receive a code?`}
+                        {STRING.didnt_receive_the_code}
                         <Text
-                            style={[styles.textStyle, { marginTop: SCALE_SIZE(35) }]}
-                            font={FONT_NAME.medium}
+                            style={[styles.textStyle, {
+                                marginTop: SCALE_SIZE(35),
+                                textDecorationLine: 'underline',
+                                textDecorationColor: COLORS.color_34216B
+                            }]}
+                            font={FONT_NAME.semiBold}
                             align="center"
                             color={COLORS.color_34216B}
                             size={SCALE_SIZE(16)}>
-                            {` Resend`}
+                            {STRING.resend}
                         </Text>
                     </Text>
                 </TouchableOpacity>

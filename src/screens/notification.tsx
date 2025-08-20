@@ -64,7 +64,8 @@ const Notification = (props: any) => {
         profileImage: '',
         message: 'Just messaged you. Check the message in message tab.',
         time: '10 days ago'
-    }])
+    },
+    ])
 
     const deleteRow = (rowKey: any) => {
         const newData = [...olderNotificationList];
@@ -88,7 +89,7 @@ const Notification = (props: any) => {
             )}
         </View>
     )
-
+    
     return (
         <View style={[styles.container, {
             marginTop: Platform.OS === 'android' ? insets.top : 0,
@@ -212,8 +213,7 @@ const Notification = (props: any) => {
                                 style={{
                                     marginTop: isFirst ? SCALE_SIZE(20) : SCALE_SIZE(9),
                                     marginBottom: isLast ? SCALE_SIZE(25) : 0,
-                                }}
-                            >
+                                }}>
                                 <NotificationItem
                                     item={item}
                                     index={index}
@@ -400,15 +400,16 @@ const styles = StyleSheet.create({
     deleteBtn: {
         backgroundColor: COLORS.color_34216B,
         width: SCALE_SIZE(100),
-        height: SCALE_SIZE(100),
         justifyContent: 'center',
         alignItems: 'center',
         borderTopRightRadius: SCALE_SIZE(25),
         borderBottomRightRadius: SCALE_SIZE(25),
+        height: '80%',
+        alignSelf: 'center'
     },
     deleteIcon: {
         height: SCALE_SIZE(20),
-        width: SCALE_SIZE(17),
+        width: SCALE_SIZE(20),
         alignSelf: 'center'
     }
 })

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView } from "react-native"
+import { StyleSheet, Image, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, ImageBackground } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -15,6 +15,7 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 
 const EditProfile = (props: any) => {
 
@@ -25,9 +26,41 @@ const EditProfile = (props: any) => {
     const [password, setPassword] = useState<string>('12345');
     const [email, setEmail] = useState<string>('mathew@gmail.com');
     const [phoneNumber, setPhoneNumber] = useState<string>('1234567890');
+    const [localImage, setLocalImage] = useState<any>(null);
+
+    async function openLibrary() {
+        const result = await launchImageLibrary({
+            mediaType: 'photo',
+        });
+
+        if (result.didCancel) {
+            console.log('User cancelled image picker');
+        } else if (result.errorCode) {
+        } else {
+            setLocalImage(result?.assets?.[0]);
+        }
+    }
+
+    async function openCamera() {
+        const result = await launchCamera({
+            mediaType: 'mixed',
+            cameraType: 'back',
+            maxWidth: 500,
+            maxHeight: 500,
+            quality: 1,
+        });
+
+        if (result.didCancel) {
+            console.log('User cancelled image picker');
+        } else if (result.errorCode) {
+            console.log('ImagePicker Error: ', result.errorCode);
+        } else {
+            setLocalImage(result?.assets?.[0]);
+        }
+    }
 
     return (
-        <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0 ,paddingBottom: Platform.OS === 'android' ? insets.bottom : 0}]}>
+        <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0, paddingBottom: Platform.OS === 'android' ? insets.bottom : 0 }]}>
             <SafeAreaView />
             <Header
                 type="home"
@@ -49,13 +82,21 @@ const EditProfile = (props: any) => {
                     color={COLORS.color_333A54}>
                     {STRING.profile}
                 </Text>
-                <View style={styles.profileView}>
+                <TouchableOpacity
+                    onPress={() => {
+                        openLibrary()
+                    }}>
+                    <ImageBackground
+                        style={styles.profileView}
+                        resizeMode="cover"
+                        source={{ uri: localImage?.uri }}>
+                    </ImageBackground>
                     <Image
                         style={styles.editIcon}
                         resizeMode="contain"
                         source={IMAGES.ic_edit}
                     />
-                </View>
+                </TouchableOpacity>
                 <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
                     style={{ flex: 1 }}>
                     <View style={[styles.inputView, { marginTop: SCALE_SIZE(40) }]}>
@@ -156,12 +197,13 @@ const styles = StyleSheet.create({
         borderRadius: SCALE_SIZE(50),
         alignSelf: 'center',
         marginTop: SCALE_SIZE(42),
+        overflow: 'hidden',
     },
     editIcon: {
         height: SCALE_SIZE(30),
         width: SCALE_SIZE(30),
         alignSelf: 'center',
-        marginTop: SCALE_SIZE(65),
+        marginTop: SCALE_SIZE(-35),
         left: SCALE_SIZE(30),
     },
     inputView: {

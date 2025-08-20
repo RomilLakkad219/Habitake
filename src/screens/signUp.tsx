@@ -29,7 +29,7 @@ import { CommonActions } from "@react-navigation/native";
 
 const SignUp = (props: any) => {
 
-    const { setUser } = useContext<any>(AuthContext)
+    const { setUser, fetchProfile } = useContext<any>(AuthContext)
 
     const insets = useSafeAreaInsets()
 
@@ -45,10 +45,10 @@ const SignUp = (props: any) => {
     const [passwordError, setPasswordError] = useState<any>('');
     const [confirmPasswordError, setConfirmPasswordError] = useState<any>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isPassValid, setIsValidPassword] = useState<boolean>(true);
+    const [isValidPass, setIsValidPassword] = useState<boolean>(true);
     const [confirmPassValid, setConfirmPassValid] = useState<boolean>(true)
 
-    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
+    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*]).{12,}$/
 
     useEffect(() => {
         if (password != '') {
@@ -61,7 +61,6 @@ const SignUp = (props: any) => {
             _validateConfirmPassword()
         }
     }, [confirmPassword])
-
 
     async function onValidateUser() {
         if (!name) {
@@ -82,11 +81,12 @@ const SignUp = (props: any) => {
         else if (confirmPassword != password) {
             SHOW_TOAST('Password and confirm password do not match')
         }
+        else if (!isValidPass) {
+            SHOW_TOAST('Password must be at least 12 characters long,\ninclude 1 number, 1 uppercase letter, 1 lowercase letter, and 1 special character.')
+            // SHOW_TOAST('Password must be at least with 1 number,\n1 uppercase letter,1 lowercase letter and 1 special character.')
+        }
         else if (!isTermsSelected) {
             SHOW_TOAST('Please agree to all terms and condition')
-        }
-        else if (!isPassValid) {
-            SHOW_TOAST('Password must be at least with 1 number,\n1 uppercase letter,1 lowercase letter and 1 special character.')
         }
         else {
             onRegisterUser()
@@ -116,21 +116,22 @@ const SignUp = (props: any) => {
             const params = {
                 "username": name,
                 "password": password,
-                "email": email
+                "email": email,
+                "role": "buyer"
             }
 
             setIsLoading(true)
             const result = await register(params)
             setIsLoading(false)
 
-            console.log('PRMS', params)
-
-            console.log('SIGN UP SUCCESS', JSON.stringify(result))
-
-            if (result.status) {
-                // setUser(result?.data?.data)
-                // await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(result?.data?.data))
+            if (result.data.success) {
+                const userData = result?.data?.data;
+                console.log('SIGNUP SUCCESS',JSON.stringify(result?.data?.data))
+                setUser(userData)
+                await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
                 SHOW_SUCCESS_TOAST('Sign up successfully')
+                await fetchProfile(userData.userId)
+
                 props.navigation.dispatch(CommonActions.reset({
                     index: 0,
                     routes: [{
@@ -269,9 +270,6 @@ const SignUp = (props: any) => {
                     </TouchableOpacity>
                     <Button
                         onPress={() => {
-                            // props.navigation.navigate(SCREENS.Otp.name, {
-                            //     userName: name
-                            // })
                             onValidateUser()
                         }}
                         style={styles.nextButtonStyle}

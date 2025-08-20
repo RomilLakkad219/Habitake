@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, Image, View, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STORAGE_KEY, STRING } from "../constants";
 import { WEB_SERVICE } from "../constants/webServices";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
+
+//CONTEXT
+import { AuthContext } from "../context";
 
 //SCREENS
 import { SCREENS } from ".";
@@ -18,6 +21,7 @@ import { SCREENS } from ".";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import axios from "axios";
 import { CommonActions } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //LOADER
 import ProgressView from "./progressView";
@@ -25,6 +29,8 @@ import ProgressView from "./progressView";
 const Login = (props: any) => {
 
     const insets = useSafeAreaInsets();
+
+    const { setUser, fetchProfile } = useContext(AuthContext)
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [email, setEmail] = useState<any>('');
@@ -52,29 +58,26 @@ const Login = (props: any) => {
             const response = await axios.post(
                 WEB_SERVICE.login,
                 {
-                    arguments: {
-                        input: {
-                            username: email,
-                            password: password,
-                        },
-                    },
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    username: email,
+                    password: password,
                 }
-            );
-            console.log(response.data);
-            SHOW_SUCCESS_TOAST('Login Successfully')
+            )
+
+            const userData = response?.data?.data;
+            console.log('LOGIN SUCC',JSON.stringify(response))
+            setUser(userData)
+            await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
+            SHOW_SUCCESS_TOAST('Login successfully')
+            await fetchProfile(userData.userId)
+
             props.navigation.dispatch(CommonActions.reset({
                 index: 0,
                 routes: [{
-                    name: SCREENS.BottomBar.name
+                    name: SCREENS.Prepare.name
                 }]
             }))
         } catch (error: any) {
-            SHOW_TOAST(error.response?.data || error.message);
+            SHOW_TOAST(error.message);
         }
         finally {
             setIsLoading(false)

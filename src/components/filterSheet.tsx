@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet, SafeAreaView, Dimensions, Image, FlatList, TouchableOpacity, ScrollView } from 'react-native'
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, SafeAreaView, Dimensions, Image, FlatList, TouchableOpacity, ScrollView, BackHandler } from 'react-native'
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -24,6 +24,25 @@ interface SheetProps {
 
 const FilterSheet = (props: SheetProps) => {
 
+    const sheetRef = props.onRef;
+
+    useEffect(() => {
+        const backAction = () => {
+            if (sheetRef?.current?.open) {
+                sheetRef.current.close(); 
+                return true; 
+            }
+            return false
+        };
+
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        return () => backHandler.remove();
+    }, [sheetRef]);
+
     const [selectedPropertyItem, setSelectedPropertyItem] = useState<number>(0);
     const [selectednumbersOfBathrooms, setSelectedNumbersOfBathrooms] = useState<number>(0);
     const [selectednumbersOfBedrooms, setSelectedNumbersOfBedrooms] = useState<number>(0);
@@ -33,7 +52,9 @@ const FilterSheet = (props: SheetProps) => {
     return (
         <RBSheet ref={props.onRef}
             closeOnPressMask={true}
+            closeOnPressBack={true}
             onOpen={props.onOpen}
+            {...props}
             onClose={props.onClose}
             draggable={true}
             customStyles={{
@@ -53,7 +74,8 @@ const FilterSheet = (props: SheetProps) => {
                 }
             }}>
             <View style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView showsVerticalScrollIndicator={false}
+                    nestedScrollEnabled={true}  >
                     <TouchableOpacity activeOpacity={1}>
                         <Text
                             font={FONT_NAME.bold}

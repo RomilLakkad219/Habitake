@@ -25,6 +25,7 @@ import Messaging from "./messaging";
 import Notification from "./notification";
 import UserProfile from "./userProfile";
 import EditProfile from "./editProfile";
+import Prepare from "./prepare";
 
 export const SCREENS = {
     Splash: {
@@ -122,6 +123,10 @@ export const SCREENS = {
     Otp: {
         name: 'Otp',
         component: Otp
+    },
+    Prepare: {
+        name: 'Prepare',
+        component: Prepare
     }
 }
 

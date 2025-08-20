@@ -9,10 +9,11 @@ async function getHeaders() {
     const user = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS)
     if (user) {
         const userJson = JSON.parse(user)
+        console.log('USER TOKEN', JSON.stringify(userJson.idToken))
         return {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userJson?.token ?? ''}`
+            'Authorization': `Bearer ${userJson?.idToken ?? ''}`
         }
     }
     else {
@@ -30,7 +31,7 @@ async function getFormDataHeaders() {
         return {
             'Accept': 'application/json',
             "Content-Type": "multipart/form-data",
-            'Authorization': `Bearer ${userJson?.token ?? ''}`
+            'Authorization': `Bearer ${userJson?.idToken ?? ''}`
         }
     }
     else {
@@ -76,7 +77,6 @@ export async function getRequest(url: any, params: any) {
 }
 
 export async function postRequest(url: any, params: any) {
-    console.log("getRequest CALLED");
     let headers = await getHeaders();
 
     console.log("URL", url)

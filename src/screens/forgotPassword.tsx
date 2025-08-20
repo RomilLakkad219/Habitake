@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, View } from "react-native"
+
+//API
+import { forgotPassword } from "../api";
 
 //ASSETS
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_TOAST, STORAGE_KEY, STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
+
+//CONTEXT
+import { AuthContext } from "../context";
 
 //NAVIGATION
 import { CommonActions } from "@react-navigation/native";
@@ -18,12 +24,73 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+//LOADER
+import ProgressView from "./progressView";
 
 const ForgotPassword = (props: any) => {
+
+    const { user } = useContext(AuthContext)
 
     const insets = useSafeAreaInsets();
 
     const [email, setEmail] = useState<any>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    function onForgotPasswordValidation() {
+
+        if (!email) {
+            SHOW_TOAST('Enter your email')
+        }
+        else if (REGEX.emailRegex.test(email) == false) {
+            SHOW_TOAST('Please enter valid email')
+        }
+        else {
+            onForgotPassword()
+        }
+    }
+
+    async function onForgotPassword() {
+
+        const storedUser = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS);
+        if (storedUser) {
+            var parsed = JSON.parse(storedUser)
+        }
+
+        try {
+            const params = {
+                email: email
+            }
+
+            setIsLoading(true)
+            const result = await forgotPassword(params)
+            setIsLoading(false)
+
+            console.log('FORGOT', JSON.stringify(result))
+
+            if (result.status) {
+                props.navigation.dispatch(CommonActions.reset({
+                    index: 0,
+                    routes: [{
+                        name: SCREENS.Otp.name,
+                        params: {
+                            userName: parsed?.username,
+                            email: email
+                        }
+                    }]
+                }))
+            }
+            else {
+                console.log('ERR', result?.error)
+                SHOW_TOAST(result?.error)
+            }
+        }
+        catch (err) {
+            console.log('ERRRR', err)
+            SHOW_TOAST(err)
+        }
+    }
 
     return (
         <View style={[styles.container, {
@@ -71,7 +138,7 @@ const ForgotPassword = (props: any) => {
                 <View style={{ flex: 1 }}></View>
                 <Button
                     onPress={() => {
-                        props.navigation.navigate(SCREENS.ResetPassword.name)
+                        onForgotPasswordValidation()
                     }}
                     style={styles.continueButtonStyle}
                     title={STRING.continue} />
@@ -95,6 +162,7 @@ const ForgotPassword = (props: any) => {
                 </Text>
             </KeyboardAvoidingView>
             <SafeAreaView />
+            {isLoading && <ProgressView />}
         </View>
     )
 }

@@ -103,6 +103,9 @@ const STRING = {
     near_by_you: 'Nearby you',
     cant_found_real_estate_nearby_you: `Can't found real estate nearby you`,
     already_have_an_account: 'Already have an account? ',
+    verify_email: 'Verify Email',
+    didnt_receive_the_code: `Didn't receive the code?`,
+    resend: ' Resend'
 }
 
 export { STRING }
