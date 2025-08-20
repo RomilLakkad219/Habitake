@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, Platform } from "react-native"
+import { StyleSheet, View, Platform } from "react-native"
 
 //API
 import { resetPassword } from "../api";
@@ -18,7 +18,7 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CommonActions } from "@react-navigation/native";
+import OTPTextInput from 'react-native-otp-textinput'
 
 //LOADER
 import ProgressView from "./progressView";
@@ -26,7 +26,6 @@ import ProgressView from "./progressView";
 const ResetPassword = (props: any) => {
 
     const email = props.route.params.email
-    const otp = props.route.params.otp
 
     const insets = useSafeAreaInsets();
 
@@ -36,6 +35,7 @@ const ResetPassword = (props: any) => {
     const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isValidPass, setIsValidPassword] = useState<boolean>(true);
+    const [otp, setOtp] = useState<any>('');
 
     const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*]).{12,}$/
 
@@ -70,7 +70,10 @@ const ResetPassword = (props: any) => {
     }
 
     function onResetPasswordCheck() {
-        if (!password) {
+        if (!otp) {
+            SHOW_TOAST('Please enter your otp')
+        }
+        else if (!password) {
             SHOW_TOAST('Enter your password')
         }
         else if (!confirmPassword) {
@@ -104,12 +107,7 @@ const ResetPassword = (props: any) => {
             if (result?.status) {
                 SHOW_SUCCESS_TOAST('Reset password successfully')
                 setTimeout(() => {
-                    props.navigation.dispatch(CommonActions.reset({
-                        index: 0,
-                        routes: [{
-                            name: SCREENS.Login.name
-                        }]
-                    }))
+                    props.navigation.navigate(SCREENS.Login.name)
                 }, 1000);
             }
             else {
@@ -150,6 +148,22 @@ const ResetPassword = (props: any) => {
                 size={SCALE_SIZE(16)}>
                 {'quis nostrud exercitation ullamco laboris nisi ut'}
             </Text>
+            <Text
+                style={[styles.textStyle, { marginTop: SCALE_SIZE(15) }]}
+                font={FONT_NAME.regular}
+                color={COLORS.color_545A70}
+                size={SCALE_SIZE(16)}>
+                {`Enter the verification code we just sent you on\n${email}`}
+            </Text>
+            <OTPTextInput
+                defaultValue={otp}
+                containerStyle={styles.otpContainerStyle}
+                textInputStyle={styles.otpSelected}
+                inputCount={6}
+                handleTextChange={(text) => {
+                    setOtp(text)
+                }}>
+            </OTPTextInput>
             <Input
                 style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
                 value={password}
@@ -219,6 +233,20 @@ const styles = StyleSheet.create({
         color: COLORS.black,
         fontSize: SCALE_SIZE(14),
         fontFamily: FONT_NAME.medium
+    },
+    otpContainerStyle: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: SCALE_SIZE(5)
+    },
+    otpSelected: {
+        borderRadius: SCALE_SIZE(10),
+        borderWidth: 1,
+        borderBottomWidth: 1,
+        marginTop: SCALE_SIZE(42),
+        color: COLORS.color_34216B,
+        backgroundColor: '#F6F6F6',
+        borderColor: COLORS.color_34216B
     },
 })
 

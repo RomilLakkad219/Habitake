@@ -8,7 +8,7 @@ import { forgotPassword } from "../api";
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_TOAST, STORAGE_KEY, STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_TOAST, STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -16,22 +16,16 @@ import { Button, Header, Input, Text } from "../components";
 //CONTEXT
 import { AuthContext } from "../context";
 
-//NAVIGATION
-import { CommonActions } from "@react-navigation/native";
-
 //SCREENS
 import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //LOADER
 import ProgressView from "./progressView";
 
 const ForgotPassword = (props: any) => {
-
-    const { user } = useContext(AuthContext)
 
     const insets = useSafeAreaInsets();
 
@@ -53,11 +47,6 @@ const ForgotPassword = (props: any) => {
 
     async function onForgotPassword() {
 
-        const storedUser = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS);
-        if (storedUser) {
-            var parsed = JSON.parse(storedUser)
-        }
-
         try {
             const params = {
                 email: email
@@ -70,24 +59,15 @@ const ForgotPassword = (props: any) => {
             console.log('FORGOT', JSON.stringify(result))
 
             if (result.status) {
-                props.navigation.dispatch(CommonActions.reset({
-                    index: 0,
-                    routes: [{
-                        name: SCREENS.Otp.name,
-                        params: {
-                            userName: parsed?.username,
-                            email: email
-                        }
-                    }]
-                }))
+                props.navigation.navigate(SCREENS.ResetPassword.name, {
+                    email: email
+                })
             }
             else {
-                console.log('ERR', result?.error)
                 SHOW_TOAST(result?.error)
             }
         }
         catch (err) {
-            console.log('ERRRR', err)
             SHOW_TOAST(err)
         }
     }

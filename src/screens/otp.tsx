@@ -20,7 +20,6 @@ import ProgressView from "./progressView"
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import OTPTextInput from 'react-native-otp-textinput'
 import axios from "axios";
-import { CommonActions } from "@react-navigation/native";
 
 const Otp = (props: any) => {
 
@@ -53,16 +52,9 @@ const Otp = (props: any) => {
             );
             console.log(response.data);
             SHOW_SUCCESS_TOAST('Otp Verify Successfully')
-            props.navigation.dispatch(CommonActions.reset({
-                index: 0,
-                routes: [{
-                    name: SCREENS.ResetPassword.name,
-                    params: {
-                        email: email,
-                        otp: otp
-                    }
-                }]
-            }))
+            setTimeout(() => {
+                props.navigation.navigate(SCREENS.Prepare.name)
+            }, 1000);
         } catch (error: any) {
             SHOW_TOAST(error.message);
         }
