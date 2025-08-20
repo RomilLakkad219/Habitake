@@ -1,12 +1,14 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, Image, View, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from "react-native"
 
+//API
+import { userLogin } from "../api";
+
 //ASSETS
 import { IMAGES } from "../assets";
 
 //CONSTANTS
 import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STORAGE_KEY, STRING } from "../constants";
-import { WEB_SERVICE } from "../constants/webServices";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -19,7 +21,6 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import axios from "axios";
 import { CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -53,29 +54,35 @@ const Login = (props: any) => {
     }
 
     async function onLoginUser() {
-        setIsLoading(true)
         try {
-            const response = await axios.post(
-                WEB_SERVICE.login,
-                {
-                    username: email,
-                    password: password,
-                }
-            )
+            const params = {
+                email: email,
+                password: password,
+            }
 
-            const userData = response?.data?.data;
-            console.log('LOGIN SUCC',JSON.stringify(response))
-            setUser(userData)
-            await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
-            SHOW_SUCCESS_TOAST('Login successfully')
-            await fetchProfile(userData.userId)
+            setIsLoading(true)
+            const response = await userLogin(params)
+            setIsLoading(false)
 
-            props.navigation.dispatch(CommonActions.reset({
-                index: 0,
-                routes: [{
-                    name: SCREENS.Prepare.name
-                }]
-            }))
+            console.log('LOGIN', JSON.stringify(response))
+
+            if (response.status) {
+                const userData = response?.data?.data;
+                setUser(userData)
+                await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
+                SHOW_SUCCESS_TOAST('Login successfully')
+                await fetchProfile(userData.userId)
+
+                props.navigation.dispatch(CommonActions.reset({
+                    index: 0,
+                    routes: [{
+                        name: SCREENS.Prepare.name
+                    }]
+                }))
+            }
+            else {
+                SHOW_TOAST(response?.error)
+            }
         } catch (error: any) {
             SHOW_TOAST(error.message);
         }

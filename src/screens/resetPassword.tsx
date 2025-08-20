@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Platform } from "react-native"
 
 //API
@@ -34,40 +34,9 @@ const ResetPassword = (props: any) => {
     const [confirmPassword, setConfirmPassword] = useState<any>('');
     const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isValidPass, setIsValidPassword] = useState<boolean>(true);
     const [otp, setOtp] = useState<any>('');
 
     const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*]).{12,}$/
-
-    useEffect(() => {
-        if (password != '') {
-            _validatePassword()
-        }
-    }, [password])
-
-    useEffect(() => {
-        if (confirmPassword != '') {
-            _validateConfirmPassword()
-        }
-    }, [confirmPassword])
-
-    function _validatePassword() {
-        if (password.length > 0 && PASSWORD_RE.test(String(password))) {
-            setIsValidPassword(true)
-        }
-        else {
-            setIsValidPassword(false)
-        }
-    }
-
-    function _validateConfirmPassword() {
-        if (password === confirmPassword && confirmPassword.length > 0) {
-            setIsValidPassword(true)
-        }
-        else {
-            setIsValidPassword(false)
-        }
-    }
 
     function onResetPasswordCheck() {
         if (!otp) {
@@ -79,10 +48,10 @@ const ResetPassword = (props: any) => {
         else if (!confirmPassword) {
             SHOW_TOAST('Enter your confirm password')
         }
-        else if (!isValidPass) {
+        else if (!PASSWORD_RE.test(password)) {
             SHOW_TOAST('Password must be at least 12 characters long,\ninclude 1 number, 1 uppercase letter, 1 lowercase letter, and 1 special character.')
         }
-        else if (password != confirmPassword) {
+        else if (password !== confirmPassword) {
             SHOW_TOAST('New password and confirm password does not match')
         }
         else {
@@ -101,8 +70,6 @@ const ResetPassword = (props: any) => {
             setIsLoading(true)
             const result = await resetPassword(params)
             setIsLoading(false)
-
-            console.log('RESET SUCCESS', JSON.stringify(result))
 
             if (result?.status) {
                 SHOW_SUCCESS_TOAST('Reset password successfully')

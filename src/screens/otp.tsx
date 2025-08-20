@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native"
 
 //API
-import { resendOtp } from "../api";
+import { emailVerification, resendOtp } from "../api";
 
 //CONSTANTS
 import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STRING, WEB_SERVICE } from "../constants";
@@ -19,7 +19,6 @@ import ProgressView from "./progressView"
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import OTPTextInput from 'react-native-otp-textinput'
-import axios from "axios";
 
 const Otp = (props: any) => {
 
@@ -41,20 +40,25 @@ const Otp = (props: any) => {
     }
 
     async function onGetOtp() {
-        setIsLoading(true)
         try {
-            const response = await axios.post(
-                WEB_SERVICE.verify_email,
-                {
-                    username: userName,
-                    confirmationCode: otp,
-                }
-            );
-            console.log(response.data);
-            SHOW_SUCCESS_TOAST('Otp Verify Successfully')
-            setTimeout(() => {
-                props.navigation.navigate(SCREENS.Prepare.name)
-            }, 1000);
+            const params = {
+                "username": userName,
+                "confirmationCode": otp,
+            }
+
+            setIsLoading(true)
+            const response = await emailVerification(params)
+            setIsLoading(false)
+
+            if (response?.status) {
+                SHOW_SUCCESS_TOAST('Otp Verify Successfully')
+                setTimeout(() => {
+                    props.navigation.navigate(SCREENS.Prepare.name)
+                }, 1000);
+            }
+            else {
+                SHOW_TOAST(response?.error)
+            }
         } catch (error: any) {
             SHOW_TOAST(error.message);
         }
@@ -72,10 +76,6 @@ const Otp = (props: any) => {
             setIsLoading(true)
             const result = await resendOtp(params)
             setIsLoading(false)
-
-            console.log('PRMS', params)
-
-            console.log('RESEND OTP SUCCESS', JSON.stringify(result))
 
             if (result.status) {
                 SHOW_SUCCESS_TOAST('OTP has been sent on your email')

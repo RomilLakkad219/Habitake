@@ -4,7 +4,7 @@ export function SHOW_TOAST(message: any) {
     Toast.show({
         type: 'error',
         text1: message,
-        position: 'bottom'
+        position: 'bottom',
     })
 }
 

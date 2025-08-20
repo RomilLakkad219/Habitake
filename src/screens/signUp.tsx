@@ -25,7 +25,6 @@ import ProgressView from "./progressView";
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { CommonActions } from "@react-navigation/native";
 
 const SignUp = (props: any) => {
 
@@ -83,7 +82,6 @@ const SignUp = (props: any) => {
         }
         else if (!isValidPass) {
             SHOW_TOAST('Password must be at least 12 characters long,\ninclude 1 number, 1 uppercase letter, 1 lowercase letter, and 1 special character.')
-            // SHOW_TOAST('Password must be at least with 1 number,\n1 uppercase letter,1 lowercase letter and 1 special character.')
         }
         else if (!isTermsSelected) {
             SHOW_TOAST('Please agree to all terms and condition')
@@ -126,22 +124,15 @@ const SignUp = (props: any) => {
 
             if (result.data.success) {
                 const userData = result?.data?.data;
-                console.log('SIGNUP SUCCESS',JSON.stringify(result?.data?.data))
                 setUser(userData)
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
                 SHOW_SUCCESS_TOAST('Sign up successfully')
                 await fetchProfile(userData.userId)
 
-                props.navigation.dispatch(CommonActions.reset({
-                    index: 0,
-                    routes: [{
-                        name: SCREENS.Otp.name,
-                        params: {
-                            userName: name,
-                            email: email
-                        }
-                    }]
-                }))
+                props.navigation.navigate(SCREENS.Otp.name, {
+                    userName: name,
+                    email: email
+                })
             }
             else {
                 SHOW_TOAST(result?.error)

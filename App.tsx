@@ -10,7 +10,7 @@ import Toast, {
   ErrorToast,
   InfoToast,
 } from 'react-native-toast-message';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 //SCREENS
 import { SCREENS } from './src/screens';
@@ -39,10 +39,11 @@ const toastConfig = {
   ),
   error: (props: any) => (
     <ErrorToast  {...props}
-      text1NumberOfLines={3}
+      text1NumberOfLines={5}
       text1Style={{
         fontSize: SCALE_SIZE(16),
-        fontFamily: FONT_NAME.light
+        fontFamily: FONT_NAME.light,
+        flexWrap: 'wrap'
       }}
     >
     </ErrorToast>
