@@ -5,7 +5,7 @@ import { StyleSheet, View, KeyboardAvoidingView, Platform, TouchableOpacity } fr
 import { emailVerification, resendOtp } from "../api";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STRING, WEB_SERVICE } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Text } from "../components";

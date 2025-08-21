@@ -9,5 +9,5 @@ export const WEB_SERVICE = {
     forgot_password: BASE_URL + 'forgot-password/',
     reset_password: BASE_URL + 'reset-password',
     user_profile: BASE_URL + 'profile',
-    edit_profile: BASE_URL + 'profile'
+    update_user_profile: 'https://8piqxvpn55.execute-api.eu-central-1.amazonaws.com/dev/' + 'users',
 }

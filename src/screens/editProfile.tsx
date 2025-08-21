@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, Image, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, ImageBackground } from "react-native"
+
+//API
+import { editUserProfile } from "../api";
 
 //ASSETS
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STRING } from "../constants";
+
+//CONTEXT
+import { AuthContext } from "../context";
 
 //COMPONENTS
 import { Button, Header, Text } from "../components";
@@ -17,16 +23,22 @@ import { SCREENS } from ".";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 
+//LOADER
+import ProgressView from "./progressView";
+
 const EditProfile = (props: any) => {
+
+    const { profile, fetchProfile } = useContext(AuthContext)
 
     const insets = useSafeAreaInsets();
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
-    const [name, setName] = useState<string>('Mathew Adam');
+    const [name, setName] = useState<string>(profile?.username);
     const [password, setPassword] = useState<string>('12345');
-    const [email, setEmail] = useState<string>('mathew@gmail.com');
+    const [email, setEmail] = useState<string>(profile?.email || '');
     const [phoneNumber, setPhoneNumber] = useState<string>('1234567890');
     const [localImage, setLocalImage] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     async function openLibrary() {
         const result = await launchImageLibrary({
@@ -56,6 +68,51 @@ const EditProfile = (props: any) => {
             console.log('ImagePicker Error: ', result.errorCode);
         } else {
             setLocalImage(result?.assets?.[0]);
+        }
+    }
+
+    async function updateProfile() {
+        try {
+            const params = {
+                "user_id": profile?.userId,
+                "name": name == null ? '' : name,
+                "email": email == null ? '' : email,
+                "phone": "",
+                "status": "",
+                "role": "buyer",
+                "profile_picture": localImage?.uri,
+                "documents": [
+                    {
+                        "document_type": "",
+                        "document_number": "",
+                        "document_file": ""
+                    },
+                    {
+                        "document_type": "",
+                        "document_number": "",
+                        "document_file": ""
+                    }
+                ]
+            };
+
+            setIsLoading(true)
+            const result = await editUserProfile(params);
+            setIsLoading(false);
+
+            console.log('Update Profile Params', JSON.stringify(params));
+
+            console.log("Update Profile Result", JSON.stringify(result));
+
+            if (result.status) {
+                await fetchProfile();
+                props.navigation.goBack();
+                SHOW_SUCCESS_TOAST("Profile updated successfully");
+            } else {
+                SHOW_TOAST(result.error);
+            }
+        }
+        catch (error) {
+            SHOW_TOAST(error)
         }
     }
 
@@ -176,10 +233,11 @@ const EditProfile = (props: any) => {
                 <Button
                     style={styles.updateButton}
                     onPress={() => {
-
+                        updateProfile()
                     }}
                     title={STRING.update} />
             </ScrollView>
+            {isLoading && <ProgressView />}
         </View>
     )
 }

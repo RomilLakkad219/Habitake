@@ -46,8 +46,8 @@ async function getUserProfile(params: any) {
     return result
 }
 
-async function editProfile(params: any) {
-    let url = WEB_SERVICE.edit_profile
+async function editUserProfile(params: any) {
+    let url = WEB_SERVICE.update_user_profile + `?user_id=${params.user_id}`
     const result = await putRequest(url, params)
     return result
 }
@@ -60,5 +60,5 @@ export {
     forgotPassword,
     resetPassword,
     getUserProfile,
-    editProfile
+    editUserProfile
 }

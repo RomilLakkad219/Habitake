@@ -25,10 +25,9 @@ export const AuthProvider = (props: any) => {
     const [user, setUser] = useState<any>(null);
     const [profile, setProfile] = useState<any>(null);
 
-    async function fetchProfile(userId?: string | number) {
+    async function fetchProfile() {
 
         const storedUser = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS);
-        console.log("Stored User", storedUser);
         if (storedUser) {
             var parsed = JSON.parse(storedUser)
         }
@@ -39,7 +38,7 @@ export const AuthProvider = (props: any) => {
 
         const result = await getUserProfile(params)
 
-        console.log("PROFILE", JSON.stringify(result))
+        console.log("Fetching profile for userId:", parsed?.userId, "RESULT", JSON.stringify(result));
 
         if (result.status) {
             setProfile(result?.data?.data)

@@ -5,6 +5,7 @@ export function SHOW_TOAST(message: any) {
         type: 'error',
         text1: message,
         position: 'bottom',
+        swipeable: false
     })
 }
 
@@ -12,6 +13,7 @@ export function SHOW_SUCCESS_TOAST(message: any) {
     Toast.show({
         type: 'success',
         text1: message,
-        position: 'bottom'
+        position: 'bottom',
+        swipeable: false
     })
 }

@@ -1,8 +1,11 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { StyleSheet, Image, View, FlatList, TouchableOpacity, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
+
+//CONTEXT
+import { AuthContext } from "../context";
 
 //CONSTANTS
 import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
@@ -17,6 +20,10 @@ import { SCREENS } from ".";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const UserProfile = (props: any) => {
+
+    const { profile } = useContext(AuthContext)
+
+    console.log("User Profile Screen", profile);
 
     const insets = useSafeAreaInsets()
 
@@ -54,9 +61,7 @@ const UserProfile = (props: any) => {
             <Header
                 type="home"
                 locationText={'1012 Ocean avanue, New yourk, USA'}
-                profileIcon={() => {
-
-                }}
+                profileIcon={true}
                 onNotification={() => {
                     props.navigation.navigate(SCREENS.Notification.name)
                 }} />

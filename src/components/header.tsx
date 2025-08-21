@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Image, ImageBackground, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 //ASSETS
@@ -6,6 +6,9 @@ import { IMAGES } from "../assets";
 
 //COMPONENTS
 import Text from "./text";
+
+//CONTEXT
+import { AuthContext } from "../context";
 
 //CONSTANTS
 import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
@@ -26,6 +29,8 @@ interface HeaderProps {
 }
 
 const Header = (props: HeaderProps) => {
+
+    const { profile } = useContext(AuthContext)
 
     const insets = useSafeAreaInsets()
 
@@ -138,9 +143,11 @@ const Header = (props: HeaderProps) => {
                     <TouchableOpacity
                         onPress={props.onProfile}>
                         <Image
-                            style={styles.profileIcon}
-                            resizeMode="contain"
-                            source={props.profileIcon}>
+                            style={[styles.profileIcon, {
+                                backgroundColor: profile?.profilePicture ? '' : 'gray',
+                            }]}
+                            resizeMode="cover"
+                            source={{ uri: profile?.profilePicture }}>
                         </Image>
                     </TouchableOpacity>
                 </View>
@@ -247,7 +254,6 @@ const styles = StyleSheet.create({
         width: SCALE_SIZE(44),
         alignSelf: 'center',
         borderRadius: SCALE_SIZE(22),
-        backgroundColor: 'gray',
         marginLeft: SCALE_SIZE(12)
     },
     searchContainer: {

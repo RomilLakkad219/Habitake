@@ -6,14 +6,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { STORAGE_KEY } from '../constants';
 
 async function getHeaders() {
-    const user = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS)
-    if (user) {
-        const userJson = JSON.parse(user)
-        console.log('USER TOKEN', JSON.stringify(userJson.idToken))
+
+    const userDetails = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS)
+    if (userDetails) {
+        const userJson = JSON.parse(userDetails)
+
+        console.log("USER JSON", userJson);
+        console.log("TOKEN (idToken)", userJson?.idToken);
+
         return {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userJson?.idToken ?? ''}`
+            'Authorization': `Bearer ${userJson?.idToken}`
         }
     }
     else {
@@ -31,7 +35,7 @@ async function getFormDataHeaders() {
         return {
             'Accept': 'application/json',
             "Content-Type": "multipart/form-data",
-            'Authorization': `Bearer ${userJson?.idToken ?? ''}`
+            'Authorization': `Bearer ${userJson?.idToken}`
         }
     }
     else {

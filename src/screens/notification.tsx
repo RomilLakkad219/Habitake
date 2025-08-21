@@ -404,8 +404,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderTopRightRadius: SCALE_SIZE(25),
         borderBottomRightRadius: SCALE_SIZE(25),
-        height: '80%',
-        alignSelf: 'center'
+        height: SCALE_SIZE(105),
     },
     deleteIcon: {
         height: SCALE_SIZE(20),

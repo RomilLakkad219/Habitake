@@ -64,19 +64,19 @@ const Login = (props: any) => {
             const response = await userLogin(params)
             setIsLoading(false)
 
-            console.log('LOGIN', JSON.stringify(response))
-
             if (response.status) {
                 const userData = response?.data?.data;
                 setUser(userData)
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
                 SHOW_SUCCESS_TOAST('Login successfully')
-                await fetchProfile(userData.userId)
 
                 props.navigation.dispatch(CommonActions.reset({
                     index: 0,
                     routes: [{
-                        name: SCREENS.Prepare.name
+                        name: SCREENS.Prepare.name,
+                        params: {
+                            userData: userData
+                        }
                     }]
                 }))
             }

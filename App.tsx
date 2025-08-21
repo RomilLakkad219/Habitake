@@ -39,7 +39,7 @@ const toastConfig = {
   ),
   error: (props: any) => (
     <ErrorToast  {...props}
-      text1NumberOfLines={5}
+      text1NumberOfLines={0}
       text1Style={{
         fontSize: SCALE_SIZE(16),
         fontFamily: FONT_NAME.light,
@@ -82,7 +82,8 @@ function App(): JSX.Element {
                 })}
               </Navigator>
             </NavigationContainer>
-            <Toast config={toastConfig} />
+            <Toast config={toastConfig}
+            />
           </View>
         </AuthProvider>
       </View>

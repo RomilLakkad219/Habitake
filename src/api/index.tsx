@@ -6,7 +6,7 @@ import {
     forgotPassword,
     resetPassword,
     getUserProfile,
-    editProfile
+    editUserProfile
 } from "./user";
 
 export {
@@ -17,5 +17,5 @@ export {
     forgotPassword,
     resetPassword,
     getUserProfile,
-    editProfile
+    editUserProfile
 }

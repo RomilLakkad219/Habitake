@@ -127,7 +127,6 @@ const SignUp = (props: any) => {
                 setUser(userData)
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
                 SHOW_SUCCESS_TOAST('Sign up successfully')
-                await fetchProfile(userData.userId)
 
                 props.navigation.navigate(SCREENS.Otp.name, {
                     userName: name,
