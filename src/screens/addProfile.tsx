@@ -5,7 +5,7 @@ import { StyleSheet, Image, View, TouchableOpacity, SafeAreaView, Platform } fro
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { AccountCreationSuccessSheet, Button, Header, Input, Text } from "../components";
@@ -17,6 +17,8 @@ import { SCREENS } from ".";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const AddProfile = (props: any) => {
+
+    const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
 

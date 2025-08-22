@@ -8,7 +8,7 @@ import { IMAGES } from "../assets";
 import { register } from "../api";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STORAGE_KEY, STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STORAGE_KEY, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -27,6 +27,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignUp = (props: any) => {
+
+    const STRING = USE_STRING();
 
     const { setUser, fetchProfile } = useContext<any>(AuthContext)
 
@@ -61,30 +63,36 @@ const SignUp = (props: any) => {
         }
     }, [confirmPassword])
 
+    const handleFullNameChange = (text: string) => {
+        // Allow only letters (a-z, A-Z) and spaces
+        const cleanedText = text.replace(/[^a-zA-Z\s]/g, '');
+        setName(cleanedText);
+    };
+
     async function onValidateUser() {
         if (!name) {
-            SHOW_TOAST('Please enter your full name')
+            SHOW_TOAST(STRING.please_enter_your_full_name)
         }
         else if (!email) {
-            SHOW_TOAST('Please enter your email')
+            SHOW_TOAST(STRING.please_enter_your_email)
         }
         else if (REGEX.emailRegex.test(email) == false) {
-            SHOW_TOAST('Enter valid email')
+            SHOW_TOAST(STRING.please_enter_valid_email)
         }
         else if (!password) {
-            SHOW_TOAST('Please enter your password')
+            SHOW_TOAST(STRING.please_enter_your_password)
         }
         else if (!confirmPassword) {
-            SHOW_TOAST('Please enter your confirm password')
+            SHOW_TOAST(STRING.please_enter_your_confirm_password)
         }
         else if (confirmPassword != password) {
-            SHOW_TOAST('Password and confirm password do not match')
+            SHOW_TOAST(STRING.password_and_confirm_password_does_not_match)
         }
         else if (!isValidPass) {
-            SHOW_TOAST('Password must be at least 12 characters long,\ninclude 1 number, 1 uppercase letter, 1 lowercase letter, and 1 special character.')
+            SHOW_TOAST(STRING.password_must_be_at_least_12_characters_long)
         }
         else if (!isTermsSelected) {
-            SHOW_TOAST('Please agree to all terms and condition')
+            SHOW_TOAST(STRING.please_agree_to_all_terms_and_condition)
         }
         else {
             onRegisterUser()
@@ -126,7 +134,7 @@ const SignUp = (props: any) => {
                 const userData = result?.data?.data;
                 setUser(userData)
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
-                SHOW_SUCCESS_TOAST('Sign up successfully')
+                SHOW_SUCCESS_TOAST('Sign Up Successfully')
 
                 props.navigation.navigate(SCREENS.Otp.name, {
                     userName: name,
@@ -184,9 +192,7 @@ const SignUp = (props: any) => {
                         placeholder={STRING.full_name}
                         autoCapitalize='none'
                         placeholderTextColor={COLORS.color_8A8E9D}
-                        onChangeText={(text) => {
-                            setName(text)
-                        }} />
+                        onChangeText={handleFullNameChange} />
                     <Input
                         style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
                         value={email}

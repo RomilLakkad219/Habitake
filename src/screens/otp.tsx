@@ -5,7 +5,7 @@ import { StyleSheet, View, KeyboardAvoidingView, Platform, TouchableOpacity } fr
 import { emailVerification, resendOtp } from "../api";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Text } from "../components";
@@ -22,6 +22,8 @@ import OTPTextInput from 'react-native-otp-textinput'
 
 const Otp = (props: any) => {
 
+    const STRING = USE_STRING();
+
     const insets = useSafeAreaInsets()
 
     const [otp, setOtp] = useState<any>('');
@@ -32,7 +34,7 @@ const Otp = (props: any) => {
 
     function onOtpCheck() {
         if (!otp) {
-            SHOW_TOAST('Please enter your otp')
+            SHOW_TOAST(STRING.please_enter_your_otp)
         }
         else {
             onGetOtp()
@@ -50,10 +52,17 @@ const Otp = (props: any) => {
             const response = await emailVerification(params)
             setIsLoading(false)
 
+            console.log('OTP RESPONSE',JSON.stringify(response))
+
             if (response?.status) {
-                SHOW_SUCCESS_TOAST('Otp Verify Successfully')
+                const userData = response?.data?.data;
+                SHOW_SUCCESS_TOAST(STRING.otp_verify_successfully)
                 setTimeout(() => {
-                    props.navigation.navigate(SCREENS.Prepare.name)
+                    props.navigation.navigate(SCREENS.Prepare.name, {
+                        params: {
+                            userData: userData
+                        }
+                    })
                 }, 1000);
             }
             else {
@@ -78,7 +87,7 @@ const Otp = (props: any) => {
             setIsLoading(false)
 
             if (result.status) {
-                SHOW_SUCCESS_TOAST('OTP has been sent on your email')
+                SHOW_SUCCESS_TOAST(STRING.otp_has_been_sent_on_your_email)
             }
             else {
                 SHOW_TOAST(result?.error)

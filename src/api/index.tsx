@@ -6,7 +6,8 @@ import {
     forgotPassword,
     resetPassword,
     getUserProfile,
-    editUserProfile
+    editUserProfile,
+    logOut
 } from "./user";
 
 export {
@@ -17,5 +18,6 @@ export {
     forgotPassword,
     resetPassword,
     getUserProfile,
-    editUserProfile
+    editUserProfile,
+    logOut
 }

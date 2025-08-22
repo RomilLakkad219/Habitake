@@ -5,13 +5,16 @@ import { StyleSheet, Image, ImageBackground } from "react-native"
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { SCALE_SIZE } from "../constants";
+import { SCALE_SIZE, STORAGE_KEY } from "../constants";
 
 //NAVIGATION
 import { CommonActions } from "@react-navigation/native";
 
 //SCREENS
 import { SCREENS } from ".";
+
+//PACKAGES
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Splash = (props: any) => {
 
@@ -22,26 +25,27 @@ const Splash = (props: any) => {
     }, [])
 
     async function moveToNext() {
-        // const user = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS)
-        // if (user) {
-        //     const userJson = JSON.parse(user)
-        //     setUser(userJson)
-
-        //     props.navigation.dispatch(CommonActions.reset({
-        //         index: 0,
-        //         routes: [{
-        //             name: SCREENS.Prepare.name
-        //         }]
-        //     }))
-        // }
-        // else {
+        const user = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS)
+        if (user) {
+            const userData = JSON.parse(user)
             props.navigation.dispatch(CommonActions.reset({
                 index: 0,
                 routes: [{
-                    name: SCREENS.LoginIntroduction.name
+                    name: SCREENS.Prepare.name,
+                    params: {
+                        userData: userData
+                    }
                 }]
             }))
-        // }
+        }
+        else {
+            props.navigation.dispatch(CommonActions.reset({
+                index: 0,
+                routes: [{
+                    name: SCREENS.Login.name
+                }]
+            }))
+        }
     }
 
     return (

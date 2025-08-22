@@ -8,7 +8,7 @@ import { editUserProfile } from "../api";
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, USE_STRING } from "../constants";
 
 //CONTEXT
 import { AuthContext } from "../context";
@@ -29,6 +29,8 @@ import ProgressView from "./progressView";
 const EditProfile = (props: any) => {
 
     const { profile, fetchProfile } = useContext(AuthContext)
+
+    const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
 
@@ -71,6 +73,12 @@ const EditProfile = (props: any) => {
         }
     }
 
+    const handleFullNameChange = (text: string) => {
+        // Allow only letters (a-z, A-Z) and spaces
+        const cleanedText = text.replace(/[^a-zA-Z\s]/g, '');
+        setName(cleanedText);
+    };
+
     async function updateProfile() {
         try {
             const params = {
@@ -106,7 +114,7 @@ const EditProfile = (props: any) => {
             if (result.status) {
                 await fetchProfile();
                 props.navigation.goBack();
-                SHOW_SUCCESS_TOAST("Profile updated successfully");
+                SHOW_SUCCESS_TOAST(STRING.profile_updated_successfully);
             } else {
                 SHOW_TOAST(result.error);
             }
@@ -122,9 +130,7 @@ const EditProfile = (props: any) => {
             <Header
                 type="home"
                 locationText={'1012 Ocean avanue, New yourk, USA'}
-                profileIcon={() => {
-
-                }}
+                profileIcon={true}
                 onNotification={() => {
                     props.navigation.navigate(SCREENS.Notification.name)
                 }} />
@@ -144,9 +150,13 @@ const EditProfile = (props: any) => {
                         openLibrary()
                     }}>
                     <ImageBackground
-                        style={styles.profileView}
+                        style={[styles.profileView, { backgroundColor: COLORS.gray }]}
                         resizeMode="cover"
-                        source={{ uri: localImage?.uri }}>
+                        source={localImage
+                            ? { uri: localImage?.uri } // if picked from library
+                            : profile?.profilePicture   // if backend gives image
+                                ? { uri: profile.profilePicture }
+                                : undefined}>
                     </ImageBackground>
                     <Image
                         style={styles.editIcon}
@@ -165,9 +175,7 @@ const EditProfile = (props: any) => {
                             style={styles.inputTextStyle}
                             value={name}
                             placeholderTextColor={COLORS.color_333A54}
-                            onChangeText={(text) => {
-                                setName(text)
-                            }}>
+                            onChangeText={handleFullNameChange}>
                         </TextInput>
                     </View>
                     <View style={[styles.inputView, { marginTop: SCALE_SIZE(20) }]}>
@@ -182,9 +190,7 @@ const EditProfile = (props: any) => {
                             onChangeText={(text) => {
                                 setEmail(text)
                             }}
-                        // editable={false}
-                        >
-
+                            editable={false}>
                         </TextInput>
                     </View>
                     <View style={[styles.inputView, { marginTop: SCALE_SIZE(20) }]}>
@@ -200,7 +206,6 @@ const EditProfile = (props: any) => {
                                 setPhoneNumber(text)
                             }}
                             keyboardType="numeric">
-
                         </TextInput>
                     </View>
                     <View style={[styles.inputView, { marginTop: SCALE_SIZE(20) }]}>
@@ -216,8 +221,7 @@ const EditProfile = (props: any) => {
                             onChangeText={(text) => {
                                 setPassword(text)
                             }}
-                        // editable={false}
-                        >
+                            editable={false}>
                         </TextInput>
                         <View style={{ flex: 1 }}></View>
                         <TouchableOpacity onPress={() => {
@@ -251,7 +255,6 @@ const styles = StyleSheet.create({
     profileView: {
         height: SCALE_SIZE(100),
         width: SCALE_SIZE(100),
-        backgroundColor: 'gray',
         borderRadius: SCALE_SIZE(50),
         alignSelf: 'center',
         marginTop: SCALE_SIZE(42),

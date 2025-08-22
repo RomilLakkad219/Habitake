@@ -5,7 +5,7 @@ import { View, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image, SafeAr
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, SCALE_SIZE, FONT_NAME, STRING } from "../constants";
+import { COLORS, SCALE_SIZE, FONT_NAME, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Header, Text } from "../components";
@@ -18,6 +18,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SCREENS } from ".";
 
 const Notification = (props: any) => {
+
+    const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets()
 
@@ -89,7 +91,7 @@ const Notification = (props: any) => {
             )}
         </View>
     )
-    
+
     return (
         <View style={[styles.container, {
             marginTop: Platform.OS === 'android' ? insets.top : 0,
@@ -248,6 +250,9 @@ type NotificationProps = {
 }
 
 const NotificationItem = ({ item, onPress, index }: NotificationProps) => {
+
+    const STRING = USE_STRING();
+    
     return (
         <View style={[styles.notificationView, {
             backgroundColor: COLORS.color_E6E6EA66,

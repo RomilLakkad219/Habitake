@@ -5,7 +5,7 @@ import { View, StyleSheet, SafeAreaView, Dimensions, Image, FlatList, TouchableO
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
 
 //COMPONENTS
 import Text from "./text";
@@ -14,7 +14,6 @@ import Button from "./button";
 //PACKAGES
 import RBSheet from "react-native-raw-bottom-sheet";
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-
 interface SheetProps {
     onRef?: any,
     onOpen?: () => void,
@@ -26,11 +25,13 @@ const FilterSheet = (props: SheetProps) => {
 
     const sheetRef = props.onRef;
 
+    const STRING = USE_STRING();
+
     useEffect(() => {
         const backAction = () => {
             if (sheetRef?.current?.open) {
-                sheetRef.current.close(); 
-                return true; 
+                sheetRef.current.close();
+                return true;
             }
             return false
         };

@@ -11,6 +11,8 @@ import Toast, {
   InfoToast,
 } from 'react-native-toast-message';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './src/translation/i18n';
 
 //SCREENS
 import { SCREENS } from './src/screens';
@@ -20,6 +22,7 @@ import { COLORS, FONT_NAME, SCALE_SIZE } from './src/constants';
 
 //CONTEXT
 import { AuthProvider } from './src/context';
+import { LanguageProvider } from './src/context/languageProvider';
 
 LogBox.ignoreAllLogs()
 
@@ -63,30 +66,34 @@ const toastConfig = {
 function App(): JSX.Element {
   return (
     <SafeAreaProvider>
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <AuthProvider>
-          <View style={styles.container}>
-            <StatusBar barStyle={'dark-content'} translucent={false} backgroundColor={COLORS.white} />
-            <NavigationContainer>
-              <Navigator
-                initialRouteName={SCREENS.Splash.name}
-                screenOptions={{ headerShown: false, gestureEnabled: false }}>
-                {_.toArray(SCREENS).map((item: any) => {
-                  return item.component ? (
-                    <Screen
-                      key={item.name}
-                      name={item.name}
-                      component={item.component}
-                    />
-                  ) : null;
-                })}
-              </Navigator>
-            </NavigationContainer>
-            <Toast config={toastConfig}
-            />
-          </View>
-        </AuthProvider>
-      </View>
+      <I18nextProvider i18n={i18n}>
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+          <LanguageProvider>
+            <AuthProvider>
+              <View style={styles.container}>
+                <StatusBar barStyle={'dark-content'} translucent={false} backgroundColor={COLORS.white} />
+                <NavigationContainer>
+                  <Navigator
+                    initialRouteName={SCREENS.Splash.name}
+                    screenOptions={{ headerShown: false, gestureEnabled: false }}>
+                    {_.toArray(SCREENS).map((item: any) => {
+                      return item.component ? (
+                        <Screen
+                          key={item.name}
+                          name={item.name}
+                          component={item.component}
+                        />
+                      ) : null;
+                    })}
+                  </Navigator>
+                </NavigationContainer>
+                <Toast config={toastConfig}
+                />
+              </View>
+            </AuthProvider>
+          </LanguageProvider>
+        </View>
+      </I18nextProvider>
     </SafeAreaProvider>
   )
 }

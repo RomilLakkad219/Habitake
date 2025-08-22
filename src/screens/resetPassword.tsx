@@ -8,7 +8,7 @@ import { resetPassword } from "../api";
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -25,6 +25,8 @@ import ProgressView from "./progressView";
 
 const ResetPassword = (props: any) => {
 
+    const STRING = USE_STRING();
+
     const email = props.route.params.email
 
     const insets = useSafeAreaInsets();
@@ -40,19 +42,19 @@ const ResetPassword = (props: any) => {
 
     function onResetPasswordCheck() {
         if (!otp) {
-            SHOW_TOAST('Please enter your otp')
+            SHOW_TOAST(STRING.please_enter_your_otp)
         }
         else if (!password) {
-            SHOW_TOAST('Enter your password')
+            SHOW_TOAST(STRING.please_enter_your_password)
         }
         else if (!confirmPassword) {
-            SHOW_TOAST('Enter your confirm password')
+            SHOW_TOAST(STRING.please_enter_your_confirm_password)
         }
         else if (!PASSWORD_RE.test(password)) {
-            SHOW_TOAST('Password must be at least 12 characters long,\ninclude 1 number, 1 uppercase letter, 1 lowercase letter, and 1 special character.')
+            SHOW_TOAST(STRING.password_must_be_at_least_12_characters_long)
         }
         else if (password !== confirmPassword) {
-            SHOW_TOAST('New password and confirm password does not match')
+            SHOW_TOAST(STRING.new_password_and_confirm_password_does_not_match)
         }
         else {
             onResetPassword()
@@ -72,7 +74,7 @@ const ResetPassword = (props: any) => {
             setIsLoading(false)
 
             if (result?.status) {
-                SHOW_SUCCESS_TOAST('Reset password successfully')
+                SHOW_SUCCESS_TOAST(STRING.reset_password_successfully)
                 setTimeout(() => {
                     props.navigation.navigate(SCREENS.Login.name)
                 }, 1000);

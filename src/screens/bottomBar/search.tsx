@@ -5,7 +5,7 @@ import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, Dimensi
 import { IMAGES } from "../../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../../constants";
 
 //COMPONENTS
 import { FilterSheet, Header, Text } from "../../components";
@@ -14,6 +14,8 @@ import { FilterSheet, Header, Text } from "../../components";
 import MapView from 'react-native-maps';
 
 const Search = (props: any) => {
+
+    const STRING = USE_STRING();
 
     const filterRef = useRef<any>(null)
 

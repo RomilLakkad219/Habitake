@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Image, View, TouchableOpacity, Platform, TextInput, SafeAreaView } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
 
 //COMPONENTS
-import { Button, Header, Input, Text } from "../components";
+import { Button, Header, Text } from "../components";
 
 //SCREENS
 import { SCREENS } from ".";
@@ -17,6 +17,8 @@ import { SCREENS } from ".";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const LocationSearch = (props: any) => {
+
+    const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
 

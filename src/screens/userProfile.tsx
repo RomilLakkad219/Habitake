@@ -1,5 +1,5 @@
-import React, { useContext, useRef } from "react";
-import { StyleSheet, Image, View, FlatList, TouchableOpacity, SafeAreaView, Platform } from "react-native"
+import React, { useContext, useRef, useState } from "react";
+import { StyleSheet, Image, View, FlatList, TouchableOpacity, SafeAreaView, Platform, ImageBackground } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -8,7 +8,7 @@ import { IMAGES } from "../assets";
 import { AuthContext } from "../context";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_TOAST, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Header, LogoutSheet, Text } from "../components";
@@ -18,16 +18,23 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CommonActions } from "@react-navigation/native";
+import ProgressView from "./progressView";
+import { logOut } from "../api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const UserProfile = (props: any) => {
 
-    const { profile } = useContext(AuthContext)
+    const { profile, user } = useContext(AuthContext)
+
+    const STRING = USE_STRING();
 
     console.log("User Profile Screen", profile);
 
     const insets = useSafeAreaInsets()
 
     const onLogoutRef = useRef<any>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const profileItem = [
         {
@@ -52,6 +59,39 @@ const UserProfile = (props: any) => {
         }
     ]
 
+    async function onLogout() {
+
+        try {
+            const params = {
+                "user_id": user?.userId
+            }
+            setIsLoading(true);
+            const result = await logOut(params);
+            setIsLoading(false)
+
+            console.log("LOGOUT RESPONSE", JSON.stringify(result));
+
+            await AsyncStorage.clear();
+
+            setTimeout(() => {
+                setIsLoading(false);
+                props.navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [
+                            {
+                                name: SCREENS.Login.name,
+                            },
+                        ],
+                    }),
+                );
+            }, 500);
+        } catch (error: any) {
+            setIsLoading(false);
+            SHOW_TOAST(error);
+        }
+    }
+
     return (
         <View style={[styles.container, {
             marginTop: Platform.OS === 'android' ? insets.top : 0,
@@ -73,20 +113,29 @@ const UserProfile = (props: any) => {
                 color={COLORS.color_333A54}>
                 {STRING.profile}
             </Text>
-            <View style={styles.profileView}>
-                <Image
-                    style={styles.editIcon}
-                    resizeMode="contain"
-                    source={IMAGES.ic_edit}
-                />
-            </View>
+            {profile?.profilePicture ?
+                <ImageBackground
+                    style={styles.profileView}
+                    resizeMode="cover"
+                    source={{ uri: profile?.profilePicture }}>
+                </ImageBackground>
+                :
+                <View
+                    style={[styles.profileView, { backgroundColor: COLORS.gray }]}>
+                </View>
+            }
+            <Image
+                style={styles.editIcon}
+                resizeMode="contain"
+                source={IMAGES.ic_edit}
+            />
             <Text
                 style={{ marginTop: SCALE_SIZE(12) }}
                 size={SCALE_SIZE(14)}
                 align="center"
                 font={FONT_NAME.semiBold}
                 color={COLORS.color_333A54}>
-                {'Mathew Adam'}
+                {profile?.username ?? ''}
             </Text>
             <Text
                 style={{ marginTop: SCALE_SIZE(4) }}
@@ -94,7 +143,7 @@ const UserProfile = (props: any) => {
                 align="center"
                 font={FONT_NAME.regular}
                 color={COLORS.color_545A70}>
-                {'mathew@gmail.com'}
+                {profile?.email ?? ''}
             </Text>
             <FlatList data={profileItem}
                 keyExtractor={(item, index) => index.toString()}
@@ -140,7 +189,9 @@ const UserProfile = (props: any) => {
                 }}
                 onLogout={() => {
                     onLogoutRef?.current?.close()
+                    onLogout()
                 }} />
+            {isLoading && <ProgressView />}
         </View>
     )
 }
@@ -154,16 +205,16 @@ const styles = StyleSheet.create({
     profileView: {
         height: SCALE_SIZE(100),
         width: SCALE_SIZE(100),
-        backgroundColor: 'gray',
         borderRadius: SCALE_SIZE(50),
         alignSelf: 'center',
         marginTop: SCALE_SIZE(42),
+        overflow: 'hidden',
     },
     editIcon: {
         height: SCALE_SIZE(30),
         width: SCALE_SIZE(30),
         alignSelf: 'center',
-        marginTop: SCALE_SIZE(65),
+        marginTop: SCALE_SIZE(-35),
         left: SCALE_SIZE(30),
     },
     itemView: {

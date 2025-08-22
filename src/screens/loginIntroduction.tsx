@@ -1,11 +1,11 @@
 import React from "react";
-import { StyleSheet, Image, View, Dimensions, ScrollView, SafeAreaView, Platform } from "react-native"
+import { StyleSheet, Image, View, Dimensions, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Text } from "../components";
@@ -17,6 +17,8 @@ import { SCREENS } from ".";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const LoginIntroduction = (props: any) => {
+
+    const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
 

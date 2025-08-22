@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { View, StyleSheet, ActivityIndicator } from 'react-native'
 
 //CONSTANT
-import { COLORS, SHOW_TOAST, STORAGE_KEY } from "../constants";
+import { COLORS, STORAGE_KEY } from "../constants";
 
 //CONTEXT
 import { AuthContext } from "../context";
@@ -22,6 +22,8 @@ const Prepare = (props: any) => {
     const { setUser, setProfile } = useContext(AuthContext)
 
     const userData = props?.route?.params?.userData;
+
+    console.log("Prepare Screen userData", JSON.stringify(userData));
 
     useEffect(() => {
         fetchProfile()

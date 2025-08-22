@@ -52,6 +52,12 @@ async function editUserProfile(params: any) {
     return result
 }
 
+async function logOut(params: any) {
+    let url = WEB_SERVICE.user_logout
+    const result = await postRequest(url, params)
+    return result
+}
+
 export {
     register,
     emailVerification,
@@ -60,5 +66,6 @@ export {
     forgotPassword,
     resetPassword,
     getUserProfile,
-    editUserProfile
+    editUserProfile,
+    logOut
 }

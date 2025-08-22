@@ -8,7 +8,7 @@ import { userLogin } from "../api";
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STORAGE_KEY, STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STORAGE_KEY, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -31,6 +31,8 @@ const Login = (props: any) => {
 
     const insets = useSafeAreaInsets();
 
+    const STRING = USE_STRING();
+
     const { setUser, fetchProfile } = useContext(AuthContext)
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
@@ -40,13 +42,13 @@ const Login = (props: any) => {
 
     async function onValidateUser() {
         if (!email) {
-            SHOW_TOAST('Please enter your email')
+            SHOW_TOAST(STRING.please_enter_your_email)
         }
         else if (REGEX.emailRegex.test(email) == false) {
-            SHOW_TOAST('Enter valid email')
+            SHOW_TOAST(STRING.please_enter_valid_email)
         }
         else if (!password) {
-            SHOW_TOAST('Please enter your password')
+            SHOW_TOAST(STRING.please_enter_your_password)
         }
         else {
             onLoginUser()
@@ -68,7 +70,7 @@ const Login = (props: any) => {
                 const userData = response?.data?.data;
                 setUser(userData)
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
-                SHOW_SUCCESS_TOAST('Login successfully')
+                SHOW_SUCCESS_TOAST(STRING.login_successfully)
 
                 props.navigation.dispatch(CommonActions.reset({
                     index: 0,

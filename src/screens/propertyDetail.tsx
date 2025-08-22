@@ -5,7 +5,7 @@ import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBa
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, SCALE_SIZE, FONT_NAME, STRING } from "../constants";
+import { COLORS, SCALE_SIZE, FONT_NAME, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Header, Text } from "../components";
@@ -18,6 +18,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SCREENS } from ".";
 
 const PropertyDetail = (props: any) => {
+
+    const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
 

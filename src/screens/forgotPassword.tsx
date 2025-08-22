@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, View } from "react-native"
 
 //API
@@ -8,13 +8,10 @@ import { forgotPassword } from "../api";
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_TOAST, STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_TOAST, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
-
-//CONTEXT
-import { AuthContext } from "../context";
 
 //SCREENS
 import { SCREENS } from ".";
@@ -27,6 +24,8 @@ import ProgressView from "./progressView";
 
 const ForgotPassword = (props: any) => {
 
+    const STRING = USE_STRING();
+    
     const insets = useSafeAreaInsets();
 
     const [email, setEmail] = useState<any>('');
@@ -35,10 +34,10 @@ const ForgotPassword = (props: any) => {
     function onForgotPasswordValidation() {
 
         if (!email) {
-            SHOW_TOAST('Enter your email')
+            SHOW_TOAST(STRING.please_enter_your_email)
         }
         else if (REGEX.emailRegex.test(email) == false) {
-            SHOW_TOAST('Please enter valid email')
+            SHOW_TOAST(STRING.please_enter_valid_email)
         }
         else {
             onForgotPassword()

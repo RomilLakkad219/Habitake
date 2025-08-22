@@ -11,7 +11,7 @@ import Text from "./text";
 import { AuthContext } from "../context";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -29,6 +29,8 @@ interface HeaderProps {
 }
 
 const Header = (props: HeaderProps) => {
+
+    const STRING = USE_STRING();
 
     const { profile } = useContext(AuthContext)
 
@@ -142,13 +144,19 @@ const Header = (props: HeaderProps) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={props.onProfile}>
-                        <Image
-                            style={[styles.profileIcon, {
-                                backgroundColor: profile?.profilePicture ? '' : 'gray',
-                            }]}
-                            resizeMode="cover"
-                            source={{ uri: profile?.profilePicture }}>
-                        </Image>
+                        {profile?.profilePicture ?
+                            <Image
+                                style={styles.profileIcon}
+                                resizeMode="cover"
+                                source={{ uri: profile?.profilePicture }}>
+                            </Image>
+                            :
+                            <View
+                                style={[styles.profileIcon, {
+                                    backgroundColor: COLORS.gray,
+                                }]}>
+                            </View>
+                        }
                     </TouchableOpacity>
                 </View>
             </View>

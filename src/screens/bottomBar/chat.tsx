@@ -5,7 +5,7 @@ import { View, StyleSheet, TouchableOpacity, Image, SafeAreaView, Platform } fro
 import { IMAGES } from "../../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../../constants";
 
 //COMPONENTS
 import { ChatDeleteSheet, Text } from "../../components";
@@ -18,6 +18,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SCREENS } from "..";
 
 const Chat = (props: any) => {
+
+    const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
 
@@ -118,7 +120,7 @@ const Chat = (props: any) => {
     );
 
     return (
-        <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0}]}>
+        <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0 }]}>
             <SafeAreaView />
             <Text
                 style={{ marginTop: SCALE_SIZE(20) }}

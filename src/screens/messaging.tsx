@@ -5,7 +5,7 @@ import { View, StyleSheet, TouchableOpacity, Image, KeyboardAvoidingView, Sectio
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Text } from "../components";
@@ -14,6 +14,8 @@ import { Text } from "../components";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Messaging = (props: any) => {
+
+    const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
 

@@ -18,6 +18,7 @@ const SCALE_SIZE = (size: number) => {
 
 const STORAGE_KEY = {
   USER_DETAILS: 'user_details_json',
+  USER_LANGLUAGE: 'user_language_json',
 }
 
 const getAndroidInsets = (insets:any) => {

@@ -5,7 +5,7 @@ import { View, StyleSheet, SafeAreaView, Dimensions, Image } from 'react-native'
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
 
 //COMPONENTS
 import Text from "./text";
@@ -22,6 +22,9 @@ interface SheetProps {
 }
 
 const AccountCreationSuccessSheet = (props: SheetProps) => {
+
+    const STRING = USE_STRING();
+    
     return (
         <RBSheet ref={props.onRef}
             closeOnPressMask={true}

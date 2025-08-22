@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, Dimensions, SafeAreaView, KeyboardAvoidingView, Platform } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
 
 //CONSTANTS
-import { COLORS, SCALE_SIZE, FONT_NAME, STRING } from "../../constants";
+import { COLORS, SCALE_SIZE, FONT_NAME, USE_STRING } from "../../constants";
 
 //COMPONENTS
 import { Header, Text } from "../../components";
@@ -17,6 +17,8 @@ import { SCREENS } from "..";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Home = (props: any) => {
+
+    const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
 
@@ -47,7 +49,7 @@ const Home = (props: any) => {
             <Header
                 type="home"
                 locationText={'1012 Ocean avanue, New yourk, USA'}
-                profileIcon={''}
+                profileIcon={true}
                 onProfile={() => {
                     props.navigation.navigate(SCREENS.UserProfile.name)
                 }}
