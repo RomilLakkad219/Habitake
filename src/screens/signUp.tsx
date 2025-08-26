@@ -8,7 +8,7 @@ import { IMAGES } from "../assets";
 import { register } from "../api";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STORAGE_KEY, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, STORAGE_KEY, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -25,12 +25,13 @@ import ProgressView from "./progressView";
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 const SignUp = (props: any) => {
 
     const STRING = USE_STRING();
 
-    const { setUser, fetchProfile } = useContext<any>(AuthContext)
+    const { setUser } = useContext<any>(AuthContext)
 
     const insets = useSafeAreaInsets()
 
@@ -71,28 +72,60 @@ const SignUp = (props: any) => {
 
     async function onValidateUser() {
         if (!name) {
-            SHOW_TOAST(STRING.please_enter_your_full_name)
+            Toast.show({
+                type: 'smallError',  
+                text1: STRING.please_enter_your_full_name,
+                position: 'bottom',
+            });
         }
         else if (!email) {
-            SHOW_TOAST(STRING.please_enter_your_email)
+            Toast.show({
+                type: 'smallError',  
+                text1: STRING.please_enter_your_email,
+                position: 'bottom',
+            });
         }
         else if (REGEX.emailRegex.test(email) == false) {
-            SHOW_TOAST(STRING.please_enter_valid_email)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_valid_email,
+                position: 'bottom',
+            });
         }
         else if (!password) {
-            SHOW_TOAST(STRING.please_enter_your_password)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_your_password,
+                position: 'bottom',
+            });
         }
         else if (!confirmPassword) {
-            SHOW_TOAST(STRING.please_enter_your_confirm_password)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_your_confirm_password,
+                position: 'bottom',
+            });
         }
         else if (confirmPassword != password) {
-            SHOW_TOAST(STRING.password_and_confirm_password_does_not_match)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.password_and_confirm_password_does_not_match,
+                position: 'bottom',
+            });
         }
         else if (!isValidPass) {
-            SHOW_TOAST(STRING.password_must_be_at_least_12_characters_long)
+            Toast.show({
+                type: 'longError',
+                text1: STRING.password_must_be_at_least_12_characters_long,
+                position: 'bottom',
+            });
         }
         else if (!isTermsSelected) {
-            SHOW_TOAST(STRING.please_agree_to_all_terms_and_condition)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_agree_to_all_terms_and_condition,
+                position: 'bottom',
+            });
         }
         else {
             onRegisterUser()
@@ -134,7 +167,7 @@ const SignUp = (props: any) => {
                 const userData = result?.data?.data;
                 setUser(userData)
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
-                SHOW_SUCCESS_TOAST('Sign Up Successfully')
+                SHOW_SUCCESS_TOAST(STRING.signup_successfully)
 
                 props.navigation.navigate(SCREENS.Otp.name, {
                     userName: name,
@@ -142,11 +175,19 @@ const SignUp = (props: any) => {
                 })
             }
             else {
-                SHOW_TOAST(result?.error)
+                Toast.show({
+                    type: 'smallError',
+                    text1: result?.error,
+                    position: 'bottom',
+                });
             }
         }
-        catch (err) {
-            SHOW_TOAST(err)
+        catch (err: any) {
+            Toast.show({
+                type: 'smallError',
+                text1: err,
+                position: 'bottom',
+            });
         }
     }
 

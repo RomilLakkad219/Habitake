@@ -8,7 +8,7 @@ import { forgotPassword } from "../api";
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_TOAST, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -18,6 +18,7 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Toast from "react-native-toast-message";
 
 //LOADER
 import ProgressView from "./progressView";
@@ -25,7 +26,7 @@ import ProgressView from "./progressView";
 const ForgotPassword = (props: any) => {
 
     const STRING = USE_STRING();
-    
+
     const insets = useSafeAreaInsets();
 
     const [email, setEmail] = useState<any>('');
@@ -34,10 +35,18 @@ const ForgotPassword = (props: any) => {
     function onForgotPasswordValidation() {
 
         if (!email) {
-            SHOW_TOAST(STRING.please_enter_your_email)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_your_email,
+                position: 'bottom',
+            });
         }
         else if (REGEX.emailRegex.test(email) == false) {
-            SHOW_TOAST(STRING.please_enter_valid_email)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_valid_email,
+                position: 'bottom',
+            });
         }
         else {
             onForgotPassword()
@@ -63,11 +72,19 @@ const ForgotPassword = (props: any) => {
                 })
             }
             else {
-                SHOW_TOAST(result?.error)
+                Toast.show({
+                    type: 'smallError',
+                    text1: result?.error,
+                    position: 'bottom',
+                });
             }
         }
-        catch (err) {
-            SHOW_TOAST(err)
+        catch (err: any) {
+            Toast.show({
+                type: 'smallError',
+                text1: err,
+                position: 'bottom',
+            });
         }
     }
 

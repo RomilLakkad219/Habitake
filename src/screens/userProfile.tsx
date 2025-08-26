@@ -4,14 +4,20 @@ import { StyleSheet, Image, View, FlatList, TouchableOpacity, SafeAreaView, Plat
 //ASSETS
 import { IMAGES } from "../assets";
 
+//API
+import { logOut } from "../api";
+
 //CONTEXT
 import { AuthContext } from "../context";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_TOAST, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Header, LogoutSheet, Text } from "../components";
+
+//LOADER
+import ProgressView from "./progressView";
 
 //SCREENS
 import { SCREENS } from ".";
@@ -19,9 +25,8 @@ import { SCREENS } from ".";
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CommonActions } from "@react-navigation/native";
-import ProgressView from "./progressView";
-import { logOut } from "../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 const UserProfile = (props: any) => {
 
@@ -88,7 +93,11 @@ const UserProfile = (props: any) => {
             }, 500);
         } catch (error: any) {
             setIsLoading(false);
-            SHOW_TOAST(error);
+            Toast.show({
+                type: 'smallError',
+                text1: error,
+                position: 'bottom',
+            });
         }
     }
 

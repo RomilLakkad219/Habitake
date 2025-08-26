@@ -121,5 +121,5 @@
     "otp_verify_successfully": "Verificación de OTP exitosa",
     "otp_has_been_sent_on_your_email": "Se ha enviado un OTP a tu correo electrónico",
     "reset_password_successfully": "Restablecer contraseña exitosamente",
-    "sigup_successfully": "Registro exitoso"
+    "signup_successfully": "Registro exitoso"
 }

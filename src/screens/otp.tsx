@@ -5,7 +5,7 @@ import { StyleSheet, View, KeyboardAvoidingView, Platform, TouchableOpacity } fr
 import { emailVerification, resendOtp } from "../api";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Text } from "../components";
@@ -19,6 +19,7 @@ import ProgressView from "./progressView"
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import OTPTextInput from 'react-native-otp-textinput'
+import Toast from "react-native-toast-message";
 
 const Otp = (props: any) => {
 
@@ -34,7 +35,11 @@ const Otp = (props: any) => {
 
     function onOtpCheck() {
         if (!otp) {
-            SHOW_TOAST(STRING.please_enter_your_otp)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_your_otp,
+                position: 'bottom',
+            });
         }
         else {
             onGetOtp()
@@ -52,7 +57,7 @@ const Otp = (props: any) => {
             const response = await emailVerification(params)
             setIsLoading(false)
 
-            console.log('OTP RESPONSE',JSON.stringify(response))
+            console.log('OTP RESPONSE', JSON.stringify(response))
 
             if (response?.status) {
                 const userData = response?.data?.data;
@@ -66,10 +71,18 @@ const Otp = (props: any) => {
                 }, 1000);
             }
             else {
-                SHOW_TOAST(response?.error)
+                Toast.show({
+                    type: 'smallError',
+                    text1: response?.error,
+                    position: 'bottom',
+                });
             }
         } catch (error: any) {
-            SHOW_TOAST(error.message);
+            Toast.show({
+                type: 'smallError',
+                text1: error,
+                position: 'bottom',
+            });
         }
         finally {
             setIsLoading(false)
@@ -90,11 +103,19 @@ const Otp = (props: any) => {
                 SHOW_SUCCESS_TOAST(STRING.otp_has_been_sent_on_your_email)
             }
             else {
-                SHOW_TOAST(result?.error)
+                Toast.show({
+                    type: 'smallError',
+                    text1: result?.error,
+                    position: 'bottom',
+                });
             }
         }
-        catch (err) {
-            SHOW_TOAST(err)
+        catch (err: any) {
+            Toast.show({
+                type: 'smallError',
+                text1: err,
+                position: 'bottom',
+            });
         }
     }
 

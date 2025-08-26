@@ -125,7 +125,7 @@ const USE_STRING = () => {
         otp_verify_successfully: getTranslation('otp_verify_successfully'),
         otp_has_been_sent_on_your_email: getTranslation('otp_has_been_sent_on_your_email'),
         reset_password_successfully: getTranslation('reset_password_successfully'),
-        sigup_successfully: getTranslation('signup_successfully'),
+        signup_successfully: getTranslation('signup_successfully'),
     }
 }
 

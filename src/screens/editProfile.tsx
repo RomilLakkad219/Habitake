@@ -8,7 +8,7 @@ import { editUserProfile } from "../api";
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, USE_STRING } from "../constants";
 
 //CONTEXT
 import { AuthContext } from "../context";
@@ -22,6 +22,7 @@ import { SCREENS } from ".";
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import Toast from "react-native-toast-message";
 
 //LOADER
 import ProgressView from "./progressView";
@@ -116,11 +117,19 @@ const EditProfile = (props: any) => {
                 props.navigation.goBack();
                 SHOW_SUCCESS_TOAST(STRING.profile_updated_successfully);
             } else {
-                SHOW_TOAST(result.error);
+                Toast.show({
+                    type: 'smallError',
+                    text1: result?.error,
+                    position: 'bottom',
+                });
             }
         }
-        catch (error) {
-            SHOW_TOAST(error)
+        catch (error:any) {
+            Toast.show({
+                type: 'smallError',
+                text1: error,
+                position: 'bottom',
+            });
         }
     }
 

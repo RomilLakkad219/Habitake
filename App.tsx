@@ -24,43 +24,61 @@ import { COLORS, FONT_NAME, SCALE_SIZE } from './src/constants';
 import { AuthProvider } from './src/context';
 import { LanguageProvider } from './src/context/languageProvider';
 
+//COMPONENTS
+import { Text } from './src/components';
+
 LogBox.ignoreAllLogs()
 
 const { Navigator, Screen } = createStackNavigator()
 
 const toastConfig = {
   success: (props: any) => (
-    <BaseToast {...props}
+    <BaseToast
+      {...props}
       style={{ borderLeftColor: 'green' }}
       contentContainerStyle={{ paddingHorizontal: SCALE_SIZE(15) }}
       text1NumberOfLines={3}
       text1Style={{
         fontSize: SCALE_SIZE(16),
         fontFamily: FONT_NAME.light
-      }}>
-    </BaseToast>
+      }}
+    />
   ),
-  error: (props: any) => (
-    <ErrorToast  {...props}
-      text1NumberOfLines={0}
+
+  // Small error (short messages)
+  smallError: (props: any) => (
+    <ErrorToast
+      {...props}
+      text1NumberOfLines={2}
       text1Style={{
         fontSize: SCALE_SIZE(16),
         fontFamily: FONT_NAME.light,
-        flexWrap: 'wrap'
       }}
-    >
-    </ErrorToast>
+    />
   ),
+
+  // Long error (detailed messages)
+  longError: ({ text1 }: any) => (
+    <View
+      style={styles.longErrorToastView}>
+      <Text
+        style={styles.longErrorToastText}>
+        {text1}
+      </Text>
+    </View>
+  ),
+
   info: (props: any) => (
-    <InfoToast {...props}
+    <InfoToast
+      {...props}
       style={{ borderLeftColor: COLORS.gray }}
       text1NumberOfLines={3}
       text1Style={{
         fontSize: SCALE_SIZE(16),
-        fontFamily: FONT_NAME.light
-      }}>
-    </InfoToast>
-  )
+        fontFamily: FONT_NAME.light,
+      }}
+    />
+  ),
 }
 
 function App(): JSX.Element {
@@ -87,8 +105,7 @@ function App(): JSX.Element {
                     })}
                   </Navigator>
                 </NavigationContainer>
-                <Toast config={toastConfig}
-                />
+                <Toast config={toastConfig}/>
               </View>
             </AuthProvider>
           </LanguageProvider>
@@ -101,7 +118,27 @@ function App(): JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1.0
-  }
+  },
+  longErrorToastView: {
+    backgroundColor: 'white',
+    borderLeftWidth: 6,
+    borderLeftColor: 'red',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  longErrorToastText: {
+    fontSize: SCALE_SIZE(16),
+    fontFamily: FONT_NAME.light,
+    lineHeight: 22,
+    color: '#000',
+    fontWeight: '700'
+  },
 })
 
 export default App;

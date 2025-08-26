@@ -8,7 +8,7 @@ import { resetPassword } from "../api";
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -19,6 +19,7 @@ import { SCREENS } from ".";
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import OTPTextInput from 'react-native-otp-textinput'
+import Toast from "react-native-toast-message";
 
 //LOADER
 import ProgressView from "./progressView";
@@ -42,19 +43,39 @@ const ResetPassword = (props: any) => {
 
     function onResetPasswordCheck() {
         if (!otp) {
-            SHOW_TOAST(STRING.please_enter_your_otp)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_your_otp,
+                position: 'bottom',
+            });
         }
         else if (!password) {
-            SHOW_TOAST(STRING.please_enter_your_password)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_your_password,
+                position: 'bottom',
+            });
         }
         else if (!confirmPassword) {
-            SHOW_TOAST(STRING.please_enter_your_confirm_password)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_your_confirm_password,
+                position: 'bottom',
+            });
         }
         else if (!PASSWORD_RE.test(password)) {
-            SHOW_TOAST(STRING.password_must_be_at_least_12_characters_long)
+            Toast.show({
+                type: 'longError',
+                text1: STRING.password_must_be_at_least_12_characters_long,
+                position: 'bottom',
+            });
         }
         else if (password !== confirmPassword) {
-            SHOW_TOAST(STRING.new_password_and_confirm_password_does_not_match)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.password_and_confirm_password_does_not_match,
+                position: 'bottom',
+            });
         }
         else {
             onResetPassword()
@@ -80,11 +101,19 @@ const ResetPassword = (props: any) => {
                 }, 1000);
             }
             else {
-                SHOW_TOAST(result?.error)
+                Toast.show({
+                    type: 'smallError',
+                    text1: result?.error,
+                    position: 'bottom',
+                });
             }
         }
-        catch (err) {
-            SHOW_TOAST(err)
+        catch (err: any) {
+            Toast.show({
+                type: 'smallError',
+                text1: err,
+                position: 'bottom',
+            });
         }
     }
 

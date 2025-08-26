@@ -3,7 +3,7 @@ import { COLORS } from "./color";
 import { REGEX } from "./regex";
 import { SHOW_TOAST, SHOW_SUCCESS_TOAST } from "./showToast";
 import { USE_STRING } from "./string";
-import { SCALE_SIZE, STORAGE_KEY, getAndroidInsets } from "./utils";
+import { SCALE_SIZE, STORAGE_KEY, getAndroidInsets} from "./utils";
 import { WEB_SERVICE } from "./webServices";
 
 export {
@@ -16,5 +16,6 @@ export {
     SCALE_SIZE,
     STORAGE_KEY,
     WEB_SERVICE,
-    getAndroidInsets
+    getAndroidInsets,
+
 }

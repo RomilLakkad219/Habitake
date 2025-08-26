@@ -8,7 +8,7 @@ import { userLogin } from "../api";
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, STORAGE_KEY, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, STORAGE_KEY, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -23,6 +23,7 @@ import { SCREENS } from ".";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 //LOADER
 import ProgressView from "./progressView";
@@ -33,7 +34,7 @@ const Login = (props: any) => {
 
     const STRING = USE_STRING();
 
-    const { setUser, fetchProfile } = useContext(AuthContext)
+    const { setUser } = useContext(AuthContext)
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [email, setEmail] = useState<any>('');
@@ -42,13 +43,25 @@ const Login = (props: any) => {
 
     async function onValidateUser() {
         if (!email) {
-            SHOW_TOAST(STRING.please_enter_your_email)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_your_email,
+                position: 'bottom',
+            });
         }
         else if (REGEX.emailRegex.test(email) == false) {
-            SHOW_TOAST(STRING.please_enter_valid_email)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_valid_email,
+                position: 'bottom',
+            });
         }
         else if (!password) {
-            SHOW_TOAST(STRING.please_enter_your_password)
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_your_password,
+                position: 'bottom',
+            })
         }
         else {
             onLoginUser()
@@ -83,10 +96,18 @@ const Login = (props: any) => {
                 }))
             }
             else {
-                SHOW_TOAST(response?.error)
+                Toast.show({
+                    type: 'smallError',
+                    text1: response?.error,
+                    position: 'bottom',
+                });
             }
         } catch (error: any) {
-            SHOW_TOAST(error.message);
+            Toast.show({
+                type: 'smallError',
+                text1: error,
+                position: 'bottom',
+            });;
         }
         finally {
             setIsLoading(false)
