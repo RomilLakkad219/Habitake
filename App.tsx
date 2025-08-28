@@ -84,9 +84,9 @@ const toastConfig = {
 function App(): JSX.Element {
   return (
     <SafeAreaProvider>
-      <I18nextProvider i18n={i18n}>
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
-          <LanguageProvider>
+      <LanguageProvider>
+        <I18nextProvider i18n={i18n}>
+          <View style={{ flex: 1, backgroundColor: '#fff' }}>
             <AuthProvider>
               <View style={styles.container}>
                 <StatusBar barStyle={'dark-content'} translucent={false} backgroundColor={COLORS.white} />
@@ -105,12 +105,12 @@ function App(): JSX.Element {
                     })}
                   </Navigator>
                 </NavigationContainer>
-                <Toast config={toastConfig}/>
+                <Toast config={toastConfig} />
               </View>
             </AuthProvider>
-          </LanguageProvider>
-        </View>
-      </I18nextProvider>
+          </View>
+        </I18nextProvider>
+      </LanguageProvider>
     </SafeAreaProvider>
   )
 }

@@ -70,7 +70,9 @@ const IMAGES = {
     ic_warning: require('./images/ic_warning.png'),
     filter_bg_white: require('./images/filter_bg_white.png'),
     error_bg: require('./images/error_bg.png'),
-    luxury_img:require('./images/luxury.png'),
+    luxury_img: require('./images/luxury.png'),
+    ic_uk: require('./images/ic_uk.png'),
+    ic_spanish: require('./images/ic_spanish.png'),
 }
 
 export { IMAGES }

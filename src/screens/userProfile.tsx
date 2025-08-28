@@ -133,11 +133,11 @@ const UserProfile = (props: any) => {
                     style={[styles.profileView, { backgroundColor: COLORS.gray }]}>
                 </View>
             }
-            <Image
+            {/* <Image
                 style={styles.editIcon}
                 resizeMode="contain"
                 source={IMAGES.ic_edit}
-            />
+            /> */}
             <Text
                 style={{ marginTop: SCALE_SIZE(12) }}
                 size={SCALE_SIZE(14)}

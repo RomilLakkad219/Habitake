@@ -15,6 +15,7 @@ import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import LanguageSelector from "./languageSelector";
 interface HeaderProps {
     style?: any
     onBack?: () => void;
@@ -44,17 +45,23 @@ const Header = (props: HeaderProps) => {
                     style={styles.headerImage}
                     resizeMode="contain"
                     source={IMAGES.undraw_city_life}>
-                    <TouchableOpacity
-                        onPress={props.onBack}>
-                        <Image
-                            style={[styles.backIcon, {
-                                marginLeft: SCALE_SIZE(16),
-                                marginTop: SCALE_SIZE(10)
-                            }]}
-                            resizeMode="contain"
-                            source={IMAGES.ic_back}>
-                        </Image>
-                    </TouchableOpacity>
+                    <View style={{ flexDirection: "row", alignItems: "center", }}>
+                        <TouchableOpacity
+                            onPress={props.onBack}>
+                            <Image
+                                style={[styles.backIcon, {
+                                    marginLeft: SCALE_SIZE(16),
+
+                                }]}
+                                resizeMode="contain"
+                                source={IMAGES.ic_back}>
+                            </Image>
+                        </TouchableOpacity>
+                        <View style={{ flex: 1 }}></View>
+                        <View >
+                            <LanguageSelector />
+                        </View>
+                    </View>
                 </ImageBackground>
             </View>
         )

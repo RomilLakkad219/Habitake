@@ -11,22 +11,21 @@ const resources = {
   es: { translation: es },
 };
 
-
 // Detect device language
-const bestLang = RNLocalize.findBestLanguageTag(Object.keys(resources));
-const defaultLang = bestLang?.languageTag?.split('-')[0] || 'en';
+export const detectLanguage = (): string => {
+  const bestLang = RNLocalize.findBestLanguageTag(Object.keys(resources));
+  return bestLang?.languageTag?.split('-')[0] || 'en';
+};
 
-i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: defaultLang,
-    fallbackLng: 'en',
-    interpolation: {
+i18n.use(initReactI18next).init({
+  resources,
+  lng: detectLanguage(),
+  fallbackLng: 'en',
+  interpolation: {
     escapeValue: false,
-    },
-  });
-console.log('System language detected:', bestLang);
-console.log('App language set:', defaultLang);
+  },
+}).then(() => {
+  console.log('Current i18n language:', i18n.language); 
+});
 
 export default i18n;

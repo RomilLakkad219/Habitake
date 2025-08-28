@@ -214,7 +214,8 @@ const EditProfile = (props: any) => {
                             onChangeText={(text) => {
                                 setPhoneNumber(text)
                             }}
-                            keyboardType="numeric">
+                            keyboardType="numeric"
+                            editable={false}>
                         </TextInput>
                     </View>
                     <View style={[styles.inputView, { marginTop: SCALE_SIZE(20) }]}>
