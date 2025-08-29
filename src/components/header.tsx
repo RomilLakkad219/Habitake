@@ -25,7 +25,7 @@ interface HeaderProps {
     locationText?: any,
     onProfile?: () => void;
     onNotification?: () => void;
-    profileIcon?: any,
+    profileIcon?: boolean,
     onFilter?: () => void;
 }
 
@@ -149,22 +149,24 @@ const Header = (props: HeaderProps) => {
                             source={IMAGES.ic_notification}>
                         </Image>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={props.onProfile}>
-                        {profile?.profilePicture ?
-                            <Image
-                                style={styles.profileIcon}
-                                resizeMode="cover"
-                                source={{ uri: profile?.profilePicture }}>
-                            </Image>
-                            :
-                            <View
-                                style={[styles.profileIcon, {
-                                    backgroundColor: COLORS.gray,
-                                }]}>
-                            </View>
-                        }
-                    </TouchableOpacity>
+                    {props.profileIcon &&
+                        <TouchableOpacity
+                            onPress={props.onProfile}>
+                            {profile?.profilePicture ?
+                                <Image
+                                    style={styles.profileIcon}
+                                    resizeMode="cover"
+                                    source={{ uri: profile?.profilePicture }}>
+                                </Image>
+                                :
+                                <View
+                                    style={[styles.profileIcon, {
+                                        backgroundColor: COLORS.gray,
+                                    }]}>
+                                </View>
+                            }
+                        </TouchableOpacity>
+                    }
                 </View>
             </View>
         )

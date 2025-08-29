@@ -20,7 +20,7 @@ const LANGUAGES = [
 
 export default function LanguageSelector() {
 
-    const { language, setLang } = useContext(LaungageContext); 
+    const { language, setLang } = useContext(LaungageContext);
 
     const [visible, setVisible] = useState<boolean>(false);
 
@@ -112,7 +112,8 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.3)",
     },
     dropdown: {
-        position: "absolute", top: SCALE_SIZE(70),
+        position: "absolute",
+        top: SCALE_SIZE(70),
         backgroundColor: "#fff",
         borderRadius: SCALE_SIZE(15),
         padding: SCALE_SIZE(10),

@@ -1,5 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import { StyleSheet, Image, View, FlatList, TouchableOpacity, SafeAreaView, Platform, ImageBackground } from "react-native"
+import { BackHandler } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -30,7 +32,21 @@ import Toast from "react-native-toast-message";
 
 const UserProfile = (props: any) => {
 
-    const { profile, user } = useContext(AuthContext)
+    useFocusEffect(
+        React.useCallback(() => {
+            const subscription = BackHandler.addEventListener(
+                "hardwareBackPress",
+                () => {
+                    props.navigation.goBack();
+                    return true; // prevent default
+                }
+            );
+
+            return () => subscription.remove();
+        }, [props.navigation])
+    );
+
+    const { profile } = useContext(AuthContext)
 
     const STRING = USE_STRING();
 
@@ -68,7 +84,7 @@ const UserProfile = (props: any) => {
 
         try {
             const params = {
-                "user_id": user?.userId
+                "user_id": profile?.userId
             }
             setIsLoading(true);
             const result = await logOut(params);
@@ -144,7 +160,7 @@ const UserProfile = (props: any) => {
                 align="center"
                 font={FONT_NAME.semiBold}
                 color={COLORS.color_333A54}>
-                {profile?.username ?? ''}
+                {profile?.firstName ?? ''}
             </Text>
             <Text
                 style={{ marginTop: SCALE_SIZE(4) }}

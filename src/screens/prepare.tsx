@@ -19,11 +19,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Prepare = (props: any) => {
 
-    const { setUser, setProfile } = useContext(AuthContext)
+    const { setProfile } = useContext(AuthContext)
 
     const userData = props?.route?.params?.userData;
-
-    console.log("Prepare Screen userData", JSON.stringify(userData));
 
     useEffect(() => {
         fetchProfile()
@@ -49,7 +47,6 @@ const Prepare = (props: any) => {
         console.log("PROFILE", JSON.stringify(result),params)
 
         if (result.status) {
-            setUser(result?.data?.data)
             setProfile(result?.data?.data)
             await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(result?.data?.data))
             redirectHome()

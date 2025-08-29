@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, View } from "react-native"
 
 //API
@@ -13,6 +13,9 @@ import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, USE_STRING } from "../constants";
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
 
+//CONTEXT
+import { AuthContext } from "../context";
+
 //SCREENS
 import { SCREENS } from ".";
 
@@ -24,6 +27,8 @@ import Toast from "react-native-toast-message";
 import ProgressView from "./progressView";
 
 const ForgotPassword = (props: any) => {
+
+    const { profile } = useContext(AuthContext)
 
     const STRING = USE_STRING();
 
@@ -67,8 +72,9 @@ const ForgotPassword = (props: any) => {
             console.log('FORGOT', JSON.stringify(result))
 
             if (result.status) {
-                props.navigation.navigate(SCREENS.ResetPassword.name, {
-                    email: email
+                props.navigation.navigate(SCREENS.Otp.name, {
+                    email: email,
+                    userName: profile?.username
                 })
             }
             else {
@@ -143,7 +149,7 @@ const ForgotPassword = (props: any) => {
                     font={FONT_NAME.regular}
                     align="center"
                     color={COLORS.color_00092999}
-                    size={SCALE_SIZE(18)}>
+                    size={SCALE_SIZE(16)}>
                     {STRING.remember_your_password}
                     <Text
                         onPress={() => {
@@ -152,7 +158,7 @@ const ForgotPassword = (props: any) => {
                         font={FONT_NAME.medium}
                         align="center"
                         color={COLORS.color_01A669}
-                        size={SCALE_SIZE(18)}>
+                        size={SCALE_SIZE(16)}>
                         {STRING.login_insted}
                     </Text>
                 </Text>

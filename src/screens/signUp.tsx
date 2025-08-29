@@ -31,8 +31,6 @@ const SignUp = (props: any) => {
 
     const STRING = USE_STRING();
 
-    const { setUser } = useContext<any>(AuthContext)
-
     const insets = useSafeAreaInsets()
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
@@ -165,7 +163,6 @@ const SignUp = (props: any) => {
 
             if (result.data.success) {
                 const userData = result?.data?.data;
-                setUser(userData)
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
                 SHOW_SUCCESS_TOAST(STRING.signup_successfully)
 

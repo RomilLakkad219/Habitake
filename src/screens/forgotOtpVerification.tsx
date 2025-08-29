@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native"
 
 //API
-import { emailVerification, resendOtp } from "../api";
+import { emailVerification, forgotPassword, resendOtp } from "../api";
 
 //CONSTANTS
 import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, USE_STRING } from "../constants";
@@ -21,7 +21,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import OTPTextInput from 'react-native-otp-textinput'
 import Toast from "react-native-toast-message";
 
-const Otp = (props: any) => {
+const ForgotOtpVerification = (props: any) => {
 
     const STRING = USE_STRING();
 
@@ -32,6 +32,8 @@ const Otp = (props: any) => {
 
     const userName = props.route.params.userName
     const email = props.route.params.email
+
+    console.log("FORGOT OTP Props", userName, email);
 
     function onOtpCheck() {
         if (!otp) {
@@ -92,11 +94,11 @@ const Otp = (props: any) => {
     async function onResendOtp() {
         try {
             const params = {
-                "username": userName
+                "email": email
             }
 
             setIsLoading(true)
-            const result = await resendOtp(params)
+            const result = await forgotPassword(params)
             setIsLoading(false)
 
             if (result.status) {
@@ -219,4 +221,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Otp;
+export default ForgotOtpVerification;

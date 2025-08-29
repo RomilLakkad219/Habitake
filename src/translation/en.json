@@ -121,5 +121,6 @@
     "otp_verify_successfully": "Otp Verify Successfully",
     "otp_has_been_sent_on_your_email": "OTP has been sent on your email",
     "reset_password_successfully": "Reset Password Successfully",
-    "signup_successfully": "Sign Up Successfully"
+    "signup_successfully": "Sign Up Successfully",
+    "enter_verification_code": "Enter the verification code we just sent you on"
 }

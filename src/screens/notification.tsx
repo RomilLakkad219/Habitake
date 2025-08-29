@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, FlatList, ScrollView, Image, SafeAreaView, Platform } from "react-native"
+import { BackHandler } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -18,6 +20,20 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SCREENS } from ".";
 
 const Notification = (props: any) => {
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const subscription = BackHandler.addEventListener(
+                "hardwareBackPress",
+                () => {
+                    props.navigation.goBack();
+                    return true; // prevent default
+                }
+            );
+
+            return () => subscription.remove();
+        }, [props.navigation])
+    );
 
     const STRING = USE_STRING();
 
@@ -101,7 +117,7 @@ const Notification = (props: any) => {
             <Header
                 type="home"
                 locationText={'1012 Ocean avanue, New yourk, USA'}
-                profileIcon={''}
+                profileIcon={true}
                 onProfile={() => {
                     props.navigation.navigate(SCREENS.UserProfile.name)
                 }} />
@@ -252,7 +268,7 @@ type NotificationProps = {
 const NotificationItem = ({ item, onPress, index }: NotificationProps) => {
 
     const STRING = USE_STRING();
-    
+
     return (
         <View style={[styles.notificationView, {
             backgroundColor: COLORS.color_E6E6EA66,

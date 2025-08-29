@@ -151,7 +151,7 @@ const ResetPassword = (props: any) => {
                 font={FONT_NAME.regular}
                 color={COLORS.color_545A70}
                 size={SCALE_SIZE(16)}>
-                {`Enter the verification code we just sent you on\n${email}`}
+                {STRING.enter_verification_code + `\n${email}`}
             </Text>
             <OTPTextInput
                 defaultValue={otp}

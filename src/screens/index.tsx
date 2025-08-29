@@ -26,6 +26,7 @@ import Notification from "./notification";
 import UserProfile from "./userProfile";
 import EditProfile from "./editProfile";
 import Prepare from "./prepare";
+import ForgotOtpVerification from "./forgotOtpVerification";
 
 export const SCREENS = {
     Splash: {
@@ -127,6 +128,10 @@ export const SCREENS = {
     Prepare: {
         name: 'Prepare',
         component: Prepare
-    }
+    },
+    ForgotOtpVerification: {
+        name: 'ForgotOtpVerification',
+        component: ForgotOtpVerification
+    },
 }
 

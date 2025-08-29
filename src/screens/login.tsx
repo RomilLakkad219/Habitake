@@ -33,9 +33,7 @@ const Login = (props: any) => {
     const insets = useSafeAreaInsets();
 
     const STRING = USE_STRING();
-
-    const { setUser } = useContext(AuthContext)
-
+    
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [email, setEmail] = useState<any>('');
     const [password, setPassword] = useState<any>('');
@@ -81,7 +79,6 @@ const Login = (props: any) => {
 
             if (response.status) {
                 const userData = response?.data?.data;
-                setUser(userData)
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
                 SHOW_SUCCESS_TOAST(STRING.login_successfully)
 

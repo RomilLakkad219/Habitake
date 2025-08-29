@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, Image, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, ImageBackground } from "react-native"
+import { BackHandler } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 //API
 import { editUserProfile } from "../api";
@@ -29,6 +31,14 @@ import ProgressView from "./progressView";
 
 const EditProfile = (props: any) => {
 
+    useFocusEffect(
+        React.useCallback(() => {
+            const unsubscribe = props.navigation.addListener("focus", () => {
+                console.log("Screen focused again after gallery close");
+            });
+            return unsubscribe;
+        }, [props.navigation])
+    );
     const { profile, fetchProfile } = useContext(AuthContext)
 
     const STRING = USE_STRING();
@@ -36,10 +46,10 @@ const EditProfile = (props: any) => {
     const insets = useSafeAreaInsets();
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
-    const [name, setName] = useState<string>(profile?.username);
+    const [name, setName] = useState<string>(profile?.firstName);
     const [password, setPassword] = useState<string>('12345');
     const [email, setEmail] = useState<string>(profile?.email || '');
-    const [phoneNumber, setPhoneNumber] = useState<string>('1234567890');
+    const [phoneNumber, setPhoneNumber] = useState<string>('XXXXXXXXXX');
     const [localImage, setLocalImage] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -51,6 +61,7 @@ const EditProfile = (props: any) => {
         if (result.didCancel) {
             console.log('User cancelled image picker');
         } else if (result.errorCode) {
+            console.log(result?.errorCode)
         } else {
             setLocalImage(result?.assets?.[0]);
         }
@@ -124,7 +135,7 @@ const EditProfile = (props: any) => {
                 });
             }
         }
-        catch (error:any) {
+        catch (error: any) {
             Toast.show({
                 type: 'smallError',
                 text1: error,
@@ -175,7 +186,10 @@ const EditProfile = (props: any) => {
                 </TouchableOpacity>
                 <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
                     style={{ flex: 1 }}>
-                    <View style={[styles.inputView, { marginTop: SCALE_SIZE(40) }]}>
+                    <View style={[styles.inputView, {
+                        marginTop: SCALE_SIZE(40),
+                        backgroundColor: COLORS.white
+                    }]}>
                         <Image
                             style={styles.inputImages}
                             resizeMode="contain"
@@ -187,7 +201,10 @@ const EditProfile = (props: any) => {
                             onChangeText={handleFullNameChange}>
                         </TextInput>
                     </View>
-                    <View style={[styles.inputView, { marginTop: SCALE_SIZE(20) }]}>
+                    <View style={[styles.inputView, {
+                        marginTop: SCALE_SIZE(20),
+                        backgroundColor: COLORS.color_E6E6EA
+                    }]}>
                         <Image
                             style={styles.inputImages}
                             resizeMode="contain"
@@ -202,7 +219,10 @@ const EditProfile = (props: any) => {
                             editable={false}>
                         </TextInput>
                     </View>
-                    <View style={[styles.inputView, { marginTop: SCALE_SIZE(20) }]}>
+                    <View style={[styles.inputView, {
+                        marginTop: SCALE_SIZE(20),
+                        backgroundColor: COLORS.color_E6E6EA
+                    }]}>
                         <Image
                             style={styles.inputImages}
                             resizeMode="contain"
@@ -218,7 +238,10 @@ const EditProfile = (props: any) => {
                             editable={false}>
                         </TextInput>
                     </View>
-                    <View style={[styles.inputView, { marginTop: SCALE_SIZE(20) }]}>
+                    <View style={[styles.inputView, {
+                        marginTop: SCALE_SIZE(20),
+                        backgroundColor: COLORS.color_E6E6EA
+                    }]}>
                         <Image
                             style={styles.inputImages}
                             resizeMode="contain"
@@ -280,7 +303,6 @@ const styles = StyleSheet.create({
     inputView: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: COLORS.white,
         borderWidth: 1,
         borderColor: COLORS.color_E6E6EA,
         borderRadius: SCALE_SIZE(10),
