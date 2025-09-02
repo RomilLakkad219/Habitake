@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View, KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native"
 
 //API
-import { emailVerification, forgotPassword, resendOtp } from "../api";
+import { emailVerification, forgotPassword, otpVerification, resendOtp } from "../api";
 
 //CONSTANTS
 import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, USE_STRING } from "../constants";
@@ -20,6 +20,7 @@ import ProgressView from "./progressView"
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import OTPTextInput from 'react-native-otp-textinput'
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ForgotOtpVerification = (props: any) => {
 
@@ -51,25 +52,25 @@ const ForgotOtpVerification = (props: any) => {
     async function onGetOtp() {
         try {
             const params = {
-                "username": userName,
-                "confirmationCode": otp,
+                "email": email,
+                "code": otp,
             }
 
             setIsLoading(true)
-            const response = await emailVerification(params)
+            const response = await otpVerification(params)
             setIsLoading(false)
+
+            console.log('OTP PRMS', params)
 
             console.log('OTP RESPONSE', JSON.stringify(response))
 
             if (response?.status) {
-                const userData = response?.data?.data;
                 SHOW_SUCCESS_TOAST(STRING.otp_verify_successfully)
+                await AsyncStorage.setItem("FORGOT_PASSWORD_OTP", otp);
                 setTimeout(() => {
-                    props.navigation.navigate(SCREENS.Prepare.name, {
-                        params: {
-                            userData: userData
-                        }
-                    })
+                    props.navigation.navigate(SCREENS.ResetPassword.name, {
+                            email: email
+                        })
                 }, 1000);
             }
             else {
@@ -100,6 +101,8 @@ const ForgotOtpVerification = (props: any) => {
             setIsLoading(true)
             const result = await forgotPassword(params)
             setIsLoading(false)
+
+            console.log('RESENT OTP', JSON.stringify(result))
 
             if (result.status) {
                 SHOW_SUCCESS_TOAST(STRING.otp_has_been_sent_on_your_email)

@@ -58,6 +58,12 @@ async function logOut(params: any) {
     return result
 }
 
+async function otpVerification(params: any) {
+    let url = WEB_SERVICE.verify_otp
+    const result = await postRequest(url, params)
+    return result
+}
+
 export {
     register,
     emailVerification,
@@ -67,5 +73,6 @@ export {
     resetPassword,
     getUserProfile,
     editUserProfile,
-    logOut
+    logOut,
+    otpVerification
 }

@@ -38,7 +38,7 @@ const UserProfile = (props: any) => {
                 "hardwareBackPress",
                 () => {
                     props.navigation.goBack();
-                    return true; // prevent default
+                    return true;
                 }
             );
 
@@ -49,8 +49,6 @@ const UserProfile = (props: any) => {
     const { profile } = useContext(AuthContext)
 
     const STRING = USE_STRING();
-
-    console.log("User Profile Screen", profile);
 
     const insets = useSafeAreaInsets()
 
@@ -86,11 +84,10 @@ const UserProfile = (props: any) => {
             const params = {
                 "user_id": profile?.userId
             }
+
             setIsLoading(true);
             const result = await logOut(params);
             setIsLoading(false)
-
-            console.log("LOGOUT RESPONSE", JSON.stringify(result));
 
             await AsyncStorage.clear();
 

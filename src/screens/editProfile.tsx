@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, Image, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, ImageBackground } from "react-native"
-import { BackHandler } from "react-native";
+import { BackHandler} from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
 //API
@@ -33,12 +33,23 @@ const EditProfile = (props: any) => {
 
     useFocusEffect(
         React.useCallback(() => {
-            const unsubscribe = props.navigation.addListener("focus", () => {
-                console.log("Screen focused again after gallery close");
-            });
-            return unsubscribe;
+            const onBackPress = () => {
+                if (props.navigation.canGoBack()) {
+                    props.navigation.goBack();
+                    return true;
+                }
+                return false;
+            };
+
+            const subscription = BackHandler.addEventListener(
+                "hardwareBackPress",
+                onBackPress
+            );
+
+            return () => subscription.remove();
         }, [props.navigation])
     );
+    
     const { profile, fetchProfile } = useContext(AuthContext)
 
     const STRING = USE_STRING();
@@ -173,8 +184,8 @@ const EditProfile = (props: any) => {
                         style={[styles.profileView, { backgroundColor: COLORS.gray }]}
                         resizeMode="cover"
                         source={localImage
-                            ? { uri: localImage?.uri } // if picked from library
-                            : profile?.profilePicture   // if backend gives image
+                            ? { uri: localImage?.uri } 
+                            : profile?.profilePicture  
                                 ? { uri: profile.profilePicture }
                                 : undefined}>
                     </ImageBackground>

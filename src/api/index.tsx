@@ -7,7 +7,8 @@ import {
     resetPassword,
     getUserProfile,
     editUserProfile,
-    logOut
+    logOut,
+    otpVerification
 } from "./user";
 
 export {
@@ -19,5 +20,6 @@ export {
     resetPassword,
     getUserProfile,
     editUserProfile,
-    logOut
+    logOut,
+    otpVerification
 }

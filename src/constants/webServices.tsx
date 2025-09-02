@@ -10,5 +10,6 @@ export const WEB_SERVICE = {
     reset_password: BASE_URL + 'reset-password',
     user_profile: BASE_URL + 'profile',
     update_user_profile: 'https://8piqxvpn55.execute-api.eu-central-1.amazonaws.com/dev/' + 'users',
-    user_logout: BASE_URL + 'logout'
+    user_logout: BASE_URL + 'logout',
+    verify_otp: BASE_URL + 'verify-reset-otp'
 }

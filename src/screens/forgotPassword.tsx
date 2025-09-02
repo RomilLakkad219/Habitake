@@ -72,7 +72,7 @@ const ForgotPassword = (props: any) => {
             console.log('FORGOT', JSON.stringify(result))
 
             if (result.status) {
-                props.navigation.navigate(SCREENS.Otp.name, {
+                props.navigation.navigate(SCREENS.ForgotOtpVerification.name, {
                     email: email,
                     userName: profile?.username
                 })
