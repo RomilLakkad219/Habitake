@@ -8,8 +8,9 @@ export const WEB_SERVICE = {
     resend_otp: BASE_URL + 'resend-email',
     forgot_password: BASE_URL + 'forgot-password/',
     reset_password: BASE_URL + 'reset-password',
-    user_profile: BASE_URL + 'profile',
+    user_profile: 'https://8piqxvpn55.execute-api.eu-central-1.amazonaws.com/dev/' + 'users',
     update_user_profile: 'https://8piqxvpn55.execute-api.eu-central-1.amazonaws.com/dev/' + 'users',
     user_logout: BASE_URL + 'logout',
-    verify_otp: BASE_URL + 'verify-reset-otp'
+    verify_otp: BASE_URL + 'verify-reset-otp',
+    get_properties: 'https://8piqxvpn55.execute-api.eu-central-1.amazonaws.com/dev/properties'
 }

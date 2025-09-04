@@ -74,11 +74,11 @@ const Login = (props: any) => {
             }
 
             setIsLoading(true)
-            const response = await userLogin(params)
+            const response: any = await userLogin(params)
             setIsLoading(false)
 
-            if (response.status) {
-                const userData = response?.data?.data;
+            if (response?.loginUser?.success) {
+                const userData = response?.loginUser;
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
                 SHOW_SUCCESS_TOAST(STRING.login_successfully)
 
@@ -95,7 +95,7 @@ const Login = (props: any) => {
             else {
                 Toast.show({
                     type: 'smallError',
-                    text1: response?.error,
+                    text1: response?.loginUser?.message,
                     position: 'bottom',
                 });
             }

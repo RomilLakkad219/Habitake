@@ -99,7 +99,7 @@ const ForgotOtpVerification = (props: any) => {
             }
 
             setIsLoading(true)
-            const result = await forgotPassword(params)
+            const result:any = await forgotPassword(params)
             setIsLoading(false)
 
             console.log('RESENT OTP', JSON.stringify(result))

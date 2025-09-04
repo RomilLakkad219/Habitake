@@ -66,12 +66,12 @@ const ForgotPassword = (props: any) => {
             }
 
             setIsLoading(true)
-            const result = await forgotPassword(params)
+            const result:any = await forgotPassword(params)
             setIsLoading(false)
 
             console.log('FORGOT', JSON.stringify(result))
 
-            if (result.status) {
+            if (result?.forgotPassword?.success) {
                 props.navigation.navigate(SCREENS.ForgotOtpVerification.name, {
                     email: email,
                     userName: profile?.username
@@ -80,7 +80,7 @@ const ForgotPassword = (props: any) => {
             else {
                 Toast.show({
                     type: 'smallError',
-                    text1: result?.error,
+                    text1: result?.forgotPassword?.message,
                     position: 'bottom',
                 });
             }

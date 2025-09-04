@@ -71,14 +71,14 @@ const SignUp = (props: any) => {
     async function onValidateUser() {
         if (!name) {
             Toast.show({
-                type: 'smallError',  
+                type: 'smallError',
                 text1: STRING.please_enter_your_full_name,
                 position: 'bottom',
             });
         }
         else if (!email) {
             Toast.show({
-                type: 'smallError',  
+                type: 'smallError',
                 text1: STRING.please_enter_your_email,
                 position: 'bottom',
             });
@@ -154,15 +154,27 @@ const SignUp = (props: any) => {
                 "username": name,
                 "password": password,
                 "email": email,
-                "role": "buyer"
+                "role": "Buyer",
+                "firstName": "",
+                "lastName": "",
+                "phoneNumber": "",
+                "dateOfBirth": "",
+                "gender": "",
+                "nationality": "",
+                "street": "",
+                "city": "",
+                "state": "",
+                "zipCode": "",
+                "country": "",
+                "kycStatus": ""
             }
 
             setIsLoading(true)
-            const result = await register(params)
+            const result: any = await register(params)
             setIsLoading(false)
 
-            if (result.data.success) {
-                const userData = result?.data?.data;
+            if (result?.registerUser?.success) {
+                const userData = result.registerUser;
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
                 SHOW_SUCCESS_TOAST(STRING.signup_successfully)
 
@@ -174,7 +186,7 @@ const SignUp = (props: any) => {
             else {
                 Toast.show({
                     type: 'smallError',
-                    text1: result?.error,
+                    text1: result.registerUser?.message,
                     position: 'bottom',
                 });
             }

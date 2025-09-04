@@ -54,13 +54,13 @@ const Otp = (props: any) => {
             }
 
             setIsLoading(true)
-            const response = await emailVerification(params)
+            const response: any = await emailVerification(params)
             setIsLoading(false)
 
             console.log('OTP RESPONSE', JSON.stringify(response))
 
-            if (response?.status) {
-                const userData = response?.data?.data;
+            if (response?.verifyEmailCode?.success) {
+                const userData = response?.verifyEmailCode;
                 SHOW_SUCCESS_TOAST(STRING.otp_verify_successfully)
                 setTimeout(() => {
                     props.navigation.navigate(SCREENS.Prepare.name, {
@@ -73,7 +73,7 @@ const Otp = (props: any) => {
             else {
                 Toast.show({
                     type: 'smallError',
-                    text1: response?.error,
+                    text1: response?.verifyEmailCode?.error,
                     position: 'bottom',
                 });
             }
@@ -92,25 +92,29 @@ const Otp = (props: any) => {
     async function onResendOtp() {
         try {
             const params = {
-                "username": userName
+                "username": userName,
             }
 
             setIsLoading(true)
-            const result = await resendOtp(params)
+            const result: any = await resendOtp(params)
             setIsLoading(false)
 
-            if (result.status) {
+            console.log('RESEND', JSON.stringify(result))
+
+            if (result?.resendVerificationCode?.success) {
                 SHOW_SUCCESS_TOAST(STRING.otp_has_been_sent_on_your_email)
             }
             else {
+                console.log('ERR', result?.resendVerificationCode?.message,)
                 Toast.show({
                     type: 'smallError',
-                    text1: result?.error,
+                    text1: result?.resendVerificationCode?.message,
                     position: 'bottom',
                 });
             }
         }
         catch (err: any) {
+            console.log('ERR', err)
             Toast.show({
                 type: 'smallError',
                 text1: err,

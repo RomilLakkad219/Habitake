@@ -52,6 +52,8 @@ const EditProfile = (props: any) => {
     
     const { profile, fetchProfile } = useContext(AuthContext)
 
+    console.log('PROFILE',profile)
+
     const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
 
 //CONSTANTS
-import { COLORS, SCALE_SIZE, FONT_NAME, USE_STRING } from "../../constants";
+import { COLORS, SCALE_SIZE, FONT_NAME, USE_STRING, SHOW_TOAST } from "../../constants";
 
 //COMPONENTS
 import { Header, Text } from "../../components";
@@ -16,6 +16,12 @@ import { SCREENS } from "..";
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+//API
+import { getHomeProperty } from "../../api";
+
+//LOADER
+import ProgressView from "../progressView";
+
 const Home = (props: any) => {
 
     const STRING = USE_STRING();
@@ -23,6 +29,12 @@ const Home = (props: any) => {
     const insets = useSafeAreaInsets();
 
     const [selectedPropertyItem, setSelectedPropertyItem] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [properties, setProperties] = useState([])
+
+    useEffect(() => {
+        getPropertyList()
+    }, [])
 
     const listings = [
         {
@@ -42,6 +54,27 @@ const Home = (props: any) => {
             status: 'Available',
         },
     ];
+
+    async function getPropertyList() {
+
+        try {
+            setIsLoading(true)
+            const result = await getHomeProperty()
+            setIsLoading(false)
+
+            // console.log('Home RESPONSE', JSON.stringify(result))
+
+            if (result.status) {
+                setProperties(result?.data?.data?.properties)
+            }
+            else {
+                SHOW_TOAST(result?.error)
+            }
+        }
+        catch (err) {
+            SHOW_TOAST(err)
+        }
+    }
 
     return (
         <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0 }]}>
@@ -259,7 +292,8 @@ const Home = (props: any) => {
                     <View style={{ marginBottom: SCALE_SIZE(10) }} />
                 )}
             />
-        </View >
+            {isLoading && <ProgressView />}
+        </View>
     )
 }
 
