@@ -52,12 +52,12 @@ export const AuthProvider = (props: any) => {
                 return null;
             }
 
-            const result = await getUserProfile({ user_id: finalUserId });
+            const result: any = await getUserProfile({ userId: finalUserId });
             console.log("Fetching profile for userId:", finalUserId, "RESULT", JSON.stringify(result));
 
-            if (result.status) {
-                setProfile(result?.data?.data);
-                return result?.data?.data;
+            if (result?.getUser?.success) {
+                setProfile(result?.getUser?.data);
+                return result?.getUser?.data;
             }
 
             return null;

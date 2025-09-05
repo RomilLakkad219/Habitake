@@ -40,12 +40,6 @@ const Splash = (props: any) => {
         }
         else {
             props.navigation.navigate(SCREENS.LoginIntroduction.name)
-            // props.navigation.dispatch(CommonActions.reset({
-            //     index: 0,
-            //     routes: [{
-            //         name: SCREENS.Login.name
-            //     }]
-            // }))
         }
     }
 

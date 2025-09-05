@@ -152,9 +152,32 @@ async function resetPassword(params: any) {
 }
 
 async function getUserProfile(params: any) {
-    let url = WEB_SERVICE.user_profile + `?user_id=${params.user_id}`
-    const result = await getRequest(url, params)
-    return result
+    // let url = WEB_SERVICE.user_profile + `?user_id=${params.user_id}`
+    // const result = await getRequest(url, params)
+    // return result
+    const GET_USER_PROFILE_QUERY = gql`
+    query GetUser($userId: ID!) {
+      getUser(userId: $userId) {
+        success
+        message
+        data {
+          userId
+          username
+          email
+          firstName
+          lastName
+          role
+          kycStatus
+          agencyId
+          profilePicture
+          createdAt
+        }
+      }
+    }
+  `;
+
+  const result = graphQlClient.request(GET_USER_PROFILE_QUERY, params)
+  return result
 }
 
 async function editUserProfile(params: any) {
@@ -164,9 +187,21 @@ async function editUserProfile(params: any) {
 }
 
 async function logOut(params: any) {
-    let url = WEB_SERVICE.user_logout
-    const result = await postRequest(url, params)
-    return result
+    // let url = WEB_SERVICE.user_logout
+    // const result = await postRequest(url, params)
+    // return result
+    const LOGOUT_MUTATION = gql`
+    mutation LogoutCurrentUser($userId: ID!, $session: String) {
+      logoutUser(input: { userId: $userId, session: $session }) {
+        success
+        message
+        errorCode
+      }
+    }
+  `;
+
+  const result = graphQlClient.request(LOGOUT_MUTATION, params)
+  return result
 }
 
 async function otpVerification(params: any) {

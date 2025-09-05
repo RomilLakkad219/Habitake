@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { StyleSheet, Image, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, ImageBackground } from "react-native"
-import { BackHandler} from "react-native";
+import { BackHandler } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
 //API
@@ -31,6 +31,25 @@ import ProgressView from "./progressView";
 
 const EditProfile = (props: any) => {
 
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //         const onBackPress = () => {
+    //             if (props.navigation.canGoBack()) {
+    //                 props.navigation.goBack();
+    //                 return true;
+    //             }
+    //             return false;
+    //         };
+
+    //         const subscription = BackHandler.addEventListener(
+    //             "hardwareBackPress",
+    //             onBackPress
+    //         );
+
+    //         return () => subscription.remove();
+    //     }, [props.navigation])
+    // );
+
     useFocusEffect(
         React.useCallback(() => {
             const onBackPress = () => {
@@ -49,10 +68,8 @@ const EditProfile = (props: any) => {
             return () => subscription.remove();
         }, [props.navigation])
     );
-    
-    const { profile, fetchProfile } = useContext(AuthContext)
 
-    console.log('PROFILE',profile)
+    const { profile, fetchProfile } = useContext(AuthContext)
 
     const STRING = USE_STRING();
 
@@ -69,14 +86,23 @@ const EditProfile = (props: any) => {
     async function openLibrary() {
         const result = await launchImageLibrary({
             mediaType: 'photo',
+            selectionLimit: 1,
+            includeBase64: false,
+            quality: 1,
         });
+
 
         if (result.didCancel) {
             console.log('User cancelled image picker');
-        } else if (result.errorCode) {
-            console.log(result?.errorCode)
-        } else {
-            setLocalImage(result?.assets?.[0]);
+            return;
+        }
+        if (result.errorCode) {
+            console.log('ImagePicker Error: ', result.errorCode);
+            return;
+        }
+
+        if (result.assets && result.assets.length > 0) {
+            setLocalImage(result.assets[0]);
         }
     }
 
@@ -186,16 +212,20 @@ const EditProfile = (props: any) => {
                         style={[styles.profileView, { backgroundColor: COLORS.gray }]}
                         resizeMode="cover"
                         source={localImage
-                            ? { uri: localImage?.uri } 
-                            : profile?.profilePicture  
+                            ? { uri: localImage?.uri }
+                            : profile?.profilePicture
                                 ? { uri: profile.profilePicture }
                                 : undefined}>
                     </ImageBackground>
-                    <Image
-                        style={styles.editIcon}
-                        resizeMode="contain"
-                        source={IMAGES.ic_edit}
-                    />
+                    <TouchableOpacity onPress={() => {
+                        openLibrary()
+                    }}>
+                        <Image
+                            style={styles.editIcon}
+                            resizeMode="contain"
+                            source={IMAGES.ic_edit}
+                        />
+                    </TouchableOpacity>
                 </TouchableOpacity>
                 <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
                     style={{ flex: 1 }}>

@@ -19,10 +19,10 @@ import { SCREENS } from ".";
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //LOADER
 import ProgressView from "./progressView";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ResetPassword = (props: any) => {
 

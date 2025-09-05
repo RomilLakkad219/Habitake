@@ -39,16 +39,16 @@ const Prepare = (props: any) => {
     async function fetchProfile() {
 
         const params = {
-            user_id: userData?.userId,
+            userId: userData?.userId,
         }
 
-        const result = await getUserProfile(params)
+        const result:any = await getUserProfile(params)
 
         console.log("PROFILE", JSON.stringify(result),params)
 
-        if (result.status) {
-            setProfile(result?.data?.data)
-            await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(result?.data?.data))
+        if (result?.getUser?.success) {
+            setProfile(result?.getUser?.data)
+            await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(result?.getUser?.data))
             redirectHome()
         }
         else {
