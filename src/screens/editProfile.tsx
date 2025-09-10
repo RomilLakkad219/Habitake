@@ -10,7 +10,7 @@ import { editUserProfile } from "../api";
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, SHOW_TOAST, USE_STRING } from "../constants";
 
 //CONTEXT
 import { AuthContext } from "../context";
@@ -23,7 +23,7 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera, ImageLibraryOptions } from 'react-native-image-picker';
 import Toast from "react-native-toast-message";
 
 //LOADER
@@ -31,37 +31,19 @@ import ProgressView from "./progressView";
 
 const EditProfile = (props: any) => {
 
-    // useFocusEffect(
-    //     React.useCallback(() => {
-    //         const onBackPress = () => {
-    //             if (props.navigation.canGoBack()) {
-    //                 props.navigation.goBack();
-    //                 return true;
-    //             }
-    //             return false;
-    //         };
-
-    //         const subscription = BackHandler.addEventListener(
-    //             "hardwareBackPress",
-    //             onBackPress
-    //         );
-
-    //         return () => subscription.remove();
-    //     }, [props.navigation])
-    // );
-
     useFocusEffect(
         React.useCallback(() => {
             const onBackPress = () => {
                 if (props.navigation.canGoBack()) {
                     props.navigation.goBack();
-                    return true;
+                } else {
+                    BackHandler.exitApp()
                 }
-                return false;
+                return true;
             };
 
             const subscription = BackHandler.addEventListener(
-                "hardwareBackPress",
+                'hardwareBackPress',
                 onBackPress
             );
 
@@ -79,30 +61,31 @@ const EditProfile = (props: any) => {
     const [name, setName] = useState<string>(profile?.firstName);
     const [password, setPassword] = useState<string>('12345');
     const [email, setEmail] = useState<string>(profile?.email || '');
-    const [phoneNumber, setPhoneNumber] = useState<string>('XXXXXXXXXX');
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [localImage, setLocalImage] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     async function openLibrary() {
-        const result = await launchImageLibrary({
-            mediaType: 'photo',
-            selectionLimit: 1,
-            includeBase64: false,
-            quality: 1,
-        });
+        try {
+            const options: ImageLibraryOptions = {
+                mediaType: 'photo',
+                selectionLimit: 1,
+                includeBase64: false,
+                quality: 0.7,
+                presentationStyle: 'fullScreen',
+            };
 
-
-        if (result.didCancel) {
-            console.log('User cancelled image picker');
-            return;
-        }
-        if (result.errorCode) {
-            console.log('ImagePicker Error: ', result.errorCode);
-            return;
-        }
-
-        if (result.assets && result.assets.length > 0) {
-            setLocalImage(result.assets[0]);
+            const result = await launchImageLibrary(options);
+            if (result.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (result.errorCode) {
+                console.log('ImagePicker Error: ', result.errorCode);
+            }
+            else if (!result.didCancel && !result.errorCode && result?.assets && result.assets?.length > 0) {
+                setLocalImage(result.assets[0]);
+            }
+        } catch (err) {
+            SHOW_TOAST(err);
         }
     }
 
@@ -133,43 +116,31 @@ const EditProfile = (props: any) => {
     async function updateProfile() {
         try {
             const params = {
-                "user_id": profile?.userId,
-                "name": name == null ? '' : name,
-                "email": email == null ? '' : email,
-                "phone": "",
-                "status": "",
-                "role": "buyer",
-                "profile_picture": localImage?.uri,
-                "documents": [
-                    {
-                        "document_type": "",
-                        "document_number": "",
-                        "document_file": ""
-                    },
-                    {
-                        "document_type": "",
-                        "document_number": "",
-                        "document_file": ""
-                    }
-                ]
+                "userId": profile?.userId,
+                input: {
+                    "name": name == null ? '' : name,
+                    "phone": "",
+                    "status": "",
+                    "profilePicture": localImage?.uri
+                }
             };
 
             setIsLoading(true)
-            const result = await editUserProfile(params);
+            const result: any = await editUserProfile(params);
             setIsLoading(false);
 
             console.log('Update Profile Params', JSON.stringify(params));
 
             console.log("Update Profile Result", JSON.stringify(result));
 
-            if (result.status) {
+            if (result?.updateUser?.success) {
                 await fetchProfile();
                 props.navigation.goBack();
                 SHOW_SUCCESS_TOAST(STRING.profile_updated_successfully);
             } else {
                 Toast.show({
                     type: 'smallError',
-                    text1: result?.error,
+                    text1: result?.updateUser?.message,
                     position: 'bottom',
                 });
             }
@@ -205,6 +176,7 @@ const EditProfile = (props: any) => {
                     {STRING.profile}
                 </Text>
                 <TouchableOpacity
+                    activeOpacity={0.7}
                     onPress={() => {
                         openLibrary()
                     }}>
@@ -217,15 +189,11 @@ const EditProfile = (props: any) => {
                                 ? { uri: profile.profilePicture }
                                 : undefined}>
                     </ImageBackground>
-                    <TouchableOpacity onPress={() => {
-                        openLibrary()
-                    }}>
-                        <Image
-                            style={styles.editIcon}
-                            resizeMode="contain"
-                            source={IMAGES.ic_edit}
-                        />
-                    </TouchableOpacity>
+                    <Image
+                        style={styles.editIcon}
+                        resizeMode="contain"
+                        source={IMAGES.ic_edit}
+                    />
                 </TouchableOpacity>
                 <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
                     style={{ flex: 1 }}>
@@ -273,6 +241,7 @@ const EditProfile = (props: any) => {
                         <TextInput
                             style={styles.inputTextStyle}
                             value={phoneNumber}
+                            placeholder={STRING.please_enter_phone_number}
                             placeholderTextColor={COLORS.color_333A54}
                             onChangeText={(text) => {
                                 setPhoneNumber(text)

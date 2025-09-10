@@ -15,6 +15,8 @@ import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+//LANGUAGE MODEL
 import LanguageSelector from "./languageSelector";
 interface HeaderProps {
     style?: any
@@ -36,6 +38,8 @@ const Header = (props: HeaderProps) => {
     const { profile } = useContext(AuthContext)
 
     const insets = useSafeAreaInsets()
+
+    console.log('profile?.profilePicture ',profile?.profilePicture,props.profileIcon )
 
     if (props.type === 'onboarding') {
         return (

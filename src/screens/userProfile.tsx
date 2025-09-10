@@ -89,8 +89,6 @@ const UserProfile = (props: any) => {
             const result: any = await logOut(params);
             setIsLoading(false)
 
-            console.log('LOGOUT', JSON.stringify(result))
-
             await AsyncStorage.clear();
 
             setTimeout(() => {
@@ -107,7 +105,6 @@ const UserProfile = (props: any) => {
                 );
             }, 500);
         } catch (error: any) {
-            console.log('ERR',error)
             setIsLoading(false);
             Toast.show({
                 type: 'smallError',
