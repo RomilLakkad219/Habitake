@@ -229,10 +229,92 @@ async function otpVerification(params: any) {
   return result
 }
 
-async function getHomeProperty(params: any = {}) {
-  let url = WEB_SERVICE.get_properties
-  const result = await getRequest(url, params)
+async function getHomeProperty(params: any) {
+  // let url = WEB_SERVICE.get_properties
+  // const result = await getRequest(url, params)
+  // return result
+  const LIST_PROPERTIES = gql`
+  query ListAllProperties($limit: Int=null) {
+    listProperties(limit: $limit) {
+      success
+      count
+      data {
+        id
+        userId
+        agentId
+        title
+        description
+        address
+        city
+        state
+        zipCode
+        country
+        propertyType
+        price
+        bedrooms
+        bathrooms
+        squareFeet
+        lotSize
+        yearBuilt
+        amenities
+        images
+        status
+        approvalStatus
+        isFeatured
+        viewsCount
+        visitsCount
+        createdAt
+        updatedAt
+        approvedAt
+        approvedBy
+        category
+        condition
+        seoOptimized
+        totalFloors
+        floorNumber
+        parkingSpots
+        district
+        firstName
+        lastName
+        email
+        phoneNumber
+        documents {
+          id
+          name
+          fileUrl
+          documentType
+        }
+        visits {
+          id
+          visitorName
+          visitDate
+          status
+        }
+      }
+    }
+  }
+`;
+  const result = graphQlClient.request(LIST_PROPERTIES, params)
   return result
+}
+
+async function propertyIncrementViews(params: any) {
+  const INCREMENT_VIEW_COUNT = gql`
+  mutation IncrementTheViewCount($propertyId: ID!) {
+    incrementPropertyViews(propertyId: $propertyId) {
+      success
+      data {
+        message
+        propertyId
+        incrementedAt
+      }
+    }
+  }
+`;
+
+  const result = graphQlClient.request(INCREMENT_VIEW_COUNT, params)
+  return result
+
 }
 
 
@@ -247,5 +329,6 @@ export {
   editUserProfile,
   logOut,
   otpVerification,
-  getHomeProperty
+  getHomeProperty,
+  propertyIncrementViews
 }

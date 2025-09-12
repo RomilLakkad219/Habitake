@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
         borderColor: COLORS.color_E6E6EA,
         borderRadius: SCALE_SIZE(10),
         paddingVertical: Platform.OS == 'ios' ? SCALE_SIZE(20) : 0,
-        paddingHorizontal: SCALE_SIZE(16)
+        paddingHorizontal: SCALE_SIZE(16),
     },
     inputImages: {
         height: SCALE_SIZE(20),
@@ -331,6 +331,7 @@ const styles = StyleSheet.create({
         fontSize: SCALE_SIZE(14),
         fontFamily: FONT_NAME.semiBold,
         color: COLORS.color_333A54,
+        flex:1
     },
     updateButton: {
         marginTop: SCALE_SIZE(50),

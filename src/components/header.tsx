@@ -39,8 +39,6 @@ const Header = (props: HeaderProps) => {
 
     const insets = useSafeAreaInsets()
 
-    console.log('profile?.profilePicture ',profile?.profilePicture,props.profileIcon )
-
     if (props.type === 'onboarding') {
         return (
             <View>

@@ -123,5 +123,10 @@
     "reset_password_successfully": "Restablecer contraseña exitosamente",
     "signup_successfully": "Registro exitoso",
     "enter_verification_code": "Ingresa el código de verificación que te acabamos de enviar",
-    "please_enter_phone_number":"Por favor ingrese el número de teléfono"
+    "please_enter_phone_number": "Por favor ingrese el número de teléfono",
+    "no_property_found": "No se encontraron propiedades para este tipo",
+    "all": "Toda",
+    "residential": "Residencial",
+    "commercial": "Comercial",
+    "rental": "Alquiler"
 }

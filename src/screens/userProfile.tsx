@@ -172,7 +172,7 @@ const UserProfile = (props: any) => {
                 renderItem={({ item, index }) => {
                     return (
                         <TouchableOpacity style={[styles.itemView, {
-                            backgroundColor: item.key == 'logout' ? COLORS.color_01A669 : COLORS.color_E6E6EA66,
+                            backgroundColor: COLORS.color_E6E6EA66,
                             marginTop: index == 0 ? SCALE_SIZE(40) : SCALE_SIZE(10),
                         }]}
                             onPress={() => {
@@ -193,7 +193,7 @@ const UserProfile = (props: any) => {
                                 style={styles.itemTitle}
                                 size={SCALE_SIZE(16)}
                                 font={FONT_NAME.medium}
-                                color={item.key == 'logout' ? COLORS.white : COLORS.color_000929}>
+                                color={COLORS.color_000929}>
                                 {item.title}
                             </Text>
                             <Image

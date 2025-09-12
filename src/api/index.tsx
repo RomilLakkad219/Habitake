@@ -9,7 +9,8 @@ import {
     editUserProfile,
     logOut,
     otpVerification,
-    getHomeProperty
+    getHomeProperty,
+    propertyIncrementViews
 } from "./user";
 
 export {
@@ -23,5 +24,6 @@ export {
     editUserProfile,
     logOut,
     otpVerification,
-    getHomeProperty
+    getHomeProperty,
+    propertyIncrementViews
 }

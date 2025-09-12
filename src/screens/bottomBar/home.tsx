@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, SafeAreaView, Platform } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, SafeAreaView, Platform, Dimensions } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
@@ -17,7 +17,7 @@ import { SCREENS } from "..";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //API
-import { getHomeProperty } from "../../api";
+import { getHomeProperty, propertyIncrementViews } from "../../api";
 
 //LOADER
 import ProgressView from "../progressView";
@@ -30,49 +30,79 @@ const Home = (props: any) => {
 
     const [selectedPropertyItem, setSelectedPropertyItem] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [properties, setProperties] = useState([])
+    const [properties, setProperties] = useState<Property[]>([]);
+    const [likedProperties, setLikedProperties] = useState<string[]>([]);
 
     useEffect(() => {
         getPropertyList()
     }, [])
 
-    const listings = [
-        {
-            id: '1',
-            image: IMAGES.ic_commercial,
-            title: 'Tranquil Haven in the Woods',
-            location: 'Jakarta, Indonesia',
-            price: '$340',
-            status: 'Available',
-        },
-        {
-            id: '2',
-            image: IMAGES.ic_commercial,
-            title: 'Tranquil Haven in the Woods',
-            location: 'Jakarta, Indonesia',
-            price: '$340',
-            status: 'Available',
-        },
+    const propertyTypes = [
+        { name: STRING.all, image: '', apiTypes: [] },
+        { name: STRING.residential, image: IMAGES.house_residential, apiTypes: ['Residential'] },
+        { name: STRING.commercial, image: IMAGES.house_commercial, apiTypes: ['Commercial'] },
+        { name: STRING.rental, image: IMAGES.house_rental, apiTypes: ['Rental'] },
+        { name: STRING.luxury, image: IMAGES.luxury_img, apiTypes: ['Luxury'] },
     ];
+
+    const filteredProperties = React.useMemo(() => {
+        const selected = propertyTypes[selectedPropertyItem];
+        if (!selected || selected.apiTypes.length === 0) {
+            return properties; // All
+        }
+        return properties.filter(p =>
+            selected.apiTypes.includes(p.propertyType)
+        );
+    }, [selectedPropertyItem, properties]);
 
     async function getPropertyList() {
 
         try {
             setIsLoading(true)
-            const result = await getHomeProperty()
+            const result: any = await getHomeProperty({ limit: null })
             setIsLoading(false)
 
             // console.log('Home RESPONSE', JSON.stringify(result))
 
-            if (result.status) {
-                setProperties(result?.data?.data?.properties)
+            if (result?.listProperties?.success) {
+                setProperties(result?.listProperties?.data)
             }
             else {
-                SHOW_TOAST(result?.error)
+                SHOW_TOAST(result?.listProperties?.message)
             }
         }
         catch (err) {
             SHOW_TOAST(err)
+        }
+    }
+
+    async function onPropertyLike(propertyID: string) {
+        const alreadyLiked = likedProperties.includes(propertyID);
+
+        //If already like property then nothing to do
+        if (alreadyLiked) {
+            return;
+        }
+
+        setLikedProperties(prev => [...prev, propertyID]);
+
+        try {
+            setIsLoading(true);
+            const result: any = await propertyIncrementViews({ propertyId: propertyID });
+            setIsLoading(false);
+
+            if (!result?.incrementPropertyViews?.success) {
+                SHOW_TOAST(result?.incrementPropertyViews?.message);
+
+                // Revert if API failed
+                setLikedProperties(prev => prev.filter(id => id !== propertyID));
+            }
+        } catch (err) {
+            setIsLoading(false);
+            SHOW_TOAST(err);
+
+            // Revert if API failed
+            setLikedProperties(prev => prev.filter(id => id !== propertyID));
         }
     }
 
@@ -119,13 +149,7 @@ const Home = (props: any) => {
                 ListHeaderComponent={() => (
                     <View>
                         <FlatList
-                            data={[
-                                { name: 'All', image: '' },
-                                { name: 'Residential', image: IMAGES.house_residential },
-                                { name: 'Commercial', image: IMAGES.house_commercial },
-                                { name: 'Rental', image: IMAGES.house_rental },
-                                { name: 'Luxury', image: IMAGES.luxury_img },
-                            ]}
+                            data={propertyTypes}
                             horizontal
                             scrollEnabled={true}
                             showsHorizontalScrollIndicator={false}
@@ -159,21 +183,36 @@ const Home = (props: any) => {
                             )}
                             ListFooterComponent={() => <View style={{ marginRight: SCALE_SIZE(16) }} />}
                         />
-                        <FlatList
-                            data={listings}
-                            horizontal
-                            scrollEnabled={true}
-                            showsHorizontalScrollIndicator={false}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={({ item }) => (
-                                <PropertyCard
-                                    item={item}
-                                    onPress={() => {
-                                        props.navigation.navigate(SCREENS.PropertyDetail.name);
-                                    }}
-                                />
-                            )}
-                        />
+                        {filteredProperties.length === 0 ? (
+                            <View style={styles.errorStyle}>
+                                <Text
+                                    font={FONT_NAME.medium}
+                                    size={SCALE_SIZE(14)}
+                                    align="center"
+                                    color={COLORS.color_545A70}>
+                                    {STRING.no_property_found}
+                                </Text>
+                            </View>
+                        ) : (
+                            <FlatList
+                                data={filteredProperties}
+                                horizontal
+                                scrollEnabled={true}
+                                showsHorizontalScrollIndicator={false}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({ item, index }) => (
+                                    <PropertyCard
+                                        item={item}
+                                        key={index}
+                                        onPress={() => {
+                                            props.navigation.navigate(SCREENS.PropertyDetail.name);
+                                        }}
+                                        liked={likedProperties.includes(item.id)}
+                                        onLike={(id) => onPropertyLike(id)}
+                                    />
+                                )}
+                            />
+                        )}
                         <View style={styles.nearByView}>
                             <Text
                                 size={SCALE_SIZE(20)}
@@ -297,70 +336,127 @@ const Home = (props: any) => {
     )
 }
 
+type Property = {
+    id: string;
+    images: string[];
+    title: string;
+    location: string;
+    price: string;
+    status: string;
+    propertyType: string;
+};
+
 type PropertyCardProps = {
-    item: {
-        id: string;
-        image: any;
-        title: string;
-        location: string;
-        price: string;
-        status: string;
-    };
-    onPress?: () => void
+    item: Property;
+    onPress?: () => void;
+    onLike?: (propertyId: string) => void;
+    liked?: boolean;
 }
 
-const PropertyCard = ({ item, onPress }: PropertyCardProps) => {
+const PropertyCard = ({ item, onPress, onLike, liked }: PropertyCardProps) => {
+
+    const { width: screenWidth } = Dimensions.get("window");
+
+    const horizontalMargin = SCALE_SIZE(16) * 2
+    const spacing = SCALE_SIZE(10);
+    const imagesPerRow = 2;
+
+    const availableWidth = screenWidth - horizontalMargin - (imagesPerRow - 1) * spacing;
+    const imageWidth = availableWidth / imagesPerRow;
+    const aspectRatio = SCALE_SIZE(155) / SCALE_SIZE(223)
+    const imageHeight = imageWidth * aspectRatio;
+
     return (
         <TouchableOpacity style={styles.card} onPress={onPress}>
             <View style={styles.imageWrapper}>
-                <Image source={item.image} style={styles.image} />
+                {/* {item.images && item.images.length > 0 &&
+                    <FlatList
+                        data={item.images}
+                        horizontal
+                        pagingEnabled
+                        keyExtractor={(img, idx) => idx.toString()}
+                        renderItem={({ item: img }) => (
+                            <Image
+                                source={{ uri: img }}
+                                style={{
+                                    width: imageWidth,
+                                    height: imageHeight,
+                                    borderRadius: SCALE_SIZE(15),
+                                }}
+                                resizeMode="cover"
+                            />
+                        )}
+                        showsHorizontalScrollIndicator={false}
+                    ></FlatList>
+                    */}
+                <Image source={IMAGES.ic_commercial}
+                    resizeMode="cover"
+                    style={{ height: SCALE_SIZE(155), width: SCALE_SIZE(223) }} />
+                {/* } */}
                 <View style={styles.actions}>
-                    <Image
-                        style={styles.heartBg}
-                        resizeMode="contain"
-                        source={IMAGES.ic_square_red_heart} />
-                    <Image
-                        style={styles.thumbIcon}
-                        resizeMode="contain"
-                        source={IMAGES.ic_thumb} />
-                    <Image
-                        style={styles.chatIcon}
-                        resizeMode="contain"
-                        source={IMAGES.chat_bg} />
-                    <Image
-                        style={styles.shareIcon}
-                        resizeMode="contain"
-                        source={IMAGES.ic_share} />
+                    <TouchableOpacity onPress={() => {
+                        if (onLike) {
+                            onLike(item.id);
+                        }
+                    }}>
+                        <Image
+                            style={styles.heartBg}
+                            resizeMode="contain"
+                            source={liked ? IMAGES.ic_square_red_heart : IMAGES.ic_un_heart} />
+                    </TouchableOpacity>
+                    {/* <TouchableOpacity>
+                        <Image
+                            style={styles.thumbIcon}
+                            resizeMode="contain"
+                            source={IMAGES.ic_thumb} />
+                    </TouchableOpacity> */}
+                    <TouchableOpacity>
+                        <Image
+                            style={styles.chatIcon}
+                            resizeMode="contain"
+                            source={IMAGES.chat_bg} />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Image
+                            style={styles.shareIcon}
+                            resizeMode="contain"
+                            source={IMAGES.ic_share} />
+                    </TouchableOpacity>
                 </View>
             </View>
             <View style={{ paddingHorizontal: SCALE_SIZE(8) }}>
                 <Text
                     style={{ marginTop: SCALE_SIZE(9) }}
                     size={SCALE_SIZE(14)}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
                     font={FONT_NAME.semiBold}
                     color={COLORS.color_333A54}>
                     {item.title}
                 </Text>
-                <View style={[styles.locationView, { marginTop: SCALE_SIZE(8) }]}>
-                    <Image
-                        style={styles.locationIcon}
-                        resizeMode="contain"
-                        source={IMAGES.ic_location}>
-                    </Image>
-                    <Text
-                        font={FONT_NAME.medium}
-                        color={COLORS.color_545A70}
-                        size={SCALE_SIZE(10)}>
-                        {item.location}
-                    </Text>
-                </View>
+                {item.location &&
+                    <View style={[styles.locationView, { marginTop: SCALE_SIZE(8) }]}>
+                        <Image
+                            style={styles.locationIcon}
+                            resizeMode="contain"
+                            source={IMAGES.ic_location}>
+                        </Image>
+                        <Text
+                            font={FONT_NAME.medium}
+                            color={COLORS.color_545A70}
+                            size={SCALE_SIZE(10)}>
+                            {item.location}
+                        </Text>
+                    </View>
+                }
                 <View style={styles.bottomView}>
                     <Text
                         size={SCALE_SIZE(11)}
                         align="center"
+                        numberOfLines={1}
                         font={FONT_NAME.semiBold}
                         color={COLORS.color_01A669}>
-                        {item.price}
+                        {`$${item.price}`}
                     </Text>
                     <View style={{ flex: 1 }}></View>
                     <TouchableOpacity style={styles.availableButton}>
@@ -532,20 +628,24 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 2,
         marginVertical: SCALE_SIZE(28),
+        overflow: 'hidden'
     },
     imageWrapper: {
         borderRadius: SCALE_SIZE(15),
         backgroundColor: COLORS.white,
+        overflow: 'hidden',
+        alignSelf: 'center',
+        justifyContent: 'center'
     },
     image: {
-        width: '100%',
-        height: SCALE_SIZE(155),
-        borderRadius: SCALE_SIZE(15),
+        // width: '100%',
+        // height: SCALE_SIZE(155),
+        // borderRadius: SCALE_SIZE(15),
     },
     actions: {
         position: 'absolute',
-        right: 8,
-        top: 9,
+        right: SCALE_SIZE(8),
+        top: SCALE_SIZE(9),
         alignItems: 'center',
     },
     bottomView: {
@@ -555,23 +655,27 @@ const styles = StyleSheet.create({
         marginBottom: SCALE_SIZE(8)
     },
     heartBg: {
-        height: SCALE_SIZE(20),
-        width: SCALE_SIZE(20),
+        height: SCALE_SIZE(25),
+        width: SCALE_SIZE(25),
     },
     thumbIcon: {
-        height: SCALE_SIZE(20),
-        width: SCALE_SIZE(20),
+        height: SCALE_SIZE(25),
+        width: SCALE_SIZE(25),
         marginTop: SCALE_SIZE(6)
     },
     chatIcon: {
-        height: SCALE_SIZE(20),
-        width: SCALE_SIZE(20),
+        height: SCALE_SIZE(25),
+        width: SCALE_SIZE(25),
         marginTop: SCALE_SIZE(6)
     },
     shareIcon: {
-        height: SCALE_SIZE(20),
-        width: SCALE_SIZE(20),
+        height: SCALE_SIZE(25),
+        width: SCALE_SIZE(25),
         marginTop: SCALE_SIZE(6)
+    },
+    errorStyle: {
+        marginTop: SCALE_SIZE(30),
+        marginBottom: SCALE_SIZE(20)
     }
 })
 

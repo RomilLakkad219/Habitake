@@ -127,7 +127,12 @@ const USE_STRING = () => {
         reset_password_successfully: getTranslation('reset_password_successfully'),
         signup_successfully: getTranslation('signup_successfully'),
         enter_verification_code: getTranslation('enter_verification_code'),
-        please_enter_phone_number: getTranslation('please_enter_phone_number')
+        please_enter_phone_number: getTranslation('please_enter_phone_number'),
+        no_property_found: getTranslation('no_property_found'),
+        all: getTranslation('all'),
+        residential: getTranslation('residential'),
+        commercial: getTranslation('commercial'),
+        rental: getTranslation('rental')
     }
 }
 

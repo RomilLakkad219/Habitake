@@ -2,53 +2,41 @@ import React, { createContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as RNLocalize from "react-native-localize";
 import i18n from "../translation/i18n";
-import { AppState } from "react-native";
 
 export const LaungageContext = createContext<any>(null);
 
 export const LanguageProvider = ({ children }: any) => {
-
     const [language, setLanguage] = useState<string>("en");
+
+    const getSystemLanguage = () => {
+        const locales = RNLocalize.getLocales();
+        let deviceLang = locales[0]?.languageCode || "en";
+
+        // Allow only supported languages
+        if (!["en", "es"].includes(deviceLang)) {
+            deviceLang = "en";
+        }
+        return deviceLang;
+    };
 
     const loadLanguage = async () => {
         try {
             const savedLang = await AsyncStorage.getItem("APP_LANGUAGE");
             const isUserSelected = await AsyncStorage.getItem("APP_LANGUAGE_SELECTED");
 
-            if (!savedLang || !isUserSelected) {
-                //First install → use system language
-                const locales = RNLocalize.getLocales();
-                let deviceLang = locales[0]?.languageCode || "en";
-
-                if (deviceLang !== "en" && deviceLang !== "es") {
-                    deviceLang = "en";
-                }
-
-                console.log("First launch - using system language:", deviceLang);
-                setLanguage(deviceLang);
-                i18n.changeLanguage(deviceLang);
-
-                await AsyncStorage.setItem("APP_LANGUAGE", deviceLang);
-                await AsyncStorage.setItem("APP_LANGUAGE_SELECTED", "false");
-            } else if (isUserSelected === "true" && savedLang) {
-                // User manually selected language → always respect it
-                console.log("Loaded user selected language:", savedLang);
+            if (savedLang && isUserSelected === "true") {
+                // User manually selected
                 setLanguage(savedLang);
                 i18n.changeLanguage(savedLang);
+                console.log("Loaded user language:", savedLang);
             } else {
-                // System language fallback (when user has not selected manually)
-                const locales = RNLocalize.getLocales();
-                let deviceLang = locales[0]?.languageCode || "en";
+                // System language fallback
+                const systemLang = getSystemLanguage();
+                setLanguage(systemLang);
+                i18n.changeLanguage(systemLang);
+                console.log("Using system language:", systemLang);
 
-                if (deviceLang !== "en" && deviceLang !== "es") {
-                    deviceLang = "en";
-                }
-
-                console.log("Using system language:", deviceLang);
-                setLanguage(deviceLang);
-                i18n.changeLanguage(deviceLang);
-
-                await AsyncStorage.setItem("APP_LANGUAGE", deviceLang);
+                await AsyncStorage.setItem("APP_LANGUAGE", systemLang);
                 await AsyncStorage.setItem("APP_LANGUAGE_SELECTED", "false");
             }
         } catch (e) {
@@ -56,24 +44,10 @@ export const LanguageProvider = ({ children }: any) => {
         }
     };
 
-
     useEffect(() => {
         loadLanguage();
-
-        // Watch app foreground → reload system lang if not overridden
-        const subscription = AppState.addEventListener("change", async (nextState) => {
-            if (nextState === "active") {
-                const isUserSelected = await AsyncStorage.getItem("APP_LANGUAGE_SELECTED");
-                if (isUserSelected !== "true") {
-                    loadLanguage();
-                }
-            }
-        });
-
-        return () => subscription.remove();
     }, []);
 
-    //User manually selects language
     const setLang = async (lang: string) => {
         try {
             setLanguage(lang);
