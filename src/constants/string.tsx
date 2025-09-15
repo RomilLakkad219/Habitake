@@ -132,7 +132,9 @@ const USE_STRING = () => {
         all: getTranslation('all'),
         residential: getTranslation('residential'),
         commercial: getTranslation('commercial'),
-        rental: getTranslation('rental')
+        rental: getTranslation('rental'),
+        please_enter_name: getTranslation('please_enter_name'),
+        near_by_property_list: getTranslation('near_by_property_list')
     }
 }
 

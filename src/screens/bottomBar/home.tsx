@@ -8,7 +8,7 @@ import { IMAGES } from "../../assets";
 import { COLORS, SCALE_SIZE, FONT_NAME, USE_STRING, SHOW_TOAST } from "../../constants";
 
 //COMPONENTS
-import { Header, Text } from "../../components";
+import { Header, LanguageSelector, Text } from "../../components";
 
 //SCREENS
 import { SCREENS } from "..";
@@ -109,6 +109,9 @@ const Home = (props: any) => {
     return (
         <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0 }]}>
             <SafeAreaView />
+            <View>
+                <LanguageSelector />
+            </View>
             <Header
                 type="home"
                 locationText={'1012 Ocean avanue, New yourk, USA'}
@@ -221,12 +224,16 @@ const Home = (props: any) => {
                                 {STRING.nearby_listing}
                             </Text>
                             <View style={{ flex: 1 }} />
-                            <Text
-                                size={SCALE_SIZE(14)}
-                                font={FONT_NAME.medium}
-                                color={COLORS.color_01A669}>
-                                {STRING.more}
-                            </Text>
+                            <TouchableOpacity onPress={() => {
+                                props.navigation.navigate(SCREENS.NearByProperty.name)
+                            }}>
+                                <Text
+                                    size={SCALE_SIZE(14)}
+                                    font={FONT_NAME.medium}
+                                    color={COLORS.color_01A669}>
+                                    {STRING.more}
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 )}
@@ -340,7 +347,7 @@ type Property = {
     id: string;
     images: string[];
     title: string;
-    location: string;
+    address: string;
     price: string;
     status: string;
     propertyType: string;
@@ -434,21 +441,19 @@ const PropertyCard = ({ item, onPress, onLike, liked }: PropertyCardProps) => {
                     color={COLORS.color_333A54}>
                     {item.title}
                 </Text>
-                {item.location &&
-                    <View style={[styles.locationView, { marginTop: SCALE_SIZE(8) }]}>
-                        <Image
-                            style={styles.locationIcon}
-                            resizeMode="contain"
-                            source={IMAGES.ic_location}>
-                        </Image>
-                        <Text
-                            font={FONT_NAME.medium}
-                            color={COLORS.color_545A70}
-                            size={SCALE_SIZE(10)}>
-                            {item.location}
-                        </Text>
-                    </View>
-                }
+                <View style={[styles.locationView, { marginTop: SCALE_SIZE(8) }]}>
+                    <Image
+                        style={styles.locationIcon}
+                        resizeMode="contain"
+                        source={IMAGES.ic_location}>
+                    </Image>
+                    <Text
+                        font={FONT_NAME.medium}
+                        color={COLORS.color_545A70}
+                        size={SCALE_SIZE(10)}>
+                        {item.address}
+                    </Text>
+                </View>
                 <View style={styles.bottomView}>
                     <Text
                         size={SCALE_SIZE(11)}
@@ -592,7 +597,7 @@ const styles = StyleSheet.create({
     },
     soldButton: {
         height: SCALE_SIZE(21),
-        width: SCALE_SIZE(44),
+        width: SCALE_SIZE(55),
         borderRadius: SCALE_SIZE(24),
         backgroundColor: COLORS.color_E6E6EA80,
         alignItems: 'center',

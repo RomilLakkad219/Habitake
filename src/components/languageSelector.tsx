@@ -33,7 +33,7 @@ export default function LanguageSelector() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { marginRight: SCALE_SIZE(10) }]}>
             <TouchableOpacity style={styles.button} onPress={() => setVisible(true)}>
                 <Image source={selectedLang.flag} style={styles.flag} />
                 <Text style={styles.text}
@@ -79,8 +79,8 @@ export default function LanguageSelector() {
 
 const styles = StyleSheet.create({
     container: {
-        margin: SCALE_SIZE(20),
         alignSelf: "flex-start",
+        marginTop: SCALE_SIZE(8)
     },
     button: {
         flexDirection: "row",

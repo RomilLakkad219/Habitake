@@ -27,6 +27,7 @@ import UserProfile from "./userProfile";
 import EditProfile from "./editProfile";
 import Prepare from "./prepare";
 import ForgotOtpVerification from "./forgotOtpVerification";
+import NearByProperty from "./nearByProperty";
 
 export const SCREENS = {
     Splash: {
@@ -133,5 +134,9 @@ export const SCREENS = {
         name: 'ForgotOtpVerification',
         component: ForgotOtpVerification
     },
+    NearByProperty: {
+        name: 'NearByProperty',
+        component: NearByProperty
+    }
 }
 

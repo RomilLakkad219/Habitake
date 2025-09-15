@@ -128,5 +128,7 @@
     "all": "Toda",
     "residential": "Residencial",
     "commercial": "Comercial",
-    "rental": "Alquiler"
+    "rental": "Alquiler",
+    "please_enter_name": "Por favor ingrese el nombre",
+    "near_by_property_list": "Lista de propiedades cercanas"
 }

@@ -59,9 +59,9 @@ const EditProfile = (props: any) => {
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [name, setName] = useState<string>(profile?.firstName);
-    const [password, setPassword] = useState<string>('12345');
+    const [password, setPassword] = useState<string>('1234');
     const [email, setEmail] = useState<string>(profile?.email || '');
-    const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [phoneNumber, setPhoneNumber] = useState<string>('1234567890');
     const [localImage, setLocalImage] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -111,6 +111,11 @@ const EditProfile = (props: any) => {
         // Allow only letters (a-z, A-Z) and spaces
         const cleanedText = text.replace(/[^a-zA-Z\s]/g, '');
         setName(cleanedText);
+    };
+
+    const handlePhoneChange = (text: string) => {
+        const cleaned = text.replace(/[^0-9]/g, "");
+        setPhoneNumber(cleaned)
     };
 
     async function updateProfile() {
@@ -208,7 +213,8 @@ const EditProfile = (props: any) => {
                         <TextInput
                             style={styles.inputTextStyle}
                             value={name}
-                            placeholderTextColor={COLORS.color_333A54}
+                            placeholder={STRING.please_enter_name}
+                            placeholderTextColor={COLORS.color_8A8E9D}
                             onChangeText={handleFullNameChange}>
                         </TextInput>
                     </View>
@@ -240,14 +246,12 @@ const EditProfile = (props: any) => {
                             source={IMAGES.ic_phone} />
                         <TextInput
                             style={styles.inputTextStyle}
+                            maxLength={10}
                             value={phoneNumber}
                             placeholder={STRING.please_enter_phone_number}
-                            placeholderTextColor={COLORS.color_333A54}
-                            onChangeText={(text) => {
-                                setPhoneNumber(text)
-                            }}
-                            keyboardType="numeric"
-                            editable={false}>
+                            placeholderTextColor={COLORS.color_8A8E9D}
+                            onChangeText={handlePhoneChange}
+                            keyboardType="numeric">
                         </TextInput>
                     </View>
                     <View style={[styles.inputView, {
@@ -331,7 +335,7 @@ const styles = StyleSheet.create({
         fontSize: SCALE_SIZE(14),
         fontFamily: FONT_NAME.semiBold,
         color: COLORS.color_333A54,
-        flex:1
+        flex: 1
     },
     updateButton: {
         marginTop: SCALE_SIZE(50),

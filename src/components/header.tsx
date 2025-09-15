@@ -47,13 +47,12 @@ const Header = (props: HeaderProps) => {
                     style={styles.headerImage}
                     resizeMode="contain"
                     source={IMAGES.undraw_city_life}>
-                    <View style={{ flexDirection: "row", alignItems: "center", }}>
+                    <View style={styles.mainStyleView}>
                         <TouchableOpacity
                             onPress={props.onBack}>
                             <Image
                                 style={[styles.backIcon, {
                                     marginLeft: SCALE_SIZE(16),
-
                                 }]}
                                 resizeMode="contain"
                                 source={IMAGES.ic_back}>
@@ -71,16 +70,33 @@ const Header = (props: HeaderProps) => {
     else if (props.type === 'basic') {
         return (
             <View style={styles.headerContainer}>
-                <TouchableOpacity
-                    onPress={props.onBack}>
-                    <Image
-                        style={[styles.backIcon, {
-                            marginTop: Platform.OS == 'ios' ? 0 : SCALE_SIZE(10)
-                        }]}
-                        resizeMode="contain"
-                        source={IMAGES.ic_back}>
-                    </Image>
-                </TouchableOpacity>
+                <View style={styles.basicContainer}>
+                    <TouchableOpacity
+                        onPress={props.onBack}>
+                        <Image
+                            style={[styles.backIcon, {
+                                marginTop: Platform.OS == 'ios' ? 0 : SCALE_SIZE(10)
+                            }]}
+                            resizeMode="contain"
+                            source={IMAGES.ic_back}>
+                        </Image>
+                    </TouchableOpacity>
+                    <View style={{ flex: 1 }}></View>
+                    {props.title &&
+                        <Text
+                            style={{ marginTop: Platform.OS == 'ios' ? 0 : SCALE_SIZE(10) }}
+                            size={SCALE_SIZE(16)}
+                            align="center"
+                            font={FONT_NAME.semiBold}
+                            color={COLORS.color_333A54}>
+                            {props.title}
+                        </Text>
+                    }
+                    <View style={{ flex: 1 }}></View>
+                    <View
+                        style={styles.backIcon}>
+                    </View>
+                </View>
             </View>
         )
     }
@@ -286,6 +302,14 @@ const styles = StyleSheet.create({
         height: SCALE_SIZE(44),
         width: SCALE_SIZE(44),
         alignSelf: 'center',
+    },
+    mainStyleView: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    basicContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     }
 })
 
