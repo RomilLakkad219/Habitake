@@ -23,7 +23,7 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { launchImageLibrary, launchCamera, ImageLibraryOptions } from 'react-native-image-picker';
+import { launchImageLibrary, ImageLibraryOptions } from 'react-native-image-picker';
 import Toast from "react-native-toast-message";
 
 //LOADER
@@ -89,24 +89,6 @@ const EditProfile = (props: any) => {
         }
     }
 
-    async function openCamera() {
-        const result = await launchCamera({
-            mediaType: 'mixed',
-            cameraType: 'back',
-            maxWidth: 500,
-            maxHeight: 500,
-            quality: 1,
-        });
-
-        if (result.didCancel) {
-            console.log('User cancelled image picker');
-        } else if (result.errorCode) {
-            console.log('ImagePicker Error: ', result.errorCode);
-        } else {
-            setLocalImage(result?.assets?.[0]);
-        }
-    }
-
     const handleFullNameChange = (text: string) => {
         // Allow only letters (a-z, A-Z) and spaces
         const cleanedText = text.replace(/[^a-zA-Z\s]/g, '');
@@ -119,43 +101,54 @@ const EditProfile = (props: any) => {
     };
 
     async function updateProfile() {
-        try {
-            const params = {
-                "userId": profile?.userId,
-                input: {
-                    "name": name == null ? '' : name,
-                    "phone": "",
-                    "status": "",
-                    "profilePicture": localImage?.uri
+        if (!name) {
+            SHOW_TOAST(STRING.please_enter_name)
+        }
+        else {
+            try {
+                const input: any = {
+                    name: name ?? "",
+                    phone: "",
+                    status: "",
+                };
+
+                // Only send profilePicture if user selected a new image
+                if (localImage?.uri) {
+                    input.profilePicture = localImage.uri;
                 }
-            };
 
-            setIsLoading(true)
-            const result: any = await editUserProfile(params);
-            setIsLoading(false);
+                const params = {
+                    userId: profile?.userId,
+                    input,
+                };
 
-            console.log('Update Profile Params', JSON.stringify(params));
+                setIsLoading(true)
+                const result: any = await editUserProfile(params);
+                setIsLoading(false);
 
-            console.log("Update Profile Result", JSON.stringify(result));
+                console.log('Update Profile Params', JSON.stringify(params));
 
-            if (result?.updateUser?.success) {
-                await fetchProfile();
-                props.navigation.goBack();
-                SHOW_SUCCESS_TOAST(STRING.profile_updated_successfully);
-            } else {
+                console.log("Update Profile Result", JSON.stringify(result));
+
+                if (result?.updateUser?.success) {
+                    await fetchProfile();
+                    props.navigation.goBack();
+                    SHOW_SUCCESS_TOAST(STRING.profile_updated_successfully);
+                } else {
+                    Toast.show({
+                        type: 'smallError',
+                        text1: result?.updateUser?.message,
+                        position: 'bottom',
+                    });
+                }
+            }
+            catch (error: any) {
                 Toast.show({
                     type: 'smallError',
-                    text1: result?.updateUser?.message,
+                    text1: error,
                     position: 'bottom',
                 });
             }
-        }
-        catch (error: any) {
-            Toast.show({
-                type: 'smallError',
-                text1: error,
-                position: 'bottom',
-            });
         }
     }
 
@@ -238,7 +231,7 @@ const EditProfile = (props: any) => {
                     </View>
                     <View style={[styles.inputView, {
                         marginTop: SCALE_SIZE(20),
-                        backgroundColor: COLORS.color_E6E6EA
+                        backgroundColor: COLORS.white
                     }]}>
                         <Image
                             style={styles.inputImages}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, SafeAreaView, Platform, Dimensions } from "react-native"
 
 //ASSETS
@@ -15,6 +15,7 @@ import { SCREENS } from "..";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { debounce } from "lodash";
 
 //API
 import { getHomeProperty, propertyIncrementViews } from "../../api";
@@ -32,6 +33,7 @@ const Home = (props: any) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [properties, setProperties] = useState<Property[]>([]);
     const [likedProperties, setLikedProperties] = useState<string[]>([]);
+    const [searchText, setSearchText] = useState("");
 
     useEffect(() => {
         getPropertyList()
@@ -55,24 +57,38 @@ const Home = (props: any) => {
         );
     }, [selectedPropertyItem, properties]);
 
-    async function getPropertyList() {
+    const searchHandler = useCallback(
+        debounce((text: string) => {
+            getPropertyList(selectedPropertyItem, text);
+        }, 1000),
+        [selectedPropertyItem]
+    );
 
+    async function getPropertyList(index?: number, keyword?: string) {
         try {
-            setIsLoading(true)
-            const result: any = await getHomeProperty({ limit: null })
-            setIsLoading(false)
+            setIsLoading(true);
 
-            // console.log('Home RESPONSE', JSON.stringify(result))
+            const selectedIndex = index ?? selectedPropertyItem;
+            const selectedType =
+                propertyTypes[selectedIndex].apiTypes.length > 0
+                    ? propertyTypes[selectedIndex].apiTypes[0]
+                    : null;
+            console.log("API CALL TYPE:", selectedType);
+
+            const result: any = await getHomeProperty({
+                limit: null,
+                propertyType: selectedType,
+            });
 
             if (result?.listProperties?.success) {
-                setProperties(result?.listProperties?.data)
+                setProperties(result?.listProperties?.data);
+            } else {
+                SHOW_TOAST(result?.listProperties?.message);
             }
-            else {
-                SHOW_TOAST(result?.listProperties?.message)
-            }
-        }
-        catch (err) {
-            SHOW_TOAST(err)
+        } catch (err) {
+            SHOW_TOAST(err);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -109,7 +125,7 @@ const Home = (props: any) => {
     return (
         <View style={[styles.container, { marginTop: Platform.OS === 'android' ? insets.top : 0 }]}>
             <SafeAreaView />
-            <View>
+            <View style={{ alignSelf: 'flex-end' }}>
                 <LanguageSelector />
             </View>
             <Header
@@ -131,19 +147,27 @@ const Home = (props: any) => {
                             source={IMAGES.ic_search} />
                         <TextInput
                             style={styles.searchTextStyle}
+                            value={searchText}
                             placeholder={STRING.search_here}
                             placeholderTextColor={COLORS.color_B0B3BD}
                             onChangeText={(text) => {
+                                // setSearchText(text);
+                                // if (text.length > 0) {
+                                //     searchHandler(text);
+                                // } else {
+                                //     searchHandler.cancel();
+                                //     getPropertyList(selectedPropertyItem, "");
+                                // }
                             }}>
                         </TextInput>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                     <Image
                         style={styles.filterIcon}
                         resizeMode="contain"
                         source={IMAGES.ic_filter} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             <FlatList
                 data={['', '', '', '']}
@@ -159,7 +183,10 @@ const Home = (props: any) => {
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item, index }) => (
                                 <TouchableOpacity
-                                    onPress={() => setSelectedPropertyItem(index)}
+                                    onPress={() => {
+                                        setSelectedPropertyItem(index)
+                                        getPropertyList(index);
+                                    }}
                                     style={
                                         selectedPropertyItem == index
                                             ? styles.selectedPropertyStyle
@@ -398,7 +425,7 @@ const PropertyCard = ({ item, onPress, onLike, liked }: PropertyCardProps) => {
                     */}
                 <Image source={IMAGES.ic_commercial}
                     resizeMode="cover"
-                    style={{ height: SCALE_SIZE(155), width: SCALE_SIZE(223) }} />
+                    style={{ height: SCALE_SIZE(155), width: SCALE_SIZE(250) }} />
                 {/* } */}
                 <View style={styles.actions}>
                     <TouchableOpacity onPress={() => {
@@ -488,7 +515,7 @@ const styles = StyleSheet.create({
     searchView: {
         flexDirection: 'row',
         marginTop: SCALE_SIZE(25),
-        marginBottom: SCALE_SIZE(10)
+        marginBottom: SCALE_SIZE(20)
     },
     searchStyle: {
         height: SCALE_SIZE(56),

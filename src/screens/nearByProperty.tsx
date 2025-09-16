@@ -30,10 +30,14 @@ const NearByProperty = (props: any) => {
                     props.navigation.goBack()
                 }}
                 title={STRING.near_by_property_list} />
-            <FlatList data={['', '', '']}
+            <FlatList
+                data={['', '', '']}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => (
-                    <View style={[styles.propertyItemView, { marginBottom: SCALE_SIZE(10) }]}>
+                    <View style={[styles.propertyItemView, {
+                        marginBottom: SCALE_SIZE(10),
+                        marginTop: index == 0 ? SCALE_SIZE(20) : 0
+                    }]}>
                         <ImageBackground
                             style={styles.propertyImages}
                             resizeMode="contain"
@@ -128,10 +132,8 @@ const NearByProperty = (props: any) => {
                             </View>
                         </View>
                     </View>
-                )}
-                ListFooterComponent={() => (
-                    <View style={{ marginBottom: SCALE_SIZE(10) }} />
-                )}></FlatList>
+                )}>
+            </FlatList>
         </View>
     )
 }

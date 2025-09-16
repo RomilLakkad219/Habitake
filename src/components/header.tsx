@@ -39,6 +39,32 @@ const Header = (props: HeaderProps) => {
 
     const insets = useSafeAreaInsets()
 
+    const BASE_URL = "https://api.habitake.com";
+
+    //Replacing file url with https for support image
+    const getProfileImageUri = (uri?: string) => {
+        if (!uri) return undefined;
+
+        // Relative path → add BASE_URL
+        if (uri.startsWith("/")) {
+            return `${BASE_URL}${uri}`;
+        }
+
+        // Already hosted → return directly
+        if (uri.startsWith("http")) {
+            return uri;
+        }
+
+        // If still file:// (not uploaded yet), just show it temporarily
+        if (uri.startsWith("file://")) {
+            return uri;
+        }
+
+        return undefined;
+    };
+
+    const profileUri = getProfileImageUri(profile?.profilePicture);
+
     if (props.type === 'onboarding') {
         return (
             <View>
@@ -174,7 +200,7 @@ const Header = (props: HeaderProps) => {
                                 <Image
                                     style={styles.profileIcon}
                                     resizeMode="cover"
-                                    source={{ uri: profile?.profilePicture }}>
+                                    source={{ uri: profileUri }}>
                                 </Image>
                                 :
                                 <View

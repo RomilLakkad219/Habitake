@@ -9,9 +9,6 @@ import { getRequest, postRequest, putRequest } from "./https";
 import { gql } from "graphql-request";
 
 async function register(params: any) {
-  // let url = WEB_SERVICE.sign_up
-  // const result = await postRequest(url, params)
-  // return result
   const REGISTER_MUTATION = gql`
     mutation RegisterNewUser(
     $username: String!
@@ -67,9 +64,6 @@ async function register(params: any) {
 }
 
 async function emailVerification(params: any) {
-  // let url = WEB_SERVICE.verify_email
-  // const result = await postRequest(url, params)
-  // return result
   const VERIFY_EMAIL_MUTATION = gql`
     mutation VerifyUserEmail($username: String!, $confirmationCode: String!) {
     verifyEmailCode(input: { username: $username, confirmationCode: $confirmationCode }) {
@@ -84,10 +78,6 @@ async function emailVerification(params: any) {
 }
 
 async function userLogin(params: any) {
-  // let url = WEB_SERVICE.login
-  // const result = await postRequest(url, params)
-  // return result
-
   const LOGIN_MUTATION = gql`
       mutation Login($email: String!, $password: String!) {
         loginUser(input: { email: $email, password: $password }) {
@@ -110,10 +100,6 @@ async function userLogin(params: any) {
 }
 
 async function resendOtp(params: any) {
-  // let url = WEB_SERVICE.resend_otp
-  // const result = await postRequest(url, params)
-  // return result
-
   const RESEND_OTP_MUTATION = gql`
     mutation ResendVerificationCode($username: String!) {
     resendVerificationCode(input: { username: $username }) {
@@ -128,9 +114,6 @@ async function resendOtp(params: any) {
 }
 
 async function forgotPassword(params: any) {
-  // let url = WEB_SERVICE.forgot_password
-  // const result = await postRequest(url, params)
-  // return result
   const FORGOT_PASSWORD_MUTATION = gql`
     mutation RequestPasswordReset($email: String!) {
     forgotPassword(input: { email: $email }) {
@@ -152,9 +135,6 @@ async function resetPassword(params: any) {
 }
 
 async function getUserProfile(params: any) {
-  // let url = WEB_SERVICE.user_profile + `?user_id=${params.user_id}`
-  // const result = await getRequest(url, params)
-  // return result
   const GET_USER_PROFILE_QUERY = gql`
     query GetUser($userId: ID!) {
       getUser(userId: $userId) {
@@ -181,9 +161,6 @@ async function getUserProfile(params: any) {
 }
 
 async function editUserProfile(params: any) {
-  // let url = WEB_SERVICE.update_user_profile + `?user_id=${params.user_id}`
-  // const result = await putRequest(url, params)
-  // return result
   const UPDATE_USER = gql`
    mutation TestUpdateUser($userId: ID!, $input: UserUpdateInput!) {
     updateUser(userId: $userId, input: $input) {
@@ -206,9 +183,6 @@ async function editUserProfile(params: any) {
 }
 
 async function logOut(params: any) {
-  // let url = WEB_SERVICE.user_logout
-  // const result = await postRequest(url, params)
-  // return result
   const LOGOUT_MUTATION = gql`
     mutation LogoutCurrentUser($userId: ID!, $session: String) {
       logoutUser(input: { userId: $userId, session: $session }) {
@@ -230,14 +204,16 @@ async function otpVerification(params: any) {
 }
 
 async function getHomeProperty(params: any) {
-  // let url = WEB_SERVICE.get_properties
-  // const result = await getRequest(url, params)
-  // return result
   const LIST_PROPERTIES = gql`
-  query ListAllProperties($limit: Int=null) {
-    listProperties(limit: $limit) {
+  query ListAllProperties(
+    $nextToken: String
+    $limit: Int
+    $propertyType: PropertyType
+  ) {
+    listProperties(nextToken: $nextToken, limit: $limit, propertyType: $propertyType) {
       success
       count
+      nextToken
       data {
         id
         userId
@@ -294,6 +270,7 @@ async function getHomeProperty(params: any) {
     }
   }
 `;
+
   const result = graphQlClient.request(LIST_PROPERTIES, params)
   return result
 }
@@ -314,9 +291,7 @@ async function propertyIncrementViews(params: any) {
 
   const result = graphQlClient.request(INCREMENT_VIEW_COUNT, params)
   return result
-
 }
-
 
 export {
   register,
