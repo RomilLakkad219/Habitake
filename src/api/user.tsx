@@ -208,9 +208,10 @@ async function getHomeProperty(params: any) {
   query ListAllProperties(
     $nextToken: String
     $limit: Int
-    $propertyType: PropertyType
+    $propertyType: PropertyType,
+    $city:String
   ) {
-    listProperties(nextToken: $nextToken, limit: $limit, propertyType: $propertyType) {
+    listProperties(nextToken: $nextToken, limit: $limit, propertyType: $propertyType,city:$city) {
       success
       count
       nextToken

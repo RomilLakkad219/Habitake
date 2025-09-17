@@ -197,7 +197,7 @@ const UserProfile = (props: any) => {
                                 {item.title}
                             </Text>
                             <Image
-                                style={[styles.itemImage, { tintColor: item.key == 'logout' ? COLORS.white : COLORS.black }]}
+                                style={[styles.itemImage, { tintColor: COLORS.black }]}
                                 resizeMode="contain"
                                 source={IMAGES.ic_next} />
                         </TouchableOpacity>

@@ -58,9 +58,9 @@ const EditProfile = (props: any) => {
     const insets = useSafeAreaInsets();
 
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
-    const [name, setName] = useState<string>(profile?.firstName);
+    const [name, setName] = useState<string>(profile?.firstName + " " + profile?.lastName);
     const [password, setPassword] = useState<string>('1234');
-    const [email, setEmail] = useState<string>(profile?.email || '');
+    const [email, setEmail] = useState<string>(profile?.email);
     const [phoneNumber, setPhoneNumber] = useState<string>('1234567890');
     const [localImage, setLocalImage] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -110,12 +110,13 @@ const EditProfile = (props: any) => {
                     name: name ?? "",
                     phone: "",
                     status: "",
+                    profilePicture: localImage ? localImage.uri : profile?.profilePicture
                 };
 
-                // Only send profilePicture if user selected a new image
-                if (localImage?.uri) {
-                    input.profilePicture = localImage.uri;
-                }
+                // // Only send profilePicture if user selected a new image
+                // if (localImage?.uri) {
+                //     input.profilePicture = localImage.uri;
+                // }
 
                 const params = {
                     userId: profile?.userId,

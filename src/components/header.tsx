@@ -55,6 +55,11 @@ const Header = (props: HeaderProps) => {
             return uri;
         }
 
+        // Base64 inline image → return directly
+        if (uri.startsWith("data:image")) {
+            return uri;
+        }
+
         // If still file:// (not uploaded yet), just show it temporarily
         if (uri.startsWith("file://")) {
             return uri;

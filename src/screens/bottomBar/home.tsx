@@ -73,11 +73,16 @@ const Home = (props: any) => {
                 propertyTypes[selectedIndex].apiTypes.length > 0
                     ? propertyTypes[selectedIndex].apiTypes[0]
                     : null;
-            console.log("API CALL TYPE:", selectedType);
+
+            console.log("API CALL PARAMS:", {
+                propertyType: selectedType,
+                city: keyword,
+            });
 
             const result: any = await getHomeProperty({
                 limit: null,
                 propertyType: selectedType,
+                ...(keyword ? { city: keyword } : {}), //only send city if not empty
             });
 
             if (result?.listProperties?.success) {
@@ -151,13 +156,13 @@ const Home = (props: any) => {
                             placeholder={STRING.search_here}
                             placeholderTextColor={COLORS.color_B0B3BD}
                             onChangeText={(text) => {
-                                // setSearchText(text);
-                                // if (text.length > 0) {
-                                //     searchHandler(text);
-                                // } else {
-                                //     searchHandler.cancel();
-                                //     getPropertyList(selectedPropertyItem, "");
-                                // }
+                                setSearchText(text);
+                                if (text.length > 0) {
+                                    searchHandler(text);
+                                } else {
+                                    searchHandler.cancel();
+                                    getPropertyList(selectedPropertyItem);
+                                }
                             }}>
                         </TextInput>
                     </TouchableOpacity>
@@ -401,8 +406,10 @@ const PropertyCard = ({ item, onPress, onLike, liked }: PropertyCardProps) => {
     const imageHeight = imageWidth * aspectRatio;
 
     return (
-        <TouchableOpacity style={styles.card} onPress={onPress}>
-            <View style={styles.imageWrapper}>
+        <TouchableOpacity
+            style={[styles.card, { width: imageWidth }]}
+            onPress={onPress}>
+            <View style={[styles.imageWrapper, { height: SCALE_SIZE(155) }]}>
                 {/* {item.images && item.images.length > 0 &&
                     <FlatList
                         data={item.images}
@@ -425,7 +432,7 @@ const PropertyCard = ({ item, onPress, onLike, liked }: PropertyCardProps) => {
                     */}
                 <Image source={IMAGES.ic_commercial}
                     resizeMode="cover"
-                    style={{ height: SCALE_SIZE(155), width: SCALE_SIZE(250) }} />
+                    style={{ height: '100%', width: '100%' }} />
                 {/* } */}
                 <View style={styles.actions}>
                     <TouchableOpacity onPress={() => {
@@ -458,7 +465,7 @@ const PropertyCard = ({ item, onPress, onLike, liked }: PropertyCardProps) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={{ paddingHorizontal: SCALE_SIZE(8) }}>
+            <View style={styles.propertyNameView}>
                 <Text
                     style={{ marginTop: SCALE_SIZE(9) }}
                     size={SCALE_SIZE(14)}
@@ -667,7 +674,8 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         overflow: 'hidden',
         alignSelf: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        width: '100%'
     },
     image: {
         // width: '100%',
@@ -708,6 +716,10 @@ const styles = StyleSheet.create({
     errorStyle: {
         marginTop: SCALE_SIZE(30),
         marginBottom: SCALE_SIZE(20)
+    },
+    propertyNameView: {
+        paddingHorizontal: SCALE_SIZE(8),
+        minHeight: SCALE_SIZE(100)
     }
 })
 

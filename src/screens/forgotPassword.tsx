@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, View } from "react-native"
+import React, { useContext, useEffect, useState } from "react";
+import { Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, View } from "react-native"
 
 //API
 import { forgotPassword } from "../api";
@@ -36,25 +36,35 @@ const ForgotPassword = (props: any) => {
 
     const [email, setEmail] = useState<any>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+    function showBottomToast(message: string) {
+        if (isKeyboardVisible) {
+            Keyboard.dismiss(); // close keyboard first
+            const sub = Keyboard.addListener("keyboardDidHide", () => {
+                Toast.show({
+                    type: "smallError",
+                    text1: message,
+                    position: "bottom",
+                });
+                sub.remove(); // clean up
+            });
+        } else {
+            Toast.show({
+                type: "smallError",
+                text1: message,
+                position: "bottom",
+            });
+        }
+    }
 
     function onForgotPasswordValidation() {
-
         if (!email) {
-            Toast.show({
-                type: 'smallError',
-                text1: STRING.please_enter_your_email,
-                position: 'bottom',
-            });
-        }
-        else if (REGEX.emailRegex.test(email) == false) {
-            Toast.show({
-                type: 'smallError',
-                text1: STRING.please_enter_valid_email,
-                position: 'bottom',
-            });
-        }
-        else {
-            onForgotPassword()
+            showBottomToast(STRING.please_enter_your_email);
+        } else if (!REGEX.emailRegex.test(email)) {
+            showBottomToast(STRING.please_enter_valid_email);
+        } else {
+            onForgotPassword();
         }
     }
 
@@ -66,7 +76,7 @@ const ForgotPassword = (props: any) => {
             }
 
             setIsLoading(true)
-            const result:any = await forgotPassword(params)
+            const result: any = await forgotPassword(params)
             setIsLoading(false)
 
             console.log('FORGOT', JSON.stringify(result))
@@ -138,31 +148,31 @@ const ForgotPassword = (props: any) => {
                         setEmail(text)
                     }} />
                 <View style={{ flex: 1 }}></View>
-                <Button
-                    onPress={() => {
-                        onForgotPasswordValidation()
-                    }}
-                    style={styles.continueButtonStyle}
-                    title={STRING.continue} />
-                <Text
-                    style={{ marginBottom: SCALE_SIZE(20) }}
-                    font={FONT_NAME.regular}
-                    align="center"
-                    color={COLORS.color_00092999}
-                    size={SCALE_SIZE(16)}>
-                    {STRING.remember_your_password}
-                    <Text
-                        onPress={() => {
-                            props.navigation.navigate(SCREENS.Login.name)
-                        }}
-                        font={FONT_NAME.medium}
-                        align="center"
-                        color={COLORS.color_01A669}
-                        size={SCALE_SIZE(16)}>
-                        {STRING.login_insted}
-                    </Text>
-                </Text>
             </KeyboardAvoidingView>
+            <Button
+                onPress={() => {
+                    onForgotPasswordValidation()
+                }}
+                style={styles.continueButtonStyle}
+                title={STRING.continue} />
+            <Text
+                style={{ marginBottom: SCALE_SIZE(20) }}
+                font={FONT_NAME.regular}
+                align="center"
+                color={COLORS.color_00092999}
+                size={SCALE_SIZE(16)}>
+                {STRING.remember_your_password}
+                <Text
+                    onPress={() => {
+                        props.navigation.navigate(SCREENS.Login.name)
+                    }}
+                    font={FONT_NAME.medium}
+                    align="center"
+                    color={COLORS.color_01A669}
+                    size={SCALE_SIZE(16)}>
+                    {STRING.login_insted}
+                </Text>
+            </Text>
             <SafeAreaView />
             {isLoading && <ProgressView />}
         </View>
