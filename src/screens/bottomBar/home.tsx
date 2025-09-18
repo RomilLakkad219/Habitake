@@ -29,15 +29,16 @@ const Home = (props: any) => {
 
     const insets = useSafeAreaInsets();
 
+    useEffect(() => {
+        getPropertyList()
+    }, [])
+
     const [selectedPropertyItem, setSelectedPropertyItem] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [properties, setProperties] = useState<Property[]>([]);
     const [likedProperties, setLikedProperties] = useState<string[]>([]);
     const [searchText, setSearchText] = useState("");
-
-    useEffect(() => {
-        getPropertyList()
-    }, [])
+    const [filterType, setFilterType] = useState<"city" | "state" | "approvalStatus">("city");
 
     const propertyTypes = [
         { name: STRING.all, image: '', apiTypes: [] },
@@ -58,40 +59,61 @@ const Home = (props: any) => {
     }, [selectedPropertyItem, properties]);
 
     const searchHandler = useCallback(
-        debounce((text: string) => {
-            getPropertyList(selectedPropertyItem, text);
+        debounce((text: string, filterType?: "city" | "state" | "approvalStatus") => {
+            getPropertyList(selectedPropertyItem, text, filterType);
         }, 1000),
         [selectedPropertyItem]
     );
 
-    async function getPropertyList(index?: number, keyword?: string) {
+    async function getPropertyList(
+        index?: number,
+        keyword?: string,
+        filterType?: "city" | "state" | "approvalStatus"
+    ) {
         try {
             setIsLoading(true);
 
             const selectedIndex = index ?? selectedPropertyItem;
             const selectedType =
-                propertyTypes[selectedIndex].apiTypes.length > 0
-                    ? propertyTypes[selectedIndex].apiTypes[0]
-                    : null;
+                propertyTypes[selectedIndex]?.apiTypes?.[0] ?? null;
 
-            console.log("API CALL PARAMS:", {
-                propertyType: selectedType,
-                city: keyword,
-            });
-
-            const result: any = await getHomeProperty({
+            const params: any = {
                 limit: null,
                 propertyType: selectedType,
-                ...(keyword ? { city: keyword } : {}), //only send city if not empty
-            });
+            };
+
+            if (keyword) {
+                const approvalMap: Record<string, string> = {
+                    approved: "APPROVED",
+                    pending: "PENDING",
+                    rejected: "REJECTED",
+                    underreview: "UNDER_REVIEW",
+                    "under review": "UNDER_REVIEW",
+                };
+
+                const lower = keyword.toLowerCase();
+                if (approvalMap[lower]) {
+                    //Pass Status
+                    params.approvalStatus = approvalMap[lower];
+                }
+                else {
+                    //Pass state and city
+                    params.city = keyword;
+                    params.state = keyword;
+                }
+            }
+
+            console.log("API CALL PARAMS:", params);
+
+            const result: any = await getHomeProperty(params);
 
             if (result?.listProperties?.success) {
-                setProperties(result?.listProperties?.data);
+                setProperties(result.listProperties.data ?? []);
             } else {
                 SHOW_TOAST(result?.listProperties?.message);
             }
         } catch (err) {
-            SHOW_TOAST(err);
+            SHOW_TOAST(err ?? String(err));
         } finally {
             setIsLoading(false);
         }
@@ -158,10 +180,10 @@ const Home = (props: any) => {
                             onChangeText={(text) => {
                                 setSearchText(text);
                                 if (text.length > 0) {
-                                    searchHandler(text);
+                                    searchHandler(text, filterType)
                                 } else {
                                     searchHandler.cancel();
-                                    getPropertyList(selectedPropertyItem);
+                                    getPropertyList(selectedPropertyItem)
                                 }
                             }}>
                         </TextInput>
@@ -218,7 +240,7 @@ const Home = (props: any) => {
                             )}
                             ListFooterComponent={() => <View style={{ marginRight: SCALE_SIZE(16) }} />}
                         />
-                        {filteredProperties.length === 0 ? (
+                        {filteredProperties.length <= 0 ? (
                             <View style={styles.errorStyle}>
                                 <Text
                                     font={FONT_NAME.medium}
