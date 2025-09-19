@@ -29,6 +29,8 @@ import Toast from "react-native-toast-message";
 
 const SignUp = (props: any) => {
 
+    const { setUser } = useContext(AuthContext)
+
     const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets()
@@ -40,10 +42,6 @@ const SignUp = (props: any) => {
     const [confirmPassword, setConfirmPassword] = useState<any>('');
     const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState<boolean>(false);
     const [isTermsSelected, setTermsSelected] = useState<boolean>(false);
-    const [nameError, setNameError] = useState<any>('');
-    const [emailError, setEmailError] = useState<any>('');
-    const [passwordError, setPasswordError] = useState<any>('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState<any>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isValidPass, setIsValidPassword] = useState<boolean>(true);
     const [confirmPassValid, setConfirmPassValid] = useState<boolean>(true)
@@ -126,7 +124,11 @@ const SignUp = (props: any) => {
             });
         }
         else {
-            onRegisterUser()
+            props.navigation.navigate(SCREENS.PropertyType.name, {
+                name: name,
+                password: password,
+                email: email
+            })
         }
     }
 
@@ -151,22 +153,26 @@ const SignUp = (props: any) => {
     async function onRegisterUser() {
         try {
             const params = {
-                "username": name,
-                "password": password,
-                "email": email,
-                "role": "Buyer",
-                "firstName": "",
-                "lastName": "",
-                "phoneNumber": "",
-                "dateOfBirth": "",
-                "gender": "",
-                "nationality": "",
-                "street": "",
-                "city": "",
-                "state": "",
-                "zipCode": "",
-                "country": "",
-                "kycStatus": ""
+                username: name,
+                password: password,
+                email: email,
+                role: "Buyer",
+                firstName: "",
+                lastName: "",
+                phoneNumber: "",
+                // propertyType: "",
+                // budget: "",
+                dateOfBirth: "",
+                gender: "",
+                nationality: "",
+                kycStatus: "",
+                address: {
+                    street: "",
+                    city: "",
+                    state: "",
+                    zipCode: "",
+                    country: "",
+                },
             }
 
             setIsLoading(true)
@@ -175,6 +181,8 @@ const SignUp = (props: any) => {
 
             if (result?.registerUser?.success) {
                 const userData = result.registerUser;
+                setUser(result.registerUser)
+                await AsyncStorage.setItem(STORAGE_KEY.USER_PASSWORD, JSON.stringify(password))
                 await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
                 SHOW_SUCCESS_TOAST(STRING.signup_successfully)
 
@@ -184,6 +192,7 @@ const SignUp = (props: any) => {
                 })
             }
             else {
+                console.log('ERR', result.registerUser?.message)
                 Toast.show({
                     type: 'smallError',
                     text1: result.registerUser?.message,
@@ -192,6 +201,7 @@ const SignUp = (props: any) => {
             }
         }
         catch (err: any) {
+            console.log('ERRRRRRR', err)
             Toast.show({
                 type: 'smallError',
                 text1: err,

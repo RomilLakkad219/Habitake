@@ -15,15 +15,47 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Toast from "react-native-toast-message";
 
 const PropertyType = (props: any) => {
+
+    const name = props?.route?.params?.name;
+    const email = props?.route?.params?.email;
+    const password = props?.route?.params?.password
 
     const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
 
     const [isSelectedProperty, setIsSelectedProperty] = useState<number>(0)
+    const [selectedPropertyName, setSelectedPropertyName] = useState<string | null>(null);
     const [budget, setBudget] = useState<any>('')
+
+    async function onValidateProperty() {
+        if (!isSelectedProperty) {
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_select_property_type,
+                position: 'bottom',
+            });
+        }
+        else if (!budget) {
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_add_property_budget,
+                position: 'bottom',
+            });
+        }
+        else {
+            props.navigation.navigate(SCREENS.AddProfile.name, {
+                name: name,
+                password: password,
+                email: email,
+                propertyType: selectedPropertyName,
+                budget: budget
+            })
+        }
+    }
 
     return (
         <View style={[styles.container, {
@@ -69,6 +101,7 @@ const PropertyType = (props: any) => {
                         renderItem={({ item, index }) => (
                             <TouchableOpacity onPress={() => {
                                 setIsSelectedProperty(index)
+                                setSelectedPropertyName(item.name);
                             }}>
                                 <ImageBackground
                                     style={[styles.propetyImages, {
@@ -108,14 +141,20 @@ const PropertyType = (props: any) => {
                     }} />
                 <Button
                     onPress={() => {
-                        props.navigation.navigate(SCREENS.AddProfile.name)
+                        onValidateProperty()
                     }}
                     style={styles.nextButtonStyle}
                     title={STRING.next} />
                 <TouchableOpacity>
                     <Text
                         onPress={() => {
-                            props.navigation.navigate(SCREENS.AddProfile.name)
+                            props.navigation.navigate(SCREENS.AddProfile.name, {
+                                name: name,
+                                password: password,
+                                email: email,
+                                propertyType: selectedPropertyName,
+                                budget: budget
+                            })
                         }}
                         align="center"
                         style={{ marginBottom: SCALE_SIZE(20) }}

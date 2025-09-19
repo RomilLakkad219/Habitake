@@ -79,10 +79,8 @@ const ForgotPassword = (props: any) => {
             const result: any = await forgotPassword(params)
             setIsLoading(false)
 
-            console.log('FORGOT', JSON.stringify(result))
-
             if (result?.forgotPassword?.success) {
-                props.navigation.navigate(SCREENS.ForgotOtpVerification.name, {
+                props.navigation.navigate(SCREENS.ResetPassword.name, {
                     email: email,
                     userName: profile?.username
                 })

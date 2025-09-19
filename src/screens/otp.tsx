@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { StyleSheet, View, KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native"
 
 //API
-import { emailVerification, resendOtp } from "../api";
+import { emailVerification, register, resendOtp } from "../api";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, STORAGE_KEY, USE_STRING } from "../constants";
 
 //COMPONENTS
-import { Button, Header, Text } from "../components";
+import { AccountCreationSuccessSheet, Button, Header, Text } from "../components";
 
 //SCREENS
 import { SCREENS } from ".";
@@ -20,8 +20,11 @@ import ProgressView from "./progressView"
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import OTPTextInput from 'react-native-otp-textinput'
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Otp = (props: any) => {
+
+    const accountCreationSuccessRef = useRef<any>('')
 
     const STRING = USE_STRING();
 
@@ -30,8 +33,13 @@ const Otp = (props: any) => {
     const [otp, setOtp] = useState<any>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const userName = props.route.params.userName
-    const email = props.route.params.email
+    const name = props.route.params.name;
+    const email = props.route.params.email;
+    const password = props?.route?.params?.password;
+    const propertyType = props?.route?.params?.propertyType;
+    const budget = props?.route?.params?.budget;
+    const phoneNumber = props?.route?.params?.phoneNumber;
+    const profileImage = props?.route?.params?.profileImage;
 
     function onOtpCheck() {
         if (!otp) {
@@ -49,7 +57,7 @@ const Otp = (props: any) => {
     async function onGetOtp() {
         try {
             const params = {
-                "username": userName,
+                "username": name,
                 "confirmationCode": otp,
             }
 
@@ -57,18 +65,8 @@ const Otp = (props: any) => {
             const response: any = await emailVerification(params)
             setIsLoading(false)
 
-            console.log('OTP RESPONSE', JSON.stringify(response))
-
             if (response?.verifyEmailCode?.success) {
-                const userData = response?.verifyEmailCode;
-                SHOW_SUCCESS_TOAST(STRING.otp_verify_successfully)
-                setTimeout(() => {
-                    props.navigation.navigate(SCREENS.Prepare.name, {
-                        params: {
-                            userData: userData
-                        }
-                    })
-                }, 1000);
+                onRegisterUser()
             }
             else {
                 Toast.show({
@@ -92,14 +90,14 @@ const Otp = (props: any) => {
     async function onResendOtp() {
         try {
             const params = {
-                "username": userName,
+                "username": name,
             }
 
             setIsLoading(true)
             const result: any = await resendOtp(params)
             setIsLoading(false)
 
-            console.log('RESEND', JSON.stringify(result))
+            console.log('RESEND', params, JSON.stringify(result))
 
             if (result?.resendVerificationCode?.success) {
                 SHOW_SUCCESS_TOAST(STRING.otp_has_been_sent_on_your_email)
@@ -115,6 +113,69 @@ const Otp = (props: any) => {
         }
         catch (err: any) {
             console.log('ERR', err)
+            Toast.show({
+                type: 'smallError',
+                text1: err,
+                position: 'bottom',
+            });
+        }
+    }
+
+    async function onRegisterUser() {
+        try {
+            const params = {
+                username: name,
+                password: password,
+                email: email,
+                role: "Buyer",
+                firstName: "",
+                lastName: "",
+                phoneNumber: phoneNumber,
+                profilePicture: profileImage,
+                propertyType: propertyType,
+                budget: budget,
+                dateOfBirth: "",
+                gender: "",
+                nationality: "",
+                kycStatus: "",
+                address: {
+                    street: "",
+                    city: "",
+                    state: "",
+                    zipCode: "",
+                    country: "",
+                },
+            }
+
+            setIsLoading(true)
+            const result: any = await register(params)
+            setIsLoading(false)
+
+            console.log('SIGNUP PRMS', params)
+
+            console.log('SIGN UP RES', result)
+
+            if (result?.registerUser?.success) {
+                const userData = result.registerUser;
+                await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
+                accountCreationSuccessRef?.current?.open()
+                setTimeout(() => {
+                    props.navigation.navigate(SCREENS.Prepare.name, {
+                        userData: userData
+                    })
+                }, 5000);
+            }
+            else {
+                console.log('ERR', result.registerUser?.message)
+                Toast.show({
+                    type: 'smallError',
+                    text1: result.registerUser?.message,
+                    position: 'bottom',
+                });
+            }
+        }
+        catch (err: any) {
+            console.log('ERRRRRRR', err)
             Toast.show({
                 type: 'smallError',
                 text1: err,
@@ -189,6 +250,11 @@ const Otp = (props: any) => {
                     style={styles.nextButtonStyle}
                     title={STRING.next} />
             </KeyboardAvoidingView>
+            <AccountCreationSuccessSheet
+                onRef={accountCreationSuccessRef}
+                onFinish={() => {
+                    accountCreationSuccessRef?.current?.close()
+                }} />
             {isLoading && <ProgressView />}
         </View>
     )

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Platform } from "react-native"
 
 //API
@@ -19,7 +19,7 @@ import { SCREENS } from ".";
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from "react-native-toast-message";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import OTPTextInput from 'react-native-otp-textinput'
 
 //LOADER
 import ProgressView from "./progressView";
@@ -29,27 +29,27 @@ const ResetPassword = (props: any) => {
     const STRING = USE_STRING();
 
     const email = props.route.params.email
+
     const insets = useSafeAreaInsets();
 
-    const [otpFromStorage, setOtpFromStorage] = useState<string | null>(null);
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [password, setPassword] = useState<any>('');
     const [confirmPassword, setConfirmPassword] = useState<any>('');
     const [isSecureConfirmPassword, setIsConfirmSecurePassword] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
-    useEffect(() => {
-        const loadData = async () => {
-            const savedOtp = await AsyncStorage.getItem("FORGOT_PASSWORD_OTP");
-            setOtpFromStorage(savedOtp);
-        };
-        loadData();
-    }, []);
+    const [otp, setOtp] = useState<any>('');
 
     const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*]).{12,}$/
 
     function onResetPasswordCheck() {
-        if (!password) {
+        if (!otp) {
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_your_otp,
+                position: 'bottom',
+            });
+        }
+        else if (!password) {
             Toast.show({
                 type: 'smallError',
                 text1: STRING.please_enter_your_password,
@@ -87,17 +87,15 @@ const ResetPassword = (props: any) => {
             const params = {
                 email: email,
                 new_password: password,
-                code: otpFromStorage
+                code: otp
             }
 
             setIsLoading(true)
-            const result = await resetPassword(params)
+            const result: any = await resetPassword(params)
             setIsLoading(false)
 
-            if (result?.status) {
+            if (result?.resetPassword?.success) {
                 SHOW_SUCCESS_TOAST(STRING.reset_password_successfully)
-                // clear stored values after success
-                await AsyncStorage.removeItem("FORGOT_PASSWORD_OTP");
                 setTimeout(() => {
                     props.navigation.navigate(SCREENS.Login.name)
                 }, 1000);
@@ -105,7 +103,7 @@ const ResetPassword = (props: any) => {
             else {
                 Toast.show({
                     type: 'smallError',
-                    text1: result?.error,
+                    text1: result?.resetPassword?.message,
                     position: 'bottom',
                 });
             }
@@ -148,6 +146,22 @@ const ResetPassword = (props: any) => {
                 size={SCALE_SIZE(16)}>
                 {'quis nostrud exercitation ullamco laboris nisi ut'}
             </Text>
+            <Text
+                style={[styles.textStyle, { marginTop: SCALE_SIZE(35) }]}
+                font={FONT_NAME.medium}
+                color={COLORS.color_333A54}
+                size={SCALE_SIZE(16)}>
+                {STRING.enter_verification_code + `\n${email}`}
+            </Text>
+            <OTPTextInput
+                defaultValue={otp}
+                containerStyle={styles.otpContainerStyle}
+                textInputStyle={styles.otpSelected}
+                inputCount={6}
+                handleTextChange={(text) => {
+                    setOtp(text)
+                }}>
+            </OTPTextInput>
             <Input
                 style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
                 value={password}
@@ -217,7 +231,21 @@ const styles = StyleSheet.create({
         color: COLORS.black,
         fontSize: SCALE_SIZE(14),
         fontFamily: FONT_NAME.medium
-    }
+    },
+    otpContainerStyle: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: SCALE_SIZE(5)
+    },
+    otpSelected: {
+        borderRadius: SCALE_SIZE(10),
+        borderWidth: 1,
+        borderBottomWidth: 1,
+        marginTop: SCALE_SIZE(42),
+        color: COLORS.color_34216B,
+        backgroundColor: '#F6F6F6',
+        borderColor: COLORS.color_34216B
+    },
 })
 
 export default ResetPassword;

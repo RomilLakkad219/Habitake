@@ -10,57 +10,22 @@ import { gql } from "graphql-request";
 
 async function register(params: any) {
   const REGISTER_MUTATION = gql`
-    mutation RegisterNewUser(
-    $username: String!
-    $password: String!
-    $email: String!
-    $firstName: String!
-    $lastName: String!
-    $phoneNumber: String!
-    $dateOfBirth: String!
-    $gender: String!
-    $nationality: String!
-    $street: String!
-    $city: String!
-    $state: String!
-    $zipCode: String!
-    $country: String!
-    $kycStatus: String!
-    $role: String!
-  ) {
-    registerUser(
-      input: {
-        username: $username
-        password: $password
-        email: $email
-        firstName: $firstName
-        lastName: $lastName
-        phoneNumber: $phoneNumber
-        dateOfBirth: $dateOfBirth
-        gender: $gender
-        nationality: $nationality
-        address: {
-          street: $street
-          city: $city
-          state: $state
-          zipCode: $zipCode
-          country: $country
-        }
-        kycStatus: $kycStatus
-        role: $role
+    mutation RegisterNewUser($input: UserRegistrationInput!) {
+      registerUser(input: $input) {
+        success
+        message
+        userId
+        username
+        email
       }
-    ) {
-      success
-      message
-      userId
-      username
-      email
     }
-  }
-`;
+  `;
 
-  const result = graphQlClient.request(REGISTER_MUTATION, params)
-  return result
+  const result = await graphQlClient.request(REGISTER_MUTATION, {
+    input: params,
+  });
+
+  return result;
 }
 
 async function emailVerification(params: any) {
@@ -129,9 +94,21 @@ async function forgotPassword(params: any) {
 }
 
 async function resetPassword(params: any) {
-  let url = WEB_SERVICE.reset_password
-  const result = await postRequest(url, params)
-  return result
+  const RESET_PASSWORD_MUTATION = gql`
+    mutation ConfirmPasswordReset($input: ResetPasswordInput!) {
+      resetPassword(input: $input) {
+        success
+        message
+        errorCode
+      }
+    }
+  `;
+
+  const result = await graphQlClient.request(RESET_PASSWORD_MUTATION, {
+    input: params,
+  });
+
+  return result;
 }
 
 async function getUserProfile(params: any) {

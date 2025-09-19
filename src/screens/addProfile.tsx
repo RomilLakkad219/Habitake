@@ -1,30 +1,87 @@
-import React, { useRef, useState } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, SafeAreaView, Platform } from "react-native"
+import React, { useState } from "react";
+import { StyleSheet, Image, View, TouchableOpacity, SafeAreaView, Platform, ImageBackground } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
 
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_TOAST, USE_STRING } from "../constants";
 
 //COMPONENTS
-import { AccountCreationSuccessSheet, Button, Header, Input, Text } from "../components";
+import { Button, Header, Input, Text } from "../components";
 
 //SCREENS
 import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Toast from "react-native-toast-message";
+import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker";
 
 const AddProfile = (props: any) => {
+
+    const name = props?.route?.params?.name;
+    const email = props?.route?.params?.email;
+    const password = props?.route?.params?.password
+    const propertyType = props?.route?.params?.propertyType;
+    const budget = props?.route?.params?.budget
 
     const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
 
-    const accountCreationSuccessRef = useRef<any>('')
-
     const [phoneNumber, setPhoneNumber] = useState<any>('');
+    const [localImage, setLocalImage] = useState<any>(null);
+
+    const handlePhoneChange = (text: string) => {
+        const cleaned = text.replace(/[^0-9]/g, "");
+        setPhoneNumber(cleaned)
+    };
+
+    async function openLibrary() {
+        try {
+            const options: ImageLibraryOptions = {
+                mediaType: 'photo',
+                selectionLimit: 1,
+                includeBase64: false,
+                quality: 0.7,
+                presentationStyle: 'fullScreen',
+            };
+
+            const result = await launchImageLibrary(options);
+            if (result.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (result.errorCode) {
+                console.log('ImagePicker Error: ', result.errorCode);
+            }
+            else if (!result.didCancel && !result.errorCode && result?.assets && result.assets?.length > 0) {
+                setLocalImage(result.assets[0]);
+            }
+        } catch (err) {
+            SHOW_TOAST(err);
+        }
+    }
+
+    async function onValidateProfile() {
+        if (!phoneNumber) {
+            Toast.show({
+                type: 'smallError',
+                text1: STRING.please_enter_phone_number,
+                position: 'bottom',
+            });
+        }
+        else {
+            props.navigation.navigate(SCREENS.Otp.name, {
+                name: name,
+                password: password,
+                email: email,
+                propertyType: propertyType,
+                budget: budget,
+                phoneNumber: phoneNumber,
+                profileImage: localImage?.uri
+            })
+        }
+    }
 
     return (
         <View style={[styles.container, {
@@ -57,33 +114,50 @@ const AddProfile = (props: any) => {
                 size={SCALE_SIZE(16)}>
                 {STRING.you_can_edit_this_later_on_your_account_setting}
             </Text>
-            <View style={styles.profileView}>
+            <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                    openLibrary()
+                }}>
+                <ImageBackground
+                    style={[styles.profileView, { backgroundColor: COLORS.gray }]}
+                    resizeMode="cover"
+                    source={localImage ? { uri: localImage?.uri } : undefined}>
+                </ImageBackground>
                 <Image
                     style={styles.editIcon}
                     resizeMode="contain"
-                    source={IMAGES.ic_edit} />
-            </View>
+                    source={IMAGES.ic_edit}
+                />
+            </TouchableOpacity>
             <Input
                 style={{ marginTop: SCALE_SIZE(27) }}
                 value={phoneNumber}
+                maxLength={10}
                 placeholder={STRING.phone_number}
                 keyboardType="numeric"
                 isPhone={IMAGES.ic_phone}
                 placeholderTextColor={COLORS.color_8A8E9D}
-                onChangeText={(text) => {
-                    setPhoneNumber(text)
-                }} />
+                onChangeText={handlePhoneChange} />
             <View style={{ flex: 1.0 }}></View>
             <Button
                 onPress={() => {
-                    accountCreationSuccessRef?.current?.open()
+                    onValidateProfile()
                 }}
                 style={styles.submitButtonStyle}
                 title={STRING.submit} />
             <TouchableOpacity>
                 <Text
                     onPress={() => {
-                        props.navigation.navigate(SCREENS.Login.name)
+                        props.navigation.navigate(SCREENS.Otp.name, {
+                            name: name,
+                            password: password,
+                            email: email,
+                            propertyType: propertyType,
+                            budget: budget,
+                            phoneNumber: phoneNumber,
+                            profileImage: localImage?.uri
+                        })
                     }}
                     align="center"
                     style={{ marginBottom: SCALE_SIZE(20) }}
@@ -93,11 +167,6 @@ const AddProfile = (props: any) => {
                     {STRING.skip}
                 </Text>
             </TouchableOpacity>
-            <AccountCreationSuccessSheet
-                onRef={accountCreationSuccessRef}
-                onFinish={() => {
-                    accountCreationSuccessRef?.current?.close()
-                }} />
             <SafeAreaView />
         </View>
     )
@@ -114,16 +183,15 @@ const styles = StyleSheet.create({
         width: SCALE_SIZE(100),
         borderRadius: SCALE_SIZE(50),
         alignSelf: 'center',
-        backgroundColor: 'gray',
         marginTop: SCALE_SIZE(46),
-        position: 'relative',
+        overflow: 'hidden',
     },
     editIcon: {
         height: SCALE_SIZE(30),
         width: SCALE_SIZE(30),
-        position: 'absolute',
-        bottom: 0,
-        right: 2,
+        alignSelf: 'center',
+        marginTop: SCALE_SIZE(-35),
+        left: SCALE_SIZE(30),
     },
     submitButtonStyle: {
         marginBottom: SCALE_SIZE(24),

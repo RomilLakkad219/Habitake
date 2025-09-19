@@ -512,6 +512,7 @@ const PropertyCard = ({ item, onPress, onLike, liked }: PropertyCardProps) => {
                 </View>
                 <View style={styles.bottomView}>
                     <Text
+                        style={{ minHeight: '100%' }}
                         size={SCALE_SIZE(11)}
                         align="center"
                         numberOfLines={1}

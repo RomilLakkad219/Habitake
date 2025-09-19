@@ -130,5 +130,8 @@
     "commercial": "Comercial",
     "rental": "Alquiler",
     "please_enter_name": "Por favor ingrese el nombre",
-    "near_by_property_list": "Lista de propiedades cercanas"
+    "near_by_property_list": "Lista de propiedades cercanas",
+    "property_type_added_successfully": "El tipo de propiedad se ha añadido correctamente",
+    "please_select_property_type": "Por favor seleccione el tipo de propiedad",
+    "please_add_property_budget": "Por favor agregue el presupuesto de la propiedad"
 }
