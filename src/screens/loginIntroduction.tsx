@@ -38,7 +38,7 @@ const LoginIntroduction = (props: any) => {
                     align="center"
                     color={COLORS.color_333A54}
                     size={SCALE_SIZE(28)}>
-                    {'Lorem ipsum dolor sit amet\n consectetur.'}
+                    {STRING.login_intro_text}
                 </Text>
                 <Text
                     style={{ marginTop: SCALE_SIZE(10) }}
@@ -47,7 +47,7 @@ const LoginIntroduction = (props: any) => {
                     color={COLORS.color_8A8E9D}
                     lineHeight={SCALE_SIZE(26)}
                     size={SCALE_SIZE(16)}>
-                    {'Lorem ipsum dolor sit amet consectetur. Nunc nunc\n felis non erat neque fringilla commodo.'}
+                    {STRING.login_intro_subtext}
                 </Text>
                 <Button
                     onPress={() => {

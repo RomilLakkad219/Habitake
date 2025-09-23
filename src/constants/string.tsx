@@ -137,8 +137,9 @@ const USE_STRING = () => {
         near_by_property_list: getTranslation('near_by_property_list'),
         property_type_added_successfully: getTranslation('property_type_added_successfully'),
         please_select_property_type: getTranslation('please_select_property_type'),
-        please_add_property_budget: getTranslation('please_add_property_budget')
-
+        please_add_property_budget: getTranslation('please_add_property_budget'),
+        login_intro_text: getTranslation('login_intro_text'),
+        login_intro_subtext: getTranslation('login_intro_subtext'),
     }
 }
 

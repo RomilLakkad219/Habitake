@@ -111,7 +111,7 @@
     "please_enter_your_password": "Please enter your password",
     "please_enter_your_otp": "Please enter your OTP",
     "please_enter_your_confirm_password": "Please enter your confirm password",
-    "password_must_be_at_least_12_characters_long": "Password must be at least 12 characters long,\ninclude 1 number, 1 uppercase letter, 1 lowercase letter, and 1 special character.",
+    "password_must_be_at_least_12_characters_long": "Password must be at least 12-40 characters long,\ninclude 1 number, 1 uppercase letter, 1 lowercase letter, and 1 special character.",
     "new_password_and_confirm_password_does_not_match": "New password and confirm password does not match",
     "please_enter_your_full_name": "Please enter your full name",
     "password_and_confirm_password_does_not_match": "Password and confirm password does not match",
@@ -132,7 +132,8 @@
     "please_enter_name": "Please enter name",
     "near_by_property_list": "Nearby Properties List",
     "property_type_added_successfully": "Property Type Has Been Added Successfully",
-    "please_select_property_type":"Please select property type",
-    "please_add_property_budget":"Please add property budget"
-
+    "please_select_property_type": "Please select property type",
+    "please_add_property_budget": "Please add property budget",
+    "login_intro_text": "Your smart real estate hub",
+    "login_intro_subtext":"Log in to Habitake to explore properties, create renovation variants, and connect with professionals."
 }

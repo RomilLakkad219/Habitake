@@ -111,7 +111,7 @@
     "please_enter_your_password": "Por favor, introduzca su contraseña",
     "please_enter_your_otp": "Por favor ingrese su OTP",
     "please_enter_your_confirm_password": "Por favor ingrese su contraseña de confirmación",
-    "password_must_be_at_least_12_characters_long": "La contraseña debe tener al menos 12 caracteres e incluir 1 número, 1 letra mayúscula, 1 letra minúscula y 1 carácter especial.",
+    "password_must_be_at_least_12_characters_long": "La contraseña debe tener al menos 12-40 caracteres e incluir 1 número, 1 letra mayúscula, 1 letra minúscula y 1 carácter especial.",
     "new_password_and_confirm_password_does_not_match": "La nueva contraseña y la confirmación de contraseña no coinciden",
     "please_enter_your_full_name": "Por favor, introduzca su nombre completo",
     "password_and_confirm_password_does_not_match": "La contraseña y confirmar contraseña no coinciden",
@@ -133,5 +133,7 @@
     "near_by_property_list": "Lista de propiedades cercanas",
     "property_type_added_successfully": "El tipo de propiedad se ha añadido correctamente",
     "please_select_property_type": "Por favor seleccione el tipo de propiedad",
-    "please_add_property_budget": "Por favor agregue el presupuesto de la propiedad"
+    "please_add_property_budget": "Por favor agregue el presupuesto de la propiedad",
+    "login_intro_text": "Tu centro inmobiliario inteligente",
+    "login_intro_subtext": "Inicie sesión en Habitake para explorar propiedades, crear variantes de renovación y conectarse con profesionales."
 }

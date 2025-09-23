@@ -1,14 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Image, View, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, ImageBackground } from "react-native"
+import { StyleSheet, Image, View, Platform, TouchableOpacity, ImageBackground } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
 
-//API
-import { register } from "../api";
-
 //CONSTANTS
-import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, SHOW_SUCCESS_TOAST, STORAGE_KEY, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
@@ -24,12 +21,10 @@ import ProgressView from "./progressView";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const SignUp = (props: any) => {
-
-    const { setUser } = useContext(AuthContext)
 
     const STRING = USE_STRING();
 
@@ -46,7 +41,7 @@ const SignUp = (props: any) => {
     const [isValidPass, setIsValidPassword] = useState<boolean>(true);
     const [confirmPassValid, setConfirmPassValid] = useState<boolean>(true)
 
-    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*]).{12,}$/
+    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[A-Za-z\d!@#\$%\^&\*]{12,40}$/
 
     useEffect(() => {
         if (password != '') {
@@ -150,66 +145,6 @@ const SignUp = (props: any) => {
         }
     }
 
-    async function onRegisterUser() {
-        try {
-            const params = {
-                username: name,
-                password: password,
-                email: email,
-                role: "Buyer",
-                firstName: "",
-                lastName: "",
-                phoneNumber: "",
-                // propertyType: "",
-                // budget: "",
-                dateOfBirth: "",
-                gender: "",
-                nationality: "",
-                kycStatus: "",
-                address: {
-                    street: "",
-                    city: "",
-                    state: "",
-                    zipCode: "",
-                    country: "",
-                },
-            }
-
-            setIsLoading(true)
-            const result: any = await register(params)
-            setIsLoading(false)
-
-            if (result?.registerUser?.success) {
-                const userData = result.registerUser;
-                setUser(result.registerUser)
-                await AsyncStorage.setItem(STORAGE_KEY.USER_PASSWORD, JSON.stringify(password))
-                await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
-                SHOW_SUCCESS_TOAST(STRING.signup_successfully)
-
-                props.navigation.navigate(SCREENS.Otp.name, {
-                    userName: name,
-                    email: email
-                })
-            }
-            else {
-                console.log('ERR', result.registerUser?.message)
-                Toast.show({
-                    type: 'smallError',
-                    text1: result.registerUser?.message,
-                    position: 'bottom',
-                });
-            }
-        }
-        catch (err: any) {
-            console.log('ERRRRRRR', err)
-            Toast.show({
-                type: 'smallError',
-                text1: err,
-                position: 'bottom',
-            });
-        }
-    }
-
     return (
         <View style={[styles.container, {
             marginTop: Platform.OS === 'android' ? insets.top : 0,
@@ -219,137 +154,139 @@ const SignUp = (props: any) => {
                 type='onboarding' onBack={() => {
                     props.navigation.goBack()
                 }} />
-            <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1 }}>
-                <ScrollView showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ flexGrow: 1 }}
-                    keyboardShouldPersistTaps="handled">
+            <KeyboardAwareScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={{ flexGrow: 1 }}
+                enableOnAndroid={true}
+                keyboardShouldPersistTaps="handled"
+                extraScrollHeight={80}   // scrolls a bit more when focusing
+                extraHeight={100}
+            >
+                <Text
+                    style={[styles.signInText, { marginTop: SCALE_SIZE(35) }]}
+                    font={FONT_NAME.regular}
+                    color={COLORS.color_333A54}
+                    size={SCALE_SIZE(28)}>
+                    {STRING.lets}
                     <Text
-                        style={[styles.signInText, { marginTop: SCALE_SIZE(35) }]}
-                        font={FONT_NAME.regular}
+                        font={FONT_NAME.bold}
                         color={COLORS.color_333A54}
                         size={SCALE_SIZE(28)}>
-                        {STRING.lets}
-                        <Text
-                            font={FONT_NAME.bold}
-                            color={COLORS.color_333A54}
-                            size={SCALE_SIZE(28)}>
-                            {STRING.create_an_account}
-                        </Text>
+                        {STRING.create_an_account}
                     </Text>
-                    <Text
-                        style={[styles.signInText, { marginTop: SCALE_SIZE(10) }]}
-                        font={FONT_NAME.regular}
-                        color={COLORS.color_545A70}
-                        size={SCALE_SIZE(16)}>
-                        {'quis nostrud exercitation ullamco laboris nisi ut'}
-                    </Text>
-                    <Input
-                        style={[styles.inputStyle, { marginTop: SCALE_SIZE(24) }]}
-                        value={name}
-                        isUser={IMAGES.ic_user}
-                        inputStyle={styles.inputTextStyle}
-                        placeholder={STRING.full_name}
-                        autoCapitalize='none'
-                        placeholderTextColor={COLORS.color_8A8E9D}
-                        onChangeText={handleFullNameChange} />
-                    <Input
-                        style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
-                        value={email}
-                        inputStyle={styles.inputTextStyle}
-                        isEmail={IMAGES.ic_email}
-                        placeholder={STRING.email}
-                        keyboardType='email-address'
-                        autoCapitalize='none'
-                        placeholderTextColor={COLORS.color_8A8E9D}
-                        onChangeText={(text) => {
-                            setEmail(text)
-                        }} />
-                    <Input
-                        style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
-                        value={password}
-                        inputStyle={styles.inputTextStyle}
-                        isLock={IMAGES.ic_lock}
-                        placeholder={STRING.password}
-                        autoCapitalize='none'
-                        placeholderTextColor={COLORS.color_8A8E9D}
-                        secureTextEntry={!isSecurePassword}
-                        secureIcon={isSecurePassword ? IMAGES.ic_eye : IMAGES.ic_hide}
-                        onPressSecureIcon={() => {
-                            setIsSecurePassword(!isSecurePassword)
-                        }}
-                        onChangeText={(text) => {
-                            setPassword(text)
-                        }} />
-                    <Input
-                        style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
-                        value={confirmPassword}
-                        inputStyle={styles.inputTextStyle}
-                        isEmail={IMAGES.ic_lock}
-                        placeholder={STRING.confirm_password}
-                        autoCapitalize='none'
-                        placeholderTextColor={COLORS.color_8A8E9D}
-                        secureTextEntry={!isSecureConfirmPassword}
-                        secureIcon={isSecureConfirmPassword ? IMAGES.ic_eye : IMAGES.ic_hide}
-                        onPressSecureIcon={() => {
-                            setIsConfirmSecurePassword(!isSecureConfirmPassword)
-                        }}
-                        onChangeText={(text) => {
-                            setConfirmPassword(text)
-                        }} />
-                    <TouchableOpacity style={styles.termsConditionView} onPress={() => {
+                </Text>
+                <Text
+                    style={[styles.signInText, { marginTop: SCALE_SIZE(10) }]}
+                    font={FONT_NAME.regular}
+                    color={COLORS.color_545A70}
+                    size={SCALE_SIZE(16)}>
+                    {'quis nostrud exercitation ullamco laboris nisi ut'}
+                </Text>
+                <Input
+                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(24) }]}
+                    value={name}
+                    isUser={IMAGES.ic_user}
+                    inputStyle={styles.inputTextStyle}
+                    placeholder={STRING.full_name}
+                    autoCapitalize='none'
+                    placeholderTextColor={COLORS.color_8A8E9D}
+                    onChangeText={handleFullNameChange} />
+                <Input
+                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
+                    value={email}
+                    inputStyle={styles.inputTextStyle}
+                    isEmail={IMAGES.ic_email}
+                    placeholder={STRING.email}
+                    keyboardType='email-address'
+                    autoCapitalize='none'
+                    placeholderTextColor={COLORS.color_8A8E9D}
+                    onChangeText={(text) => {
+                        setEmail(text)
+                    }} />
+                <Input
+                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
+                    value={password}
+                    inputStyle={styles.inputTextStyle}
+                    isLock={IMAGES.ic_lock}
+                    placeholder={STRING.password}
+                    autoCapitalize='none'
+                    placeholderTextColor={COLORS.color_8A8E9D}
+                    secureTextEntry={!isSecurePassword}
+                    secureIcon={isSecurePassword ? IMAGES.ic_eye : IMAGES.ic_hide}
+                    onPressSecureIcon={() => {
+                        setIsSecurePassword(!isSecurePassword)
+                    }}
+                    onChangeText={(text) => {
+                        setPassword(text)
+                    }} />
+                <Input
+                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
+                    value={confirmPassword}
+                    inputStyle={styles.inputTextStyle}
+                    isEmail={IMAGES.ic_lock}
+                    placeholder={STRING.confirm_password}
+                    autoCapitalize='none'
+                    placeholderTextColor={COLORS.color_8A8E9D}
+                    secureTextEntry={!isSecureConfirmPassword}
+                    secureIcon={isSecureConfirmPassword ? IMAGES.ic_eye : IMAGES.ic_hide}
+                    onPressSecureIcon={() => {
+                        setIsConfirmSecurePassword(!isSecureConfirmPassword)
+                    }}
+                    onChangeText={(text) => {
+                        setConfirmPassword(text)
+                    }} />
+                <TouchableOpacity style={styles.termsConditionView} onPress={() => {
+                    setTermsSelected(!isTermsSelected)
+                }}>
+                    <TouchableOpacity onPress={() => {
                         setTermsSelected(!isTermsSelected)
                     }}>
-                        <TouchableOpacity onPress={() => {
-                            setTermsSelected(!isTermsSelected)
-                        }}>
-                            <View style={styles.imageDirection}>
-                                <ImageBackground
-                                    style={styles.squareIcon}
-                                    resizeMode="contain"
-                                    source={IMAGES.ic_square}>
-                                    {isTermsSelected &&
-                                        <Image
-                                            style={styles.rightImage}
-                                            resizeMode="cover"
-                                            source={IMAGES.green_check_bg} />
-                                    }
-                                </ImageBackground>
-                            </View>
-                        </TouchableOpacity>
-                        <Text
-                            font={FONT_NAME.medium}
-                            color={COLORS.color_00092999}
-                            size={SCALE_SIZE(16)}>
-                            {STRING.agree_to_terms_conditions}
-                        </Text>
+                        <View style={styles.imageDirection}>
+                            <ImageBackground
+                                style={styles.squareIcon}
+                                resizeMode="contain"
+                                source={IMAGES.ic_square}>
+                                {isTermsSelected &&
+                                    <Image
+                                        style={styles.rightImage}
+                                        resizeMode="cover"
+                                        source={IMAGES.green_check_bg} />
+                                }
+                            </ImageBackground>
+                        </View>
                     </TouchableOpacity>
-                    <Button
-                        onPress={() => {
-                            onValidateUser()
-                        }}
-                        style={styles.nextButtonStyle}
-                        title={STRING.next} />
                     <Text
-                        style={{ marginBottom: SCALE_SIZE(25) }}
-                        font={FONT_NAME.regular}
-                        align="center"
-                        color={COLORS.color_333A54}
+                        font={FONT_NAME.medium}
+                        color={COLORS.color_00092999}
                         size={SCALE_SIZE(16)}>
-                        {STRING.already_have_an_account}
-                        <Text
-                            onPress={() => {
-                                props.navigation.navigate(SCREENS.Login.name)
-                            }}
-                            font={FONT_NAME.bold}
-                            align="center"
-                            color={COLORS.color_01A669}
-                            size={SCALE_SIZE(16)}>
-                            {STRING.login}
-                        </Text>
+                        {STRING.agree_to_terms_conditions}
                     </Text>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                </TouchableOpacity>
+                <Button
+                    onPress={() => {
+                        onValidateUser()
+                    }}
+                    style={styles.nextButtonStyle}
+                    title={STRING.next} />
+                <Text
+                    style={{ marginBottom: SCALE_SIZE(25) }}
+                    font={FONT_NAME.regular}
+                    align="center"
+                    color={COLORS.color_333A54}
+                    size={SCALE_SIZE(16)}>
+                    {STRING.already_have_an_account}
+                    <Text
+                        onPress={() => {
+                            props.navigation.navigate(SCREENS.Login.name)
+                        }}
+                        font={FONT_NAME.bold}
+                        align="center"
+                        color={COLORS.color_01A669}
+                        size={SCALE_SIZE(16)}>
+                        {STRING.login}
+                    </Text>
+                </Text>
+            </KeyboardAwareScrollView>
             {isLoading && <ProgressView />}
         </View>
     )

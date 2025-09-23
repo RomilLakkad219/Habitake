@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Platform } from "react-native"
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, View, Platform, KeyboardAvoidingView, ScrollView } from "react-native"
 
 //API
 import { resetPassword } from "../api";
@@ -23,12 +23,13 @@ import OTPTextInput from 'react-native-otp-textinput'
 
 //LOADER
 import ProgressView from "./progressView";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const ResetPassword = (props: any) => {
 
     const STRING = USE_STRING();
 
-    const email = props.route.params.email
+    // const email = props.route.params.email
 
     const insets = useSafeAreaInsets();
 
@@ -39,7 +40,7 @@ const ResetPassword = (props: any) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [otp, setOtp] = useState<any>('');
 
-    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*]).{12,}$/
+    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[A-Za-z\d!@#\$%\^&\*]{12,40}$/
 
     function onResetPasswordCheck() {
         if (!otp) {
@@ -85,7 +86,7 @@ const ResetPassword = (props: any) => {
     async function onResetPassword() {
         try {
             const params = {
-                email: email,
+                email: '',
                 new_password: password,
                 code: otp
             }
@@ -126,82 +127,92 @@ const ResetPassword = (props: any) => {
                 type='onboarding' onBack={() => {
                     props.navigation.goBack()
                 }} />
-            <Text
-                style={[styles.textStyle, { marginTop: SCALE_SIZE(35) }]}
-                font={FONT_NAME.bold}
-                color={COLORS.color_333A54}
-                size={SCALE_SIZE(28)}>
-                {STRING.reset}
+            <KeyboardAwareScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={{ flexGrow: 1 }}
+                enableOnAndroid={true}
+                keyboardShouldPersistTaps="handled"
+                extraScrollHeight={80}   // scrolls a bit more when focusing
+                extraHeight={100}
+            >
                 <Text
-                    font={FONT_NAME.regular}
+                    style={[styles.textStyle, { marginTop: SCALE_SIZE(35) }]}
+                    font={FONT_NAME.bold}
                     color={COLORS.color_333A54}
                     size={SCALE_SIZE(28)}>
-                    {STRING.password}
+                    {STRING.reset}
+                    <Text
+                        font={FONT_NAME.regular}
+                        color={COLORS.color_333A54}
+                        size={SCALE_SIZE(28)}>
+                        {STRING.password}
+                    </Text>
                 </Text>
-            </Text>
-            <Text
-                style={[styles.textStyle, { marginTop: SCALE_SIZE(10) }]}
-                font={FONT_NAME.regular}
-                color={COLORS.color_545A70}
-                size={SCALE_SIZE(16)}>
-                {'quis nostrud exercitation ullamco laboris nisi ut'}
-            </Text>
-            <Text
-                style={[styles.textStyle, { marginTop: SCALE_SIZE(35) }]}
-                font={FONT_NAME.medium}
-                color={COLORS.color_333A54}
-                size={SCALE_SIZE(16)}>
-                {STRING.enter_verification_code + `\n${email}`}
-            </Text>
-            <OTPTextInput
-                defaultValue={otp}
-                containerStyle={styles.otpContainerStyle}
-                textInputStyle={styles.otpSelected}
-                inputCount={6}
-                handleTextChange={(text) => {
-                    setOtp(text)
-                }}>
-            </OTPTextInput>
-            <Input
-                style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
-                value={password}
-                isLock={IMAGES.ic_lock}
-                placeholder={STRING.password}
-                inputStyle={styles.inputTextStyle}
-                autoCapitalize='none'
-                placeholderTextColor={COLORS.color_8A8E9D}
-                secureTextEntry={!isSecurePassword}
-                onPressSecureIcon={() => {
-                    setIsSecurePassword(!isSecurePassword)
-                }}
-                secureIcon={isSecurePassword ? IMAGES.ic_eye : IMAGES.ic_hide}
-                onChangeText={(text) => {
-                    setPassword(text)
-                }} />
-            <Input
-                style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
-                value={confirmPassword}
-                isEmail={IMAGES.ic_lock}
-                inputStyle={styles.inputTextStyle}
-                placeholder={STRING.confirm_password}
-                autoCapitalize='none'
-                placeholderTextColor={COLORS.color_8A8E9D}
-                secureTextEntry={!isSecureConfirmPassword}
-                secureIcon={isSecureConfirmPassword ? IMAGES.ic_eye : IMAGES.ic_hide}
-                onPressSecureIcon={() => {
-                    setIsConfirmSecurePassword(!isSecureConfirmPassword)
-                }}
-                onChangeText={(text) => {
-                    setConfirmPassword(text)
-                }} />
-            <View style={{ flex: 1 }}></View>
-            <Button
-                onPress={() => {
-                    onResetPasswordCheck()
-                }}
-                style={styles.buttonStyle}
-                title={STRING.set_password} />
-            {isLoading && <ProgressView />}
+                <Text
+                    style={[styles.textStyle, { marginTop: SCALE_SIZE(10) }]}
+                    font={FONT_NAME.regular}
+                    color={COLORS.color_545A70}
+                    size={SCALE_SIZE(16)}>
+                    {'quis nostrud exercitation ullamco laboris nisi ut'}
+                </Text>
+                <Text
+                    style={[styles.textStyle, { marginTop: SCALE_SIZE(35) }]}
+                    font={FONT_NAME.medium}
+                    color={COLORS.color_333A54}
+                    size={SCALE_SIZE(16)}>
+                    {STRING.enter_verification_code + `\n${''}`}
+                </Text>
+                <OTPTextInput
+                    defaultValue={otp}
+                    tintColor={COLORS.color_34216B}
+                    containerStyle={styles.otpContainerStyle}
+                    textInputStyle={styles.otpSelected}
+                    inputCount={6}
+                    handleTextChange={(text) => {
+                        setOtp(text)
+                    }}>
+                </OTPTextInput>
+                <Input
+                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
+                    value={password}
+                    isLock={IMAGES.ic_lock}
+                    placeholder={STRING.password}
+                    inputStyle={styles.inputTextStyle}
+                    autoCapitalize='none'
+                    placeholderTextColor={COLORS.color_8A8E9D}
+                    secureTextEntry={!isSecurePassword}
+                    onPressSecureIcon={() => {
+                        setIsSecurePassword(!isSecurePassword)
+                    }}
+                    secureIcon={isSecurePassword ? IMAGES.ic_eye : IMAGES.ic_hide}
+                    onChangeText={(text) => {
+                        setPassword(text)
+                    }} />
+                <Input
+                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
+                    value={confirmPassword}
+                    isEmail={IMAGES.ic_lock}
+                    inputStyle={styles.inputTextStyle}
+                    placeholder={STRING.confirm_password}
+                    autoCapitalize='none'
+                    placeholderTextColor={COLORS.color_8A8E9D}
+                    secureTextEntry={!isSecureConfirmPassword}
+                    secureIcon={isSecureConfirmPassword ? IMAGES.ic_eye : IMAGES.ic_hide}
+                    onPressSecureIcon={() => {
+                        setIsConfirmSecurePassword(!isSecureConfirmPassword)
+                    }}
+                    onChangeText={(text) => {
+                        setConfirmPassword(text)
+                    }} />
+                <View style={{ flex: 1 }}></View>
+                <Button
+                    onPress={() => {
+                        onResetPasswordCheck()
+                    }}
+                    style={styles.buttonStyle}
+                    title={STRING.set_password} />
+                {isLoading && <ProgressView />}
+            </KeyboardAwareScrollView>
         </View>
     )
 }
@@ -241,10 +252,11 @@ const styles = StyleSheet.create({
         borderRadius: SCALE_SIZE(10),
         borderWidth: 1,
         borderBottomWidth: 1,
-        marginTop: SCALE_SIZE(42),
+        marginTop: SCALE_SIZE(8),
         color: COLORS.color_34216B,
         backgroundColor: '#F6F6F6',
-        borderColor: COLORS.color_34216B
+        height: SCALE_SIZE(50),
+        width: SCALE_SIZE(50)
     },
 })
 

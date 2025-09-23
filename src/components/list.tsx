@@ -5,14 +5,14 @@ import { View, StyleSheet, ActivityIndicator, Image } from 'react-native'
 import { COLORS, FONT_NAME, SCALE_SIZE } from "../constants";
 
 //COMPONENTƒ
-import { Text } from '../components'
+import { Text } from '.'
 
-const Loader = (props:any) => {
+const List = (props:any) => {
     if (props.isLoading) {
         return (
             <View style={styles.container}>
                 <View style={styles.indicatorContainer}>
-                    <ActivityIndicator />
+                    <ActivityIndicator  />
                 </View>
             </View>
         )
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Loader;
+export default List;

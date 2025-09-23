@@ -66,7 +66,7 @@ const Notification = (props: any) => {
         id: '1',
         name: 'Exclusive Offers Inside',
         profileImage: '',
-        message: 'Lorem Ipsum is simply dummy text of the printing\nand typesetting industry.',
+        message: 'Lorem Ipsum is simply dummy text of the \nprinting and typesetting industry.',
         time: '1 day ago'
     },
     {
@@ -311,7 +311,7 @@ const NotificationItem = ({ item, onPress, index }: NotificationProps) => {
                                 size={SCALE_SIZE(14)}
                                 font={FONT_NAME.regular}
                                 color={COLORS.color_545A70}>
-                                {' is changed the price of\nthe property.'}
+                                {' is changed the \nprice of the property.'}
                             </Text>
                         </Text>
                         <Text

@@ -167,7 +167,7 @@ const EditProfile = (props: any) => {
                 contentContainerStyle={{ flexGrow: 1 }}
                 keyboardShouldPersistTaps="handled">
                 <Text
-                    style={{ marginTop: SCALE_SIZE(24) }}
+                    style={{ marginTop: Platform.OS == 'android' ? SCALE_SIZE(24) : SCALE_SIZE(40) }}
                     size={SCALE_SIZE(16)}
                     align="center"
                     font={FONT_NAME.semiBold}
@@ -285,7 +285,7 @@ const EditProfile = (props: any) => {
                     title={STRING.update} />
             </ScrollView>
             {isLoading && <ProgressView />}
-        </View>
+        </View >
     )
 }
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, SafeAreaView, Platform, Dimensions } from "react-native"
+import { View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, SafeAreaView, Platform, Dimensions, ActivityIndicator } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../../assets";
@@ -8,7 +8,7 @@ import { IMAGES } from "../../assets";
 import { COLORS, SCALE_SIZE, FONT_NAME, USE_STRING, SHOW_TOAST } from "../../constants";
 
 //COMPONENTS
-import { Header, LanguageSelector, Text } from "../../components";
+import { Header, LanguageSelector, List, Text } from "../../components";
 
 //SCREENS
 import { SCREENS } from "..";
@@ -39,6 +39,8 @@ const Home = (props: any) => {
     const [likedProperties, setLikedProperties] = useState<string[]>([]);
     const [searchText, setSearchText] = useState("");
     const [filterType, setFilterType] = useState<"city" | "state" | "approvalStatus">("city");
+    const [isSearching, setIsSearching] = useState(false); // for search
+    const [lastKeyword, setLastKeyword] = useState<string | undefined>(undefined);
 
     const propertyTypes = [
         { name: STRING.all, image: '', apiTypes: [] },
@@ -58,20 +60,35 @@ const Home = (props: any) => {
         );
     }, [selectedPropertyItem, properties]);
 
+    // const searchHandler = useCallback(
+    //     debounce((text: string, filterType?: "city" | "state" | "approvalStatus") => {
+    //         getPropertyList(selectedPropertyItem, text, filterType);
+    //     }, 1000),
+    //     [selectedPropertyItem]
+    // );
+
     const searchHandler = useCallback(
         debounce((text: string, filterType?: "city" | "state" | "approvalStatus") => {
-            getPropertyList(selectedPropertyItem, text, filterType);
-        }, 1000),
-        [selectedPropertyItem]
+            if (text !== lastKeyword) {
+                getPropertyList(selectedPropertyItem, text, filterType, true);
+                setLastKeyword(text);
+            }
+        }, 800), // reduced delay for better UX
+        [selectedPropertyItem, lastKeyword]
     );
 
     async function getPropertyList(
         index?: number,
         keyword?: string,
-        filterType?: "city" | "state" | "approvalStatus"
+        filterType?: "city" | "state" | "approvalStatus",
+        isSearch = false
     ) {
         try {
-            setIsLoading(true);
+            if (isSearch) {
+                setIsSearching(true);
+            } else {
+                setIsLoading(true);
+            }
 
             const selectedIndex = index ?? selectedPropertyItem;
             const selectedType =
@@ -115,7 +132,11 @@ const Home = (props: any) => {
         } catch (err) {
             SHOW_TOAST(err ?? String(err));
         } finally {
-            setIsLoading(false);
+            if (isSearch) {
+                setIsSearching(false);
+            } else {
+                setIsLoading(false);
+            }
         }
     }
 
@@ -393,6 +414,11 @@ const Home = (props: any) => {
                 )}
             />
             {isLoading && <ProgressView />}
+            {isSearching && (
+                <View style={styles.searchLoader}>
+                    <ActivityIndicator size="small" color={COLORS.black} />
+                </View>
+            )}
         </View>
     )
 }
@@ -429,7 +455,10 @@ const PropertyCard = ({ item, onPress, onLike, liked }: PropertyCardProps) => {
 
     return (
         <TouchableOpacity
-            style={[styles.card, { width: imageWidth }]}
+            style={[styles.card, {
+                width: imageWidth,
+                overflow: Platform.OS === "ios" ? "visible" : "hidden",
+            }]}
             onPress={onPress}>
             <View style={[styles.imageWrapper, { height: SCALE_SIZE(155) }]}>
                 {/* {item.images && item.images.length > 0 &&
@@ -512,10 +541,9 @@ const PropertyCard = ({ item, onPress, onLike, liked }: PropertyCardProps) => {
                 </View>
                 <View style={styles.bottomView}>
                     <Text
-                        style={{ minHeight: '100%' }}
                         size={SCALE_SIZE(11)}
                         align="center"
-                        numberOfLines={1}
+                        numberOfLines={2}
                         font={FONT_NAME.semiBold}
                         color={COLORS.color_01A669}>
                         {`$${item.price}`}
@@ -544,7 +572,7 @@ const styles = StyleSheet.create({
     },
     searchView: {
         flexDirection: 'row',
-        marginTop: SCALE_SIZE(25),
+        marginTop: Platform.OS == 'android' ? SCALE_SIZE(25) : SCALE_SIZE(35),
         marginBottom: SCALE_SIZE(20)
     },
     searchStyle: {
@@ -662,7 +690,7 @@ const styles = StyleSheet.create({
     },
     availableButton: {
         height: SCALE_SIZE(21),
-        width: SCALE_SIZE(66),
+        width: SCALE_SIZE(77),
         borderRadius: SCALE_SIZE(24),
         backgroundColor: COLORS.color_34216B,
         alignItems: 'center',
@@ -690,7 +718,6 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 2,
         marginVertical: SCALE_SIZE(28),
-        overflow: 'hidden'
     },
     imageWrapper: {
         borderRadius: SCALE_SIZE(15),
@@ -743,7 +770,17 @@ const styles = StyleSheet.create({
     propertyNameView: {
         paddingHorizontal: SCALE_SIZE(8),
         minHeight: SCALE_SIZE(100)
-    }
+    },
+    searchLoader: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 999
+    },
 })
 
 export default Home;

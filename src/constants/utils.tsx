@@ -13,15 +13,15 @@ const scaleHeight = (height - (StaticSafeAreaInsets.safeAreaInsetsTop + StaticSa
 const scale = Math.min(scaleWidth, scaleHeight)
 
 const SCALE_SIZE = (size: number) => {
-  return Math.ceil((size * scale))
+  return Math.ceil((size * scale)) + 2
 }
 
 const STORAGE_KEY = {
   USER_DETAILS: 'user_details_json',
-  USER_PASSWORD:'user_password'
+  USER_PASSWORD: 'user_password'
 }
 
-const getAndroidInsets = (insets:any) => {
+const getAndroidInsets = (insets: any) => {
   const result = {
     paddingTop: Platform.OS === 'android' ? insets.top : 0,
     paddingBottom: Platform.OS === 'android' ? insets.bottom : 0,

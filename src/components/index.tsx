@@ -9,6 +9,7 @@ import FavouritePropertyRemoveSheet from "./favouritePropertyRemoveSheet";
 import ChatDeleteSheet from "./chatDeleteSheet";
 import LogoutSheet from "./logoutSheet";
 import LanguageSelector from "./languageSelector";
+import List from "./list";
 
 export { 
     Text ,
@@ -21,5 +22,6 @@ export {
     FavouritePropertyRemoveSheet,
     ChatDeleteSheet,
     LogoutSheet,
-    LanguageSelector
+    LanguageSelector,
+    List
 }

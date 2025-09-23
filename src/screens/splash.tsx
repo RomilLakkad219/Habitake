@@ -1,11 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { StyleSheet, Image, ImageBackground } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
 
+//API
+import { getUserProfile } from "../api";
+
 //CONSTANTS
 import { SCALE_SIZE, STORAGE_KEY } from "../constants";
+
+//CONTEXT
+import { AuthContext } from "../context";
 
 //NAVIGATION
 import { CommonActions } from "@react-navigation/native";
@@ -18,28 +24,58 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Splash = (props: any) => {
 
+    const { setProfile } = useContext(AuthContext)
+
     useEffect(() => {
         setTimeout(() => {
             moveToNext()
         }, 1000);
     }, [])
 
+    // async function moveToNext() {
+    //     const user = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS)
+    //     if (user) {
+    //         const userData = JSON.parse(user)
+    //         props.navigation.dispatch(CommonActions.reset({
+    //             index: 0,
+    //             routes: [{
+    //                 name: SCREENS.Prepare.name,
+    //                 params: {
+    //                     userData: userData
+    //                 }
+    //             }]
+    //         }))
+    //     }
+    //     else {
+    //         props.navigation.navigate(SCREENS.LoginIntroduction.name)
+    //     }
+    // }
+
     async function moveToNext() {
-        const user = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS)
+        const user = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS);
+
         if (user) {
-            const userData = JSON.parse(user)
-            props.navigation.dispatch(CommonActions.reset({
-                index: 0,
-                routes: [{
-                    name: SCREENS.Prepare.name,
-                    params: {
-                        userData: userData
-                    }
-                }]
-            }))
-        }
-        else {
-            props.navigation.navigate(SCREENS.LoginIntroduction.name)
+            const userData = JSON.parse(user);
+
+            //Fetch profile directly
+            const profileRes: any = await getUserProfile({ userId: userData?.userId });
+
+            if (profileRes?.getUser?.success) {
+                const profile = profileRes?.getUser?.data;
+                setProfile(profile);
+
+                props.navigation.dispatch(CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: SCREENS.BottomBar.name }]
+                }));
+            } else {
+                props.navigation.dispatch(CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: SCREENS.LoginIntroduction.name }]
+                }));
+            }
+        } else {
+            props.navigation.navigate(SCREENS.LoginIntroduction.name);
         }
     }
 

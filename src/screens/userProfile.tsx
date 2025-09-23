@@ -48,6 +48,8 @@ const UserProfile = (props: any) => {
 
     const { profile } = useContext(AuthContext)
 
+    console.log('PROFILE DATA', profile)
+
     const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets()
@@ -105,6 +107,7 @@ const UserProfile = (props: any) => {
                 );
             }, 500);
         } catch (error: any) {
+            console.log('LOGOUT ERROR', error);
             setIsLoading(false);
             Toast.show({
                 type: 'smallError',
@@ -128,7 +131,7 @@ const UserProfile = (props: any) => {
                     props.navigation.navigate(SCREENS.Notification.name)
                 }} />
             <Text
-                style={{ marginTop: SCALE_SIZE(24) }}
+                style={{ marginTop: Platform.OS == 'android' ? SCALE_SIZE(24) : SCALE_SIZE(40) }}
                 size={SCALE_SIZE(16)}
                 align="center"
                 font={FONT_NAME.semiBold}

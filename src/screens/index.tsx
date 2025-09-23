@@ -9,7 +9,6 @@ import Location from "./location";
 import PropertyType from "./propertyType";
 import AddProfile from "./addProfile";
 import LocationSearch from "./locationSearch";
-import Loader from "./loader";
 import ProgressView from "./progressView";
 import Otp from "./otp";
 
@@ -113,10 +112,6 @@ export const SCREENS = {
     EditProfile: {
         name: 'EditProfile',
         component: EditProfile
-    },
-    Loader: {
-        name: 'Loader',
-        component: Loader
     },
     ProgressView: {
         name: 'ProgressView',

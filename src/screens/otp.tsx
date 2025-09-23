@@ -1,14 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, View, KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native"
 
 //API
-import { emailVerification, register, resendOtp } from "../api";
+import { emailVerification, getUserProfile, resendOtp } from "../api";
 
 //CONSTANTS
 import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_SUCCESS_TOAST, STORAGE_KEY, USE_STRING } from "../constants";
 
 //COMPONENTS
-import { AccountCreationSuccessSheet, Button, Header, Text } from "../components";
+import { Button, Header, Text } from "../components";
+
+//CONTEXT
+import { AuthContext } from "../context";
 
 //SCREENS
 import { SCREENS } from ".";
@@ -21,10 +24,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import OTPTextInput from 'react-native-otp-textinput'
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CommonActions } from "@react-navigation/native";
 
 const Otp = (props: any) => {
 
-    const accountCreationSuccessRef = useRef<any>('')
+    const { setProfile } = useContext(AuthContext)
 
     const STRING = USE_STRING();
 
@@ -35,11 +39,6 @@ const Otp = (props: any) => {
 
     const name = props.route.params.name;
     const email = props.route.params.email;
-    const password = props?.route?.params?.password;
-    const propertyType = props?.route?.params?.propertyType;
-    const budget = props?.route?.params?.budget;
-    const phoneNumber = props?.route?.params?.phoneNumber;
-    const profileImage = props?.route?.params?.profileImage;
 
     function onOtpCheck() {
         if (!otp) {
@@ -66,24 +65,50 @@ const Otp = (props: any) => {
             setIsLoading(false)
 
             if (response?.verifyEmailCode?.success) {
-                onRegisterUser()
-            }
-            else {
+                const userDataStr = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS);
+                const userData = userDataStr ? JSON.parse(userDataStr) : null;
+
+                const userResponse = userData
+                //Fetch profile here (no Prepare screen needed)
+                const profileRes: any = await getUserProfile({ userId: userResponse?.userId });
+
+                if (profileRes?.getUser?.success) {
+                    const profile = profileRes?.getUser?.data;
+
+                    // Save user profile
+                    await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(profile));
+                    setProfile(profile);
+
+                    SHOW_SUCCESS_TOAST(STRING.login_successfully);
+
+                    // Redirect directly to Home
+                    props.navigation.dispatch(CommonActions.reset({
+                        index: 0,
+                        routes: [{ name: SCREENS.BottomBar.name }]
+                    }));
+                } else {
+                    Toast.show({
+                        type: 'smallError',
+                        text1: profileRes?.getUser?.message,
+                        position: 'bottom',
+                    });
+                }
+            } else {
                 Toast.show({
                     type: 'smallError',
                     text1: response?.verifyEmailCode?.error,
                     position: 'bottom',
                 });
             }
-        } catch (error: any) {
+        }
+        catch (error: any) {
             Toast.show({
                 type: 'smallError',
                 text1: error,
                 position: 'bottom',
             });
-        }
-        finally {
-            setIsLoading(false)
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -97,13 +122,10 @@ const Otp = (props: any) => {
             const result: any = await resendOtp(params)
             setIsLoading(false)
 
-            console.log('RESEND', params, JSON.stringify(result))
-
             if (result?.resendVerificationCode?.success) {
                 SHOW_SUCCESS_TOAST(STRING.otp_has_been_sent_on_your_email)
             }
             else {
-                console.log('ERR', result?.resendVerificationCode?.message,)
                 Toast.show({
                     type: 'smallError',
                     text1: result?.resendVerificationCode?.message,
@@ -112,70 +134,6 @@ const Otp = (props: any) => {
             }
         }
         catch (err: any) {
-            console.log('ERR', err)
-            Toast.show({
-                type: 'smallError',
-                text1: err,
-                position: 'bottom',
-            });
-        }
-    }
-
-    async function onRegisterUser() {
-        try {
-            const params = {
-                username: name,
-                password: password,
-                email: email,
-                role: "Buyer",
-                firstName: "",
-                lastName: "",
-                phoneNumber: phoneNumber,
-                profilePicture: profileImage,
-                propertyType: propertyType,
-                budget: budget,
-                dateOfBirth: "",
-                gender: "",
-                nationality: "",
-                kycStatus: "",
-                address: {
-                    street: "",
-                    city: "",
-                    state: "",
-                    zipCode: "",
-                    country: "",
-                },
-            }
-
-            setIsLoading(true)
-            const result: any = await register(params)
-            setIsLoading(false)
-
-            console.log('SIGNUP PRMS', params)
-
-            console.log('SIGN UP RES', result)
-
-            if (result?.registerUser?.success) {
-                const userData = result.registerUser;
-                await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
-                accountCreationSuccessRef?.current?.open()
-                setTimeout(() => {
-                    props.navigation.navigate(SCREENS.Prepare.name, {
-                        userData: userData
-                    })
-                }, 5000);
-            }
-            else {
-                console.log('ERR', result.registerUser?.message)
-                Toast.show({
-                    type: 'smallError',
-                    text1: result.registerUser?.message,
-                    position: 'bottom',
-                });
-            }
-        }
-        catch (err: any) {
-            console.log('ERRRRRRR', err)
             Toast.show({
                 type: 'smallError',
                 text1: err,
@@ -211,6 +169,7 @@ const Otp = (props: any) => {
                 </Text>
                 <OTPTextInput
                     defaultValue={otp}
+                    tintColor={COLORS.color_34216B}
                     containerStyle={styles.otpContainerStyle}
                     textInputStyle={styles.otpSelected}
                     inputCount={6}
@@ -250,11 +209,6 @@ const Otp = (props: any) => {
                     style={styles.nextButtonStyle}
                     title={STRING.next} />
             </KeyboardAvoidingView>
-            <AccountCreationSuccessSheet
-                onRef={accountCreationSuccessRef}
-                onFinish={() => {
-                    accountCreationSuccessRef?.current?.close()
-                }} />
             {isLoading && <ProgressView />}
         </View>
     )
@@ -277,10 +231,11 @@ const styles = StyleSheet.create({
         borderRadius: SCALE_SIZE(10),
         borderWidth: 1,
         borderBottomWidth: 1,
-        marginTop: SCALE_SIZE(42),
+        marginTop: SCALE_SIZE(8),
         color: COLORS.color_34216B,
         backgroundColor: '#F6F6F6',
-        borderColor: COLORS.color_34216B
+        height: SCALE_SIZE(50),
+        width: SCALE_SIZE(50)
     },
     nextButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),

@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { StyleSheet, Image, View, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from "react-native"
 
 //API
-import { userLogin } from "../api";
+import { getUserProfile, userLogin } from "../api";
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -30,10 +30,12 @@ import ProgressView from "./progressView";
 
 const Login = (props: any) => {
 
+    const { setProfile } = useContext(AuthContext)
+
     const insets = useSafeAreaInsets();
 
     const STRING = USE_STRING();
-    
+
     const [isSecurePassword, setIsSecurePassword] = useState<boolean>(false);
     const [email, setEmail] = useState<any>('');
     const [password, setPassword] = useState<any>('');
@@ -66,33 +68,91 @@ const Login = (props: any) => {
         }
     }
 
+    // async function onLoginUser() {
+    //     try {
+    //         const params = {
+    //             email: email,
+    //             password: password,
+    //         }
+
+    //         setIsLoading(true)
+    //         const response: any = await userLogin(params)
+    //         setIsLoading(false)
+
+    //         if (response?.loginUser?.success) {
+    //             const userData = response?.loginUser;
+    //             await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
+    //             SHOW_SUCCESS_TOAST(STRING.login_successfully)
+
+    //             props.navigation.dispatch(CommonActions.reset({
+    //                 index: 0,
+    //                 routes: [{
+    //                     name: SCREENS.Prepare.name,
+    //                     params: {
+    //                         userData: userData
+    //                     }
+    //                 }]
+    //             }))
+    //         }
+    //         else {
+    //             Toast.show({
+    //                 type: 'smallError',
+    //                 text1: response?.loginUser?.message,
+    //                 position: 'bottom',
+    //             });
+    //         }
+    //     } catch (error: any) {
+    //         Toast.show({
+    //             type: 'smallError',
+    //             text1: error,
+    //             position: 'bottom',
+    //         });;
+    //     }
+    //     finally {
+    //         setIsLoading(false)
+    //     }
+    // }
+
     async function onLoginUser() {
         try {
             const params = {
                 email: email,
-                password: password,
-            }
+                password: password
+            };
 
-            setIsLoading(true)
-            const response: any = await userLogin(params)
-            setIsLoading(false)
+            setIsLoading(true);
+            const response: any = await userLogin(params);
 
             if (response?.loginUser?.success) {
                 const userData = response?.loginUser;
-                await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
-                SHOW_SUCCESS_TOAST(STRING.login_successfully)
 
-                props.navigation.dispatch(CommonActions.reset({
-                    index: 0,
-                    routes: [{
-                        name: SCREENS.Prepare.name,
-                        params: {
-                            userData: userData
-                        }
-                    }]
-                }))
-            }
-            else {
+                //Fetch profile here (no Prepare screen needed)
+                const profileRes: any = await getUserProfile({ userId: userData?.userId });
+
+                if (profileRes?.getUser?.success) {
+                    const profile = profileRes?.getUser?.data;
+
+                    // Save user profile
+                    await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(profile));
+
+                    // Optional: update AuthContext
+                    setProfile(profile);
+
+                    SHOW_SUCCESS_TOAST(STRING.login_successfully);
+
+                    // Redirect directly to Home
+                    props.navigation.dispatch(CommonActions.reset({
+                        index: 0,
+                        routes: [{ name: SCREENS.BottomBar.name }]
+                    }));
+                } else {
+                    Toast.show({
+                        type: 'smallError',
+                        text1: profileRes?.getUser?.message,
+                        position: 'bottom',
+                    });
+                }
+            } else {
                 Toast.show({
                     type: 'smallError',
                     text1: response?.loginUser?.message,
@@ -104,10 +164,9 @@ const Login = (props: any) => {
                 type: 'smallError',
                 text1: error,
                 position: 'bottom',
-            });;
-        }
-        finally {
-            setIsLoading(false)
+            });
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -264,8 +323,8 @@ const styles = StyleSheet.create({
     },
     loginButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),
-        marginTop: SCALE_SIZE(50),
-        marginBottom: SCALE_SIZE(30)
+        marginTop: SCALE_SIZE(40),
+        marginBottom: SCALE_SIZE(20)
     },
     buttonDirectionView: {
         flexDirection: 'row',
@@ -274,7 +333,7 @@ const styles = StyleSheet.create({
         marginBottom: SCALE_SIZE(40)
     },
     googleButtonStyle: {
-        height: SCALE_SIZE(70),
+        height: SCALE_SIZE(60),
         width: SCALE_SIZE(158),
         borderRadius: SCALE_SIZE(20),
         backgroundColor: COLORS.color_E6E6EA66,
@@ -282,7 +341,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     fbButtonStyle: {
-        height: SCALE_SIZE(70),
+        height: SCALE_SIZE(60),
         width: SCALE_SIZE(158),
         borderRadius: SCALE_SIZE(20),
         backgroundColor: COLORS.color_E6E6EA66,

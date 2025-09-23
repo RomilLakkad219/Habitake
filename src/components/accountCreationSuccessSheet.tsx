@@ -27,7 +27,7 @@ const AccountCreationSuccessSheet = (props: SheetProps) => {
     
     return (
         <RBSheet ref={props.onRef}
-            closeOnPressMask={true}
+            closeOnPressMask={false}
             onOpen={props.onOpen}
             onClose={props.onClose}
             draggable={true}

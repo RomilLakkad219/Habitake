@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, View, FlatList, Dimensions, ScrollView, TouchableOpacity, ImageBackground, SafeAreaView, Platform } from "react-native"
+import { StyleSheet, Image, View, FlatList, Dimensions, TouchableOpacity, ImageBackground, SafeAreaView, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -16,6 +16,7 @@ import { SCREENS } from ".";
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from "react-native-toast-message";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const PropertyType = (props: any) => {
 
@@ -27,12 +28,12 @@ const PropertyType = (props: any) => {
 
     const insets = useSafeAreaInsets();
 
-    const [isSelectedProperty, setIsSelectedProperty] = useState<number>(0)
+    const [isSelectedProperty, setIsSelectedProperty] = useState<number | null>(null)
     const [selectedPropertyName, setSelectedPropertyName] = useState<string | null>(null);
     const [budget, setBudget] = useState<any>('')
 
     async function onValidateProperty() {
-        if (!isSelectedProperty) {
+        if (!isSelectedProperty && isSelectedProperty !== 0) {
             Toast.show({
                 type: 'smallError',
                 text1: STRING.please_select_property_type,
@@ -63,12 +64,19 @@ const PropertyType = (props: any) => {
             paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
         }]}>
             <SafeAreaView />
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <Header
-                    type='basic'
-                    onBack={() => {
-                        props.navigation.goBack()
-                    }} />
+            <Header
+                type='basic'
+                onBack={() => {
+                    props.navigation.goBack()
+                }} />
+            <KeyboardAwareScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={{ flexGrow: 1 }}
+                enableOnAndroid={true}
+                keyboardShouldPersistTaps="handled"
+                extraScrollHeight={80}   // scrolls a bit more when focusing
+                extraHeight={100}
+            >
                 <Text
                     style={{ marginTop: SCALE_SIZE(14) }}
                     font={FONT_NAME.regular}
@@ -113,7 +121,7 @@ const PropertyType = (props: any) => {
                                         <Image
                                             style={styles.checkMarkImage}
                                             resizeMode="contain"
-                                            source={isSelectedProperty == index ? IMAGES.ic_check_green : IMAGES.ic_check_white} />
+                                            source={isSelectedProperty === index ? IMAGES.ic_check_green : IMAGES.ic_check_white} />
                                     </View>
                                     <View style={styles.contentWrapper}>
                                         <Text
@@ -131,7 +139,7 @@ const PropertyType = (props: any) => {
                     </FlatList>
                 </View>
                 <Input
-                    style={{ marginTop: SCALE_SIZE(27) }}
+                    style={styles.budgetInput}
                     value={budget}
                     placeholder={STRING.add_budget}
                     keyboardType="numeric"
@@ -164,7 +172,7 @@ const PropertyType = (props: any) => {
                         {STRING.skip}
                     </Text>
                 </TouchableOpacity>
-            </ScrollView>
+            </KeyboardAwareScrollView>
         </View>
     )
 }
@@ -223,6 +231,10 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'flex-end',
     },
+    budgetInput: {
+        marginTop: SCALE_SIZE(27),
+        color: COLORS.black
+    }
 })
 
 export default PropertyType;

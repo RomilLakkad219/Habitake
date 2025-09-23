@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { StyleSheet, Image, View, TouchableOpacity, SafeAreaView, Platform, ImageBackground } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
 
+//API
+import { register } from "../api";
+
 //CONSTANTS
-import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_TOAST, USE_STRING } from "../constants";
+import { COLORS, FONT_NAME, SCALE_SIZE, SHOW_TOAST, STORAGE_KEY, USE_STRING } from "../constants";
 
 //COMPONENTS
-import { Button, Header, Input, Text } from "../components";
+import { AccountCreationSuccessSheet, Button, Header, Input, Text } from "../components";
+
+//LOADER
+import ProgressView from "./progressView";
 
 //SCREENS
 import { SCREENS } from ".";
@@ -17,8 +23,11 @@ import { SCREENS } from ".";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from "react-native-toast-message";
 import { ImageLibraryOptions, launchImageLibrary } from "react-native-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AddProfile = (props: any) => {
+
+    const accountCreationSuccessRef = useRef<any>('')
 
     const name = props?.route?.params?.name;
     const email = props?.route?.params?.email;
@@ -32,6 +41,7 @@ const AddProfile = (props: any) => {
 
     const [phoneNumber, setPhoneNumber] = useState<any>('');
     const [localImage, setLocalImage] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handlePhoneChange = (text: string) => {
         const cleaned = text.replace(/[^0-9]/g, "");
@@ -71,15 +81,67 @@ const AddProfile = (props: any) => {
             });
         }
         else {
-            props.navigation.navigate(SCREENS.Otp.name, {
-                name: name,
+            onRegisterUser()
+        }
+    }
+
+    async function onRegisterUser() {
+        try {
+            const params = {
+                username: name,
                 password: password,
                 email: email,
+                role: "Buyer",
+                firstName: "",
+                lastName: "",
+                phoneNumber: phoneNumber,
+                profilePicture: localImage?.uri,
                 propertyType: propertyType,
                 budget: budget,
-                phoneNumber: phoneNumber,
-                profileImage: localImage?.uri
-            })
+                dateOfBirth: "",
+                gender: "",
+                nationality: "",
+                kycStatus: "",
+                address: {
+                    street: "",
+                    city: "",
+                    state: "",
+                    zipCode: "",
+                    country: "",
+                },
+            }
+
+            setIsLoading(true)
+            const result: any = await register(params)
+            setIsLoading(false)
+
+            console.log('SIGNUP PRMS', params)
+
+            console.log('SIGN UP RES', result)
+
+            if (result?.registerUser?.success) {
+                const userData = result.registerUser;
+                await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
+                setTimeout(() => {
+                    accountCreationSuccessRef?.current?.open()
+                }, 1000);
+            }
+            else {
+                console.log('SIGNUP ERR', result.registerUser?.message)
+                Toast.show({
+                    type: 'smallError',
+                    text1: result.registerUser?.message,
+                    position: 'bottom',
+                });
+            }
+        }
+        catch (err: any) {
+            console.log('ERRRRRRR', err)
+            Toast.show({
+                type: 'smallError',
+                text1: err,
+                position: 'bottom',
+            });
         }
     }
 
@@ -168,6 +230,16 @@ const AddProfile = (props: any) => {
                 </Text>
             </TouchableOpacity>
             <SafeAreaView />
+            <AccountCreationSuccessSheet
+                onRef={accountCreationSuccessRef}
+                onFinish={() => {
+                    accountCreationSuccessRef?.current?.close()
+                    props.navigation.navigate(SCREENS.Otp.name, {
+                        name: name,
+                        email: email,
+                    })
+                }} />
+            {isLoading && <ProgressView />}
         </View>
     )
 }
