@@ -24,6 +24,14 @@ const PropertyType = (props: any) => {
     const email = props?.route?.params?.email;
     const password = props?.route?.params?.password
 
+    const budgetRegex = /^[0-9]+$/; // Only digits
+
+    const handleChange = (text: any) => {
+        if (budgetRegex.test(text) || text === "") {
+            setBudget(text)
+        }
+    };
+
     const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets();
@@ -141,12 +149,11 @@ const PropertyType = (props: any) => {
                 <Input
                     style={styles.budgetInput}
                     value={budget}
+                    inputStyle={{ color: COLORS.black }}
                     placeholder={STRING.add_budget}
                     keyboardType="numeric"
                     placeholderTextColor={COLORS.color_8A8E9D}
-                    onChangeText={(text) => {
-                        setBudget(text)
-                    }} />
+                    onChangeText={handleChange} />
                 <Button
                     onPress={() => {
                         onValidateProperty()
@@ -233,7 +240,6 @@ const styles = StyleSheet.create({
     },
     budgetInput: {
         marginTop: SCALE_SIZE(27),
-        color: COLORS.black
     }
 })
 

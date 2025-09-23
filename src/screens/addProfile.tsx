@@ -198,6 +198,7 @@ const AddProfile = (props: any) => {
                 maxLength={10}
                 placeholder={STRING.phone_number}
                 keyboardType="numeric"
+                inputStyle={{ color: COLORS.black }}
                 isPhone={IMAGES.ic_phone}
                 placeholderTextColor={COLORS.color_8A8E9D}
                 onChangeText={handlePhoneChange} />

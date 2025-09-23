@@ -235,7 +235,10 @@ const styles = StyleSheet.create({
         color: COLORS.color_34216B,
         backgroundColor: '#F6F6F6',
         height: SCALE_SIZE(50),
-        width: SCALE_SIZE(50)
+        width: SCALE_SIZE(50),
+        textAlign: 'center',      
+        textAlignVertical: 'center',
+        fontSize: SCALE_SIZE(20),
     },
     nextButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),

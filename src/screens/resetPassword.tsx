@@ -40,7 +40,7 @@ const ResetPassword = (props: any) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [otp, setOtp] = useState<any>('');
 
-    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[A-Za-z\d!@#\$%\^&\*]{12,40}$/
+    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{12,40}$/
 
     function onResetPasswordCheck() {
         if (!otp) {
@@ -256,7 +256,10 @@ const styles = StyleSheet.create({
         color: COLORS.color_34216B,
         backgroundColor: '#F6F6F6',
         height: SCALE_SIZE(50),
-        width: SCALE_SIZE(50)
+        width: SCALE_SIZE(50),
+        textAlign: 'center',      
+        textAlignVertical: 'center',
+        fontSize: SCALE_SIZE(20),
     },
 })
 

@@ -41,7 +41,7 @@ const SignUp = (props: any) => {
     const [isValidPass, setIsValidPassword] = useState<boolean>(true);
     const [confirmPassValid, setConfirmPassValid] = useState<boolean>(true)
 
-    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[A-Za-z\d!@#\$%\^&\*]{12,40}$/
+    const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{12,40}$/
 
     useEffect(() => {
         if (password != '') {

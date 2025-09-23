@@ -111,7 +111,7 @@
     "please_enter_your_password": "Por favor, introduzca su contraseña",
     "please_enter_your_otp": "Por favor ingrese su OTP",
     "please_enter_your_confirm_password": "Por favor ingrese su contraseña de confirmación",
-    "password_must_be_at_least_12_characters_long": "La contraseña debe tener al menos 12-40 caracteres e incluir 1 número, 1 letra mayúscula, 1 letra minúscula y 1 carácter especial.",
+    "password_must_be_at_least_12_characters_long": "La contraseña debe tener entre 12 y 40 caracteres, al menos 1 número, 1 carácter especial, 1 letra mayúscula y 1 letra minúscula.",
     "new_password_and_confirm_password_does_not_match": "La nueva contraseña y la confirmación de contraseña no coinciden",
     "please_enter_your_full_name": "Por favor, introduzca su nombre completo",
     "password_and_confirm_password_does_not_match": "La contraseña y confirmar contraseña no coinciden",
