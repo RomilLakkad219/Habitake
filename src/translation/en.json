@@ -117,7 +117,7 @@
     "password_and_confirm_password_does_not_match": "Password and confirm password does not match",
     "please_agree_to_all_terms_and_condition": "Please agree to all terms and condition",
     "profile_updated_successfully": "Profile Updated Successfully",
-    "login_successfully": "Login Successfull",
+    "login_successfully": "Login Successful",
     "otp_verify_successfully": "Otp Verify Successfully",
     "otp_has_been_sent_on_your_email": "OTP has been sent on your email",
     "reset_password_successfully": "Reset Password Successfully",

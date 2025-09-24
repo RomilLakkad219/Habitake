@@ -48,13 +48,6 @@ const PropertyType = (props: any) => {
                 position: 'bottom',
             });
         }
-        else if (!budget) {
-            Toast.show({
-                type: 'smallError',
-                text1: STRING.please_add_property_budget,
-                position: 'bottom',
-            });
-        }
         else {
             props.navigation.navigate(SCREENS.AddProfile.name, {
                 name: name,

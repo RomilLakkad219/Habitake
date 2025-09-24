@@ -87,7 +87,7 @@ const AddProfile = (props: any) => {
 
     async function onRegisterUser() {
         try {
-            const params = {
+            let params: any = {
                 username: name,
                 password: password,
                 email: email,
@@ -95,9 +95,9 @@ const AddProfile = (props: any) => {
                 firstName: "",
                 lastName: "",
                 phoneNumber: phoneNumber,
-                profilePicture: localImage?.uri,
+                profilePicture: "https://picsum.photos/200/300",
                 propertyType: propertyType,
-                budget: budget,
+                budget: budget ? budget : "",
                 dateOfBirth: "",
                 gender: "",
                 nationality: "",
@@ -111,11 +111,16 @@ const AddProfile = (props: any) => {
                 },
             }
 
+            // if (localImage?.uri) {
+            //     params.profilePicture = localImage.uri;
+            // }
+
             setIsLoading(true)
             const result: any = await register(params)
             setIsLoading(false)
 
             console.log('SIGNUP PRMS', params)
+            console.log('SIGNUP PROFILE PIC', params.profilePicture)
 
             console.log('SIGN UP RES', result)
 

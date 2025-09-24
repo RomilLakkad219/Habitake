@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Image, View, Dimensions, SafeAreaView, Platform } from "react-native"
+import { StyleSheet, Image, View, Dimensions, Platform } from "react-native"
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -15,6 +15,7 @@ import { SCREENS } from ".";
 
 //PACKAGES
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const LoginIntroduction = (props: any) => {
 
@@ -27,7 +28,19 @@ const LoginIntroduction = (props: any) => {
             marginTop: Platform.OS === 'android' ? insets.top : 0,
             paddingBottom: Platform.OS === 'android' ? insets.bottom : 0
         }]}>
-            <SafeAreaView >
+            <KeyboardAwareScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={{
+                    flexGrow: 1,
+                    paddingBottom: insets.bottom + SCALE_SIZE(20),
+                    justifyContent: "space-between", 
+                }}
+                showsVerticalScrollIndicator={false}
+                enableOnAndroid={true}
+                keyboardShouldPersistTaps="handled"
+                extraScrollHeight={80}
+                extraHeight={100}
+            >
                 <Image
                     style={styles.introLogo}
                     resizeMode="cover"
@@ -53,7 +66,9 @@ const LoginIntroduction = (props: any) => {
                     onPress={() => {
                         props.navigation.navigate(SCREENS.Login.name)
                     }}
-                    style={styles.loginButtonStyle}
+                    style={[styles.loginButtonStyle,
+                    { marginBottom: insets.bottom + SCALE_SIZE(20) }
+                    ]}
                     title={STRING.login} />
                 <View style={{ marginBottom: SCALE_SIZE(10) }}>
                     <Text
@@ -74,7 +89,7 @@ const LoginIntroduction = (props: any) => {
                         </Text>
                     </Text>
                 </View>
-            </SafeAreaView>
+            </KeyboardAwareScrollView>
         </View>
     )
 }
@@ -95,7 +110,6 @@ const styles = StyleSheet.create({
     loginButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),
         marginTop: SCALE_SIZE(30),
-        marginBottom: SCALE_SIZE(35)
     }
 })
 

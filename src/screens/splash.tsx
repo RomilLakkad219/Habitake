@@ -32,25 +32,6 @@ const Splash = (props: any) => {
         }, 1000);
     }, [])
 
-    // async function moveToNext() {
-    //     const user = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS)
-    //     if (user) {
-    //         const userData = JSON.parse(user)
-    //         props.navigation.dispatch(CommonActions.reset({
-    //             index: 0,
-    //             routes: [{
-    //                 name: SCREENS.Prepare.name,
-    //                 params: {
-    //                     userData: userData
-    //                 }
-    //             }]
-    //         }))
-    //     }
-    //     else {
-    //         props.navigation.navigate(SCREENS.LoginIntroduction.name)
-    //     }
-    // }
-
     async function moveToNext() {
         const user = await AsyncStorage.getItem(STORAGE_KEY.USER_DETAILS);
 

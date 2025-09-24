@@ -24,6 +24,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CommonActions } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 //LOADER
 import ProgressView from "./progressView";
@@ -67,51 +68,6 @@ const Login = (props: any) => {
             onLoginUser()
         }
     }
-
-    // async function onLoginUser() {
-    //     try {
-    //         const params = {
-    //             email: email,
-    //             password: password,
-    //         }
-
-    //         setIsLoading(true)
-    //         const response: any = await userLogin(params)
-    //         setIsLoading(false)
-
-    //         if (response?.loginUser?.success) {
-    //             const userData = response?.loginUser;
-    //             await AsyncStorage.setItem(STORAGE_KEY.USER_DETAILS, JSON.stringify(userData))
-    //             SHOW_SUCCESS_TOAST(STRING.login_successfully)
-
-    //             props.navigation.dispatch(CommonActions.reset({
-    //                 index: 0,
-    //                 routes: [{
-    //                     name: SCREENS.Prepare.name,
-    //                     params: {
-    //                         userData: userData
-    //                     }
-    //                 }]
-    //             }))
-    //         }
-    //         else {
-    //             Toast.show({
-    //                 type: 'smallError',
-    //                 text1: response?.loginUser?.message,
-    //                 position: 'bottom',
-    //             });
-    //         }
-    //     } catch (error: any) {
-    //         Toast.show({
-    //             type: 'smallError',
-    //             text1: error,
-    //             position: 'bottom',
-    //         });;
-    //     }
-    //     finally {
-    //         setIsLoading(false)
-    //     }
-    // }
 
     async function onLoginUser() {
         try {
@@ -179,132 +135,138 @@ const Login = (props: any) => {
                 type='onboarding' onBack={() => {
                     props.navigation.goBack()
                 }} />
-            <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1 }}>
-                <ScrollView showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ flexGrow: 1 }}
-                    keyboardShouldPersistTaps="handled">
+            <KeyboardAwareScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={{
+                    flexGrow: 1,
+                    paddingBottom: insets.bottom + SCALE_SIZE(20),
+                }}
+                showsVerticalScrollIndicator={false}
+                enableOnAndroid={true}
+                keyboardShouldPersistTaps="handled"
+                extraScrollHeight={80}
+                extraHeight={100}
+            >
+                <Text
+                    style={[styles.signInText, { marginTop: SCALE_SIZE(35) }]}
+                    font={FONT_NAME.regular}
+                    color={COLORS.color_333A54}
+                    size={SCALE_SIZE(28)}>
+                    {STRING.lets}
                     <Text
-                        style={[styles.signInText, { marginTop: SCALE_SIZE(35) }]}
-                        font={FONT_NAME.regular}
+                        font={FONT_NAME.bold}
                         color={COLORS.color_333A54}
                         size={SCALE_SIZE(28)}>
-                        {STRING.lets}
-                        <Text
-                            font={FONT_NAME.bold}
-                            color={COLORS.color_333A54}
-                            size={SCALE_SIZE(28)}>
-                            {STRING.sign_in}
-                        </Text>
+                        {STRING.sign_in}
                     </Text>
+                </Text>
+                <Text
+                    style={[styles.signInText, { marginTop: SCALE_SIZE(10) }]}
+                    font={FONT_NAME.regular}
+                    color={COLORS.color_545A70}
+                    size={SCALE_SIZE(16)}>
+                    {'quis nostrud exercitation ullamco laboris nisi ut'}
+                </Text>
+                <Input
+                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(24) }]}
+                    value={email}
+                    isEmail={IMAGES.ic_email}
+                    inputStyle={styles.inputTextStyle}
+                    placeholder={STRING.email}
+                    keyboardType='email-address'
+                    autoCapitalize='none'
+                    placeholderTextColor={COLORS.color_8A8E9D}
+                    onChangeText={(text) => {
+                        setEmail(text)
+                    }} />
+                <Input
+                    style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
+                    value={password}
+                    isLock={IMAGES.ic_lock}
+                    inputStyle={styles.inputTextStyle}
+                    placeholder={STRING.password}
+                    autoCapitalize='none'
+                    placeholderTextColor={COLORS.color_8A8E9D}
+                    secureTextEntry={!isSecurePassword}
+                    onPressSecureIcon={() => {
+                        setIsSecurePassword(!isSecurePassword)
+                    }}
+                    secureIcon={isSecurePassword ? IMAGES.ic_eye : IMAGES.ic_hide}
+                    onChangeText={(text) => {
+                        setPassword(text)
+                    }} />
+                <Text
+                    onPress={() => {
+                        props.navigation.navigate(SCREENS.ForgotPassword.name)
+                    }}
+                    style={styles.forgotPasswordText}
+                    font={FONT_NAME.semiBold}
+                    color={COLORS.color_01A669}
+                    size={SCALE_SIZE(14)}>
+                    {STRING.forgot_password}
+                </Text>
+                <Button
+                    onPress={() => {
+                        onValidateUser()
+                    }}
+                    style={styles.loginButtonStyle}
+                    title={STRING.login} />
+                <View style={styles.horizontalLineView}>
+                    <Image
+                        style={{ flex: 1 }}
+                        resizeMode="contain"
+                        source={IMAGES.ic_horizontal}></Image>
                     <Text
-                        style={[styles.signInText, { marginTop: SCALE_SIZE(10) }]}
+                        style={{ marginHorizontal: SCALE_SIZE(10) }}
+                        font={FONT_NAME.bold}
+                        color={COLORS.color_B0B3BD}
+                        size={SCALE_SIZE(10)}>
+                        {STRING.or}
+                    </Text>
+                    <Image
+                        style={{ flex: 1 }}
+                        resizeMode="contain"
+                        source={IMAGES.ic_horizontal}></Image>
+                </View>
+                <View style={styles.buttonDirectionView}>
+                    <TouchableOpacity style={styles.googleButtonStyle}>
+                        <Image
+                            style={styles.socialIcons}
+                            resizeMode="contain"
+                            source={IMAGES.ic_google}>
+                        </Image>
+                    </TouchableOpacity>
+                    <View style={{ width: SCALE_SIZE(12) }}></View>
+                    <TouchableOpacity style={styles.fbButtonStyle}>
+                        <Image
+                            style={styles.socialIcons}
+                            resizeMode="contain"
+                            source={IMAGES.ic_fb}>
+                        </Image>
+                    </TouchableOpacity>
+                </View>
+                <View style={{ marginBottom: insets.bottom + SCALE_SIZE(20) }}>
+                    <Text
                         font={FONT_NAME.regular}
-                        color={COLORS.color_545A70}
+                        align="center"
+                        color={COLORS.color_333A54}
                         size={SCALE_SIZE(16)}>
-                        {'quis nostrud exercitation ullamco laboris nisi ut'}
-                    </Text>
-                    <Input
-                        style={[styles.inputStyle, { marginTop: SCALE_SIZE(24) }]}
-                        value={email}
-                        isEmail={IMAGES.ic_email}
-                        inputStyle={styles.inputTextStyle}
-                        placeholder={STRING.email}
-                        keyboardType='email-address'
-                        autoCapitalize='none'
-                        placeholderTextColor={COLORS.color_8A8E9D}
-                        onChangeText={(text) => {
-                            setEmail(text)
-                        }} />
-                    <Input
-                        style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
-                        value={password}
-                        isLock={IMAGES.ic_lock}
-                        inputStyle={styles.inputTextStyle}
-                        placeholder={STRING.password}
-                        autoCapitalize='none'
-                        placeholderTextColor={COLORS.color_8A8E9D}
-                        secureTextEntry={!isSecurePassword}
-                        onPressSecureIcon={() => {
-                            setIsSecurePassword(!isSecurePassword)
-                        }}
-                        secureIcon={isSecurePassword ? IMAGES.ic_eye : IMAGES.ic_hide}
-                        onChangeText={(text) => {
-                            setPassword(text)
-                        }} />
-                    <Text
-                        onPress={() => {
-                            props.navigation.navigate(SCREENS.ForgotPassword.name)
-                        }}
-                        style={styles.forgotPasswordText}
-                        font={FONT_NAME.semiBold}
-                        color={COLORS.color_01A669}
-                        size={SCALE_SIZE(14)}>
-                        {STRING.forgot_password}
-                    </Text>
-                    <Button
-                        onPress={() => {
-                            onValidateUser()
-                        }}
-                        style={styles.loginButtonStyle}
-                        title={STRING.login} />
-                    <View style={styles.horizontalLineView}>
-                        <Image
-                            style={{ flex: 1 }}
-                            resizeMode="contain"
-                            source={IMAGES.ic_horizontal}></Image>
+                        {STRING.dont_have_an_account}
                         <Text
-                            style={{ marginHorizontal: SCALE_SIZE(10) }}
+                            onPress={() => {
+                                props.navigation.navigate(SCREENS.SignUp.name)
+                            }}
                             font={FONT_NAME.bold}
-                            color={COLORS.color_B0B3BD}
-                            size={SCALE_SIZE(10)}>
-                            {STRING.or}
-                        </Text>
-                        <Image
-                            style={{ flex: 1 }}
-                            resizeMode="contain"
-                            source={IMAGES.ic_horizontal}></Image>
-                    </View>
-                    <View style={styles.buttonDirectionView}>
-                        <TouchableOpacity style={styles.googleButtonStyle}>
-                            <Image
-                                style={styles.socialIcons}
-                                resizeMode="contain"
-                                source={IMAGES.ic_google}>
-                            </Image>
-                        </TouchableOpacity>
-                        <View style={{ width: SCALE_SIZE(12) }}></View>
-                        <TouchableOpacity style={styles.fbButtonStyle}>
-                            <Image
-                                style={styles.socialIcons}
-                                resizeMode="contain"
-                                source={IMAGES.ic_fb}>
-                            </Image>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ marginBottom: SCALE_SIZE(40) }}>
-                        <Text
-                            font={FONT_NAME.regular}
                             align="center"
-                            color={COLORS.color_333A54}
+                            color={COLORS.color_01A669}
                             size={SCALE_SIZE(16)}>
-                            {STRING.dont_have_an_account}
-                            <Text
-                                onPress={() => {
-                                    props.navigation.navigate(SCREENS.SignUp.name)
-                                }}
-                                font={FONT_NAME.bold}
-                                align="center"
-                                color={COLORS.color_01A669}
-                                size={SCALE_SIZE(16)}>
-                                {STRING.register}
-                            </Text>
+                            {STRING.register}
                         </Text>
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
+                    </Text>
+                </View>
+            </KeyboardAwareScrollView>
             {isLoading && <ProgressView />}
-        </View>
+        </View >
     )
 }
 
@@ -324,7 +286,6 @@ const styles = StyleSheet.create({
     loginButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),
         marginTop: SCALE_SIZE(40),
-        marginBottom: SCALE_SIZE(20)
     },
     buttonDirectionView: {
         flexDirection: 'row',
@@ -357,7 +318,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         marginHorizontal: SCALE_SIZE(16),
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: SCALE_SIZE(20)
     },
     inputStyle: {
         marginHorizontal: SCALE_SIZE(16),

@@ -110,13 +110,9 @@ const EditProfile = (props: any) => {
                     name: name ?? "",
                     phone: "",
                     status: "",
-                    profilePicture: localImage ? localImage.uri : profile?.profilePicture
+                    profilePicture: "https://picsum.photos/200/300"
+                    // localImage ? localImage.uri : profile?.profilePicture
                 };
-
-                // // Only send profilePicture if user selected a new image
-                // if (localImage?.uri) {
-                //     input.profilePicture = localImage.uri;
-                // }
 
                 const params = {
                     userId: profile?.userId,
@@ -136,6 +132,7 @@ const EditProfile = (props: any) => {
                     props.navigation.goBack();
                     SHOW_SUCCESS_TOAST(STRING.profile_updated_successfully);
                 } else {
+                    console.log('ERR',JSON.stringify(result))
                     Toast.show({
                         type: 'smallError',
                         text1: result?.updateUser?.message,
@@ -144,6 +141,7 @@ const EditProfile = (props: any) => {
                 }
             }
             catch (error: any) {
+                console.log('Update Profile Error', JSON.stringify(error));
                 Toast.show({
                     type: 'smallError',
                     text1: error,

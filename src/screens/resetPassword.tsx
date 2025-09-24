@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View, Platform, KeyboardAvoidingView, ScrollView } from "react-native"
+import React, { useState } from "react";
+import { StyleSheet, View, Platform, KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native"
 
 //API
-import { resetPassword } from "../api";
+import { forgotPassword, resetPassword } from "../api";
 
 //ASSETS
 import { IMAGES } from "../assets";
@@ -29,7 +29,7 @@ const ResetPassword = (props: any) => {
 
     const STRING = USE_STRING();
 
-    // const email = props.route.params.email
+    const email = props.route.params.email
 
     const insets = useSafeAreaInsets();
 
@@ -86,10 +86,12 @@ const ResetPassword = (props: any) => {
     async function onResetPassword() {
         try {
             const params = {
-                email: '',
+                email: email,
                 new_password: password,
                 code: otp
             }
+
+            console.log("ResetPassword Params", params);
 
             setIsLoading(true)
             const result: any = await resetPassword(params)
@@ -102,9 +104,40 @@ const ResetPassword = (props: any) => {
                 }, 1000);
             }
             else {
+                console.log("ResetPassword Error", result?.resetPassword?.message,);
                 Toast.show({
                     type: 'smallError',
                     text1: result?.resetPassword?.message,
+                    position: 'bottom',
+                });
+            }
+        }
+        catch (err: any) {
+            Toast.show({
+                type: 'smallError',
+                text1: err,
+                position: 'bottom',
+            });
+        }
+    }
+
+    async function onResendOtp() {
+        try {
+            const params = {
+                email: email
+            }
+
+            setIsLoading(true)
+            const result: any = await forgotPassword(params)
+            setIsLoading(false)
+
+            if (result?.forgotPassword?.success) {
+                SHOW_SUCCESS_TOAST(STRING.otp_has_been_sent_on_your_email)
+            }
+            else {
+                Toast.show({
+                    type: 'smallError',
+                    text1: result?.forgotPassword?.message,
                     position: 'bottom',
                 });
             }
@@ -131,6 +164,7 @@ const ResetPassword = (props: any) => {
                 style={{ flex: 1 }}
                 contentContainerStyle={{ flexGrow: 1 }}
                 enableOnAndroid={true}
+                showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
                 extraScrollHeight={80}   // scrolls a bit more when focusing
                 extraHeight={100}
@@ -160,7 +194,7 @@ const ResetPassword = (props: any) => {
                     font={FONT_NAME.medium}
                     color={COLORS.color_333A54}
                     size={SCALE_SIZE(16)}>
-                    {STRING.enter_verification_code + `\n${''}`}
+                    {STRING.enter_verification_code + `\n${email}`}
                 </Text>
                 <OTPTextInput
                     defaultValue={otp}
@@ -172,6 +206,30 @@ const ResetPassword = (props: any) => {
                         setOtp(text)
                     }}>
                 </OTPTextInput>
+                <TouchableOpacity onPress={() => {
+                    onResendOtp()
+                }}>
+                    <Text
+                        style={[styles.textStyle, { marginTop: SCALE_SIZE(15) }]}
+                        font={FONT_NAME.medium}
+                        color={COLORS.color_333A54}
+                        align="center"
+                        size={SCALE_SIZE(16)}>
+                        {STRING.didnt_receive_the_code}
+                        <Text
+                            style={[styles.textStyle, {
+                                marginTop: SCALE_SIZE(35),
+                                textDecorationLine: 'underline',
+                                textDecorationColor: COLORS.color_34216B
+                            }]}
+                            font={FONT_NAME.semiBold}
+                            align="center"
+                            color={COLORS.color_34216B}
+                            size={SCALE_SIZE(16)}>
+                            {STRING.resend}
+                        </Text>
+                    </Text>
+                </TouchableOpacity>
                 <Input
                     style={[styles.inputStyle, { marginTop: SCALE_SIZE(20) }]}
                     value={password}
@@ -255,9 +313,9 @@ const styles = StyleSheet.create({
         marginTop: SCALE_SIZE(8),
         color: COLORS.color_34216B,
         backgroundColor: '#F6F6F6',
-        height: SCALE_SIZE(50),
-        width: SCALE_SIZE(50),
-        textAlign: 'center',      
+        height: SCALE_SIZE(60),
+        width: SCALE_SIZE(55),
+        textAlign: 'center',
         textAlignVertical: 'center',
         fontSize: SCALE_SIZE(20),
     },

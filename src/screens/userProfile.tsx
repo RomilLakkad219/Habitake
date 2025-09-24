@@ -48,8 +48,6 @@ const UserProfile = (props: any) => {
 
     const { profile } = useContext(AuthContext)
 
-    console.log('PROFILE DATA', profile)
-
     const STRING = USE_STRING();
 
     const insets = useSafeAreaInsets()

@@ -681,16 +681,16 @@ const styles = StyleSheet.create({
         marginRight: SCALE_SIZE(4)
     },
     soldButton: {
-        height: SCALE_SIZE(21),
-        width: SCALE_SIZE(55),
+        height: SCALE_SIZE(31),
+        width: SCALE_SIZE(66),
         borderRadius: SCALE_SIZE(24),
         backgroundColor: COLORS.color_E6E6EA80,
         alignItems: 'center',
         justifyContent: 'center'
     },
     availableButton: {
-        height: SCALE_SIZE(21),
-        width: SCALE_SIZE(77),
+        height: SCALE_SIZE(31),
+        width: SCALE_SIZE(88),
         borderRadius: SCALE_SIZE(24),
         backgroundColor: COLORS.color_34216B,
         alignItems: 'center',

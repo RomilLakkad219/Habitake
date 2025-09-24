@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Image, View, Platform, TouchableOpacity, ImageBackground } from "react-native"
 
 //ASSETS
@@ -9,9 +9,6 @@ import { COLORS, FONT_NAME, REGEX, SCALE_SIZE, USE_STRING } from "../constants";
 
 //COMPONENTS
 import { Button, Header, Input, Text } from "../components";
-
-//CONTEXT
-import { AuthContext } from "../context";
 
 //SCREENS
 import { SCREENS } from ".";
@@ -156,10 +153,14 @@ const SignUp = (props: any) => {
                 }} />
             <KeyboardAwareScrollView
                 style={{ flex: 1 }}
-                contentContainerStyle={{ flexGrow: 1 }}
+                contentContainerStyle={{
+                    flexGrow: 1,
+                    paddingBottom: insets.bottom + SCALE_SIZE(20),
+                }}
+                showsVerticalScrollIndicator={false}
                 enableOnAndroid={true}
                 keyboardShouldPersistTaps="handled"
-                extraScrollHeight={80}   // scrolls a bit more when focusing
+                extraScrollHeight={80}
                 extraHeight={100}
             >
                 <Text
@@ -266,10 +267,12 @@ const SignUp = (props: any) => {
                     onPress={() => {
                         onValidateUser()
                     }}
-                    style={styles.nextButtonStyle}
+                    style={[styles.nextButtonStyle,
+                    { marginBottom: insets.bottom + SCALE_SIZE(20) }
+                    ]}
                     title={STRING.next} />
                 <Text
-                    style={{ marginBottom: SCALE_SIZE(25) }}
+                    style={{ marginBottom: insets.bottom + SCALE_SIZE(20) }}
                     font={FONT_NAME.regular}
                     align="center"
                     color={COLORS.color_333A54}
@@ -288,7 +291,7 @@ const SignUp = (props: any) => {
                 </Text>
             </KeyboardAwareScrollView>
             {isLoading && <ProgressView />}
-        </View>
+         </View>
     )
 }
 
@@ -308,7 +311,7 @@ const styles = StyleSheet.create({
     nextButtonStyle: {
         marginHorizontal: SCALE_SIZE(16),
         marginTop: SCALE_SIZE(58),
-        marginBottom: SCALE_SIZE(40)
+        // marginBottom: SCALE_SIZE(40)
     },
     inputStyle: {
         marginHorizontal: SCALE_SIZE(16),
