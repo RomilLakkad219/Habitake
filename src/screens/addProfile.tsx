@@ -97,7 +97,6 @@ const AddProfile = (props: any) => {
                 phoneNumber: phoneNumber,
                 profilePicture: "https://picsum.photos/200/300",
                 propertyType: propertyType,
-                budget: budget ? budget : "",
                 dateOfBirth: "",
                 gender: "",
                 nationality: "",
@@ -115,12 +114,16 @@ const AddProfile = (props: any) => {
             //     params.profilePicture = localImage.uri;
             // }
 
+            if (budget) {
+                params.budget = budget
+            }
+
             setIsLoading(true)
             const result: any = await register(params)
             setIsLoading(false)
 
             console.log('SIGNUP PRMS', params)
-            console.log('SIGNUP PROFILE PIC', params.profilePicture)
+            console.log('SIGNUP PROFILE PIC', params.budget)
 
             console.log('SIGN UP RES', result)
 
