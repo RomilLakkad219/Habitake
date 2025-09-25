@@ -41,7 +41,7 @@ const Otp = (props: any) => {
     const email = props.route.params.email;
 
     function onOtpCheck() {
-        if (!otp) {
+        if (!otp || otp.length < 6) {
             Toast.show({
                 type: 'smallError',
                 text1: STRING.please_enter_your_otp,
@@ -96,7 +96,7 @@ const Otp = (props: any) => {
             } else {
                 Toast.show({
                     type: 'smallError',
-                    text1: response?.verifyEmailCode?.error,
+                    text1: response?.verifyEmailCode?.message,
                     position: 'bottom',
                 });
             }

@@ -102,52 +102,50 @@ const EditProfile = (props: any) => {
 
     async function updateProfile() {
         if (!name) {
-            SHOW_TOAST(STRING.please_enter_name)
+            SHOW_TOAST(STRING.please_enter_name);
+            return;
         }
-        else {
-            try {
-                const input: any = {
-                    name: name ?? "",
-                    phone: "",
-                    status: "",
-                    profilePicture: "https://picsum.photos/200/300"
-                    // localImage ? localImage.uri : profile?.profilePicture
-                };
 
-                const params = {
-                    userId: profile?.userId,
-                    input,
-                };
+        try {
+            const input: any = {
+                name: name ?? "",
+                phone: "",
+                status: "Active",
+                role:'Buyer',
+                profilePicture: "https://picsum.photos/200/300",
+            };
 
-                setIsLoading(true)
-                const result: any = await editUserProfile(params);
-                setIsLoading(false);
+            const params = {
+                userId: profile?.userId,
+                input,
+            };
 
-                console.log('Update Profile Params', JSON.stringify(params));
+            setIsLoading(true);
+            const result: any = await editUserProfile(params);
+            setIsLoading(false);
 
-                console.log("Update Profile Result", JSON.stringify(result));
+            console.log("Update Profile Params", JSON.stringify(params));
+            console.log("Update Profile Result", JSON.stringify(result));
 
-                if (result?.updateUser?.success) {
-                    await fetchProfile();
-                    props.navigation.goBack();
-                    SHOW_SUCCESS_TOAST(STRING.profile_updated_successfully);
-                } else {
-                    console.log('ERR',JSON.stringify(result))
-                    Toast.show({
-                        type: 'smallError',
-                        text1: result?.updateUser?.message,
-                        position: 'bottom',
-                    });
-                }
-            }
-            catch (error: any) {
-                console.log('Update Profile Error', JSON.stringify(error));
+            if (result?.updateUser?.success) {
+                await fetchProfile();
+                props.navigation.goBack();
+                SHOW_SUCCESS_TOAST(STRING.profile_updated_successfully);
+            } else {
                 Toast.show({
-                    type: 'smallError',
-                    text1: error,
-                    position: 'bottom',
+                    type: "smallError",
+                    text1: result?.updateUser?.message,
+                    position: "bottom",
                 });
             }
+        } catch (error: any) {
+            setIsLoading(false);
+            console.log("Update Profile Error", JSON.stringify(error));
+            Toast.show({
+                type: "smallError",
+                text1: error?.message ?? "Something went wrong",
+                position: "bottom",
+            });
         }
     }
 

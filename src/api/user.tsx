@@ -139,21 +139,23 @@ async function getUserProfile(params: any) {
 
 async function editUserProfile(params: any) {
   const UPDATE_USER = gql`
-   mutation TestUpdateUser($userId: ID!, $input: UserUpdateInput!) {
-    updateUser(userId: $userId, input: $input) {
-      success
-      message
-      data {
-        userId
-        firstName
-        lastName
-        phoneNumber
-        status
-        profilePicture
+    mutation TestUpdateUser($userId: ID!, $input: UserUpdateInput!) {
+      updateUser(userId: $userId, input: $input) {
+        success
+        message
+        data {
+          userId
+          firstName
+          lastName
+          phoneNumber
+          role
+          status
+          profilePicture
+          updatedAt
+        }
       }
     }
-  }
-`;
+  `;
 
   const result = graphQlClient.request(UPDATE_USER, params)
   return result
